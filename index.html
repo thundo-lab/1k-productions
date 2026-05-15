@@ -169,9 +169,9 @@
     <span>Tour Date Tracker &mdash; 2026</span>
   </div></div>
   <div class="stats-bar">
-    <div class="stat"><div class="stat-value">156</div><div class="stat-label">Total Shows</div></div>
+    <div class="stat"><div class="stat-value">144</div><div class="stat-label">Total Shows</div></div>
     <div class="stat"><div class="stat-value s-dal">3</div><div class="stat-label">Dallas</div></div>
-    <div class="stat"><div class="stat-value s-tx">22</div><div class="stat-label">Texas</div></div>
+    <div class="stat"><div class="stat-value s-tx">21</div><div class="stat-label">Texas</div></div>
     <div class="stat"><div class="stat-value s-col">40</div><div class="stat-label">Collisions</div></div>
   </div>
 </header>
@@ -264,22 +264,6 @@
 
   <!-- LIST VIEW -->
   <div id="list-view">
-
-  <div class="mh">April 2026</div>
-  <table class="tbl"><thead><tr><th>Date</th><th>Artist</th><th>City</th><th>Venue</th><th>Tags</th></tr></thead><tbody>
-    <tr data-t="au"><td>Apr 9</td><td class="a-au">Autumn!</td><td>Reno, NV</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>Apr 10</td><td class="a-au">Autumn!</td><td>Sacramento, CA</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>Apr 11</td><td class="a-au">Autumn!</td><td>Fresno, CA</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>Apr 13</td><td class="a-au">Autumn!</td><td>Oakland, CA</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>Apr 16</td><td class="a-au">Autumn!</td><td>Tucson, AZ</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>Apr 18</td><td class="a-au">Autumn!</td><td>Nashville, TN</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>Apr 19</td><td class="a-au">Autumn!</td><td>Santa Ana, CA</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>Apr 24</td><td class="a-au">Autumn!</td><td>Las Vegas, NV</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au" data-x="1" class="tx"><td>Apr 25</td><td class="a-au">Autumn!</td><td>Austin, TX</td><td>&mdash;</td><td><span class="b b-tx">TX</span></td></tr>
-    <tr data-t="au"><td>Apr 26</td><td class="a-au">Autumn!</td><td>Phoenix, AZ</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>Apr 29</td><td class="a-au">Autumn!</td><td>Denver, CO</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>Apr 30</td><td class="a-au">Autumn!</td><td>San Diego, CA</td><td>&mdash;</td><td></td></tr>
-  </tbody></table>
 
   <div class="mh">May 2026</div>
   <table class="tbl"><thead><tr><th>Date</th><th>Artist</th><th>City</th><th>Venue</th><th>Tags</th></tr></thead><tbody>
@@ -467,21 +451,9 @@
 
 <script>
 try {
-var at={fm:1,br:1,rio:1,ct:1,bfe:1,yh:1,'2s':1,au:1},hl=null,curM=3;
+var at={fm:1,br:1,rio:1,ct:1,bfe:1,yh:1,'2s':1,au:1},hl=null,curM=4;
 var AN={fm:'Fattmack',br:'Babyface Ray & 42 Dugg',rio:'Rio Da Yung OG',ct:'Chris Travis',bfe:'BabyFxce E',yh:'Yhapojj','2s':'2Slimey',au:'Autumn!'};
 var E=[
-{d:'2026-04-09',a:'au',n:'Autumn!',c:'Reno, NV',v:'',s:''},
-{d:'2026-04-10',a:'au',n:'Autumn!',c:'Sacramento, CA',v:'',s:''},
-{d:'2026-04-11',a:'au',n:'Autumn!',c:'Fresno, CA',v:'',s:''},
-{d:'2026-04-13',a:'au',n:'Autumn!',c:'Oakland, CA',v:'',s:''},
-{d:'2026-04-16',a:'au',n:'Autumn!',c:'Tucson, AZ',v:'',s:''},
-{d:'2026-04-18',a:'au',n:'Autumn!',c:'Nashville, TN',v:'',s:''},
-{d:'2026-04-19',a:'au',n:'Autumn!',c:'Santa Ana, CA',v:'',s:''},
-{d:'2026-04-24',a:'au',n:'Autumn!',c:'Las Vegas, NV',v:'',s:''},
-{d:'2026-04-25',a:'au',n:'Autumn!',c:'Austin, TX',v:'',s:''},
-{d:'2026-04-26',a:'au',n:'Autumn!',c:'Phoenix, AZ',v:'',s:''},
-{d:'2026-04-29',a:'au',n:'Autumn!',c:'Denver, CO',v:'',s:''},
-{d:'2026-04-30',a:'au',n:'Autumn!',c:'San Diego, CA',v:'',s:''},
 {d:'2026-05-02',a:'au',n:'Autumn!',c:'Chicago, IL',v:'',s:''},
 {d:'2026-05-03',a:'au',n:'Autumn!',c:'Columbus, OH',v:'',s:''},
 {d:'2026-05-10',a:'au',n:'Autumn!',c:'Philadelphia, PA',v:'',s:''},
@@ -706,7 +678,7 @@ function buildCal(){
 
 function chgM(dir){
   curM+=dir;
-  if(curM<3)curM=3;
+  if(curM<4)curM=4;
   if(curM>8)curM=8;
   buildCal();
 }
