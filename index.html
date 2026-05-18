@@ -26,7 +26,7 @@
   .fb:hover{background:#242424}
   .fb.on{border-color:currentColor;background:rgba(255,255,255,.08)}
   .c-fm{color:#FFD700}.c-br{color:#C4A265}.c-rio{color:#FF4444}.c-ct{color:#B366FF}
-  .c-bfe{color:#00CED1}.c-yh{color:#E91E63}.c-2s{color:#76FF03}.c-au{color:#FF7043}
+  .c-bfe{color:#00CED1}.c-yh{color:#E91E63}.c-2s{color:#76FF03}.c-au{color:#FF7043}.c-bs{color:#90A4AE}
   .c-dal{color:#00E5FF}.c-tx{color:#FF6B35}.c-col{color:#FF9500}
   .dv{width:1px;height:20px;background:#333;margin:0 4px}
   .vtog{margin-left:auto;display:flex;gap:3px}
@@ -56,7 +56,7 @@
   .tbl tr.dal{background:rgba(0,229,255,.06)}
   .tbl tr.tx{border-left:3px solid #FF6B35}
   .a-fm{color:#FFD700}.a-br{color:#C4A265}.a-rio{color:#FF4444}.a-ct{color:#B366FF}
-  .a-bfe{color:#00CED1}.a-yh{color:#E91E63}.a-2s{color:#76FF03}.a-au{color:#FF7043}
+  .a-bfe{color:#00CED1}.a-yh{color:#E91E63}.a-2s{color:#76FF03}.a-au{color:#FF7043}.a-bs{color:#90A4AE}
   .b{display:inline-block;font-size:8px;padding:1px 5px;border-radius:8px;font-weight:600;white-space:nowrap;margin-left:2px}
   .b-dal{background:rgba(0,229,255,.15);color:#00E5FF;border:1px solid rgba(0,229,255,.3)}
   .b-tx{background:rgba(255,107,53,.15);color:#FF6B35;border:1px solid rgba(255,107,53,.3)}
@@ -67,6 +67,7 @@
   .mh{font-size:16px;font-weight:600;padding:16px 0 6px;border-bottom:1px solid #333;margin-bottom:2px}
   .mh:first-of-type{padding-top:0}
   .triple{color:#ff3333;font-size:9px;font-weight:800}
+  .cap{font-size:8px;color:#666;border:1px solid #333;padding:0 4px;border-radius:8px;margin-left:3px;white-space:nowrap}
 
   /* ===== VIEW TOGGLE (CSS-only for no-JS previews) ===== */
   #v-list,#v-cal{position:absolute;opacity:0;pointer-events:none}
@@ -108,6 +109,7 @@
   .cal-ev.t-yh{background:rgba(233,30,99,.15);color:#E91E63;border-left:2px solid #E91E63}
   .cal-ev.t-2s{background:rgba(118,255,3,.15);color:#76FF03;border-left:2px solid #76FF03}
   .cal-ev.t-au{background:rgba(255,112,67,.15);color:#FF7043;border-left:2px solid #FF7043}
+  .cal-ev.t-bs{background:rgba(144,164,174,.15);color:#90A4AE;border-left:2px solid #90A4AE}
   .cal-cb{position:absolute;top:3px;right:3px;background:#FF9500;color:#000;font-size:8px;font-weight:800;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center}
   .cal-cb.c5{background:#ff3333;color:#fff}
   .cal-so{font-size:7px;background:#ff3333;color:#fff;padding:0 3px;border-radius:2px;margin-left:2px;font-weight:700}
@@ -169,10 +171,10 @@
     <span>Tour Date Tracker &mdash; 2026</span>
   </div></div>
   <div class="stats-bar">
-    <div class="stat"><div class="stat-value">144</div><div class="stat-label">Total Shows</div></div>
+    <div class="stat"><div class="stat-value">154</div><div class="stat-label">Total Shows</div></div>
     <div class="stat"><div class="stat-value s-dal">3</div><div class="stat-label">Dallas</div></div>
     <div class="stat"><div class="stat-value s-tx">21</div><div class="stat-label">Texas</div></div>
-    <div class="stat"><div class="stat-value s-col">40</div><div class="stat-label">Collisions</div></div>
+    <div class="stat"><div class="stat-value s-col">44</div><div class="stat-label">Collisions</div></div>
   </div>
 </header>
 
@@ -187,6 +189,7 @@
     <button class="fb on c-yh" data-t="yh" onclick="tf(this)">Yhapojj</button>
     <button class="fb on c-2s" data-t="2s" onclick="tf(this)">2Slimey</button>
     <button class="fb on c-au" data-t="au" onclick="tf(this)">Autumn!</button>
+    <button class="fb on c-bs" data-t="bs" onclick="tf(this)">Black Smurf</button>
   </div>
   <div class="dv"></div>
   <div class="fg">
@@ -212,6 +215,7 @@
     <div class="li"><div class="ld" style="background:#E91E63"></div>Yhapojj</div>
     <div class="li"><div class="ld" style="background:#76FF03"></div>2Slimey</div>
     <div class="li"><div class="ld" style="background:#FF7043"></div>Autumn!</div>
+    <div class="li"><div class="ld" style="background:#90A4AE"></div>Black Smurf</div>
     <div class="li"><span style="color:#00E5FF">&#9733;</span>Dallas</div>
     <div class="li"><span style="color:#FF6B35;font-weight:700">TX</span>Texas</div>
     <div class="li"><span style="color:#FF9500;font-weight:700">!</span>Collision</div>
@@ -219,14 +223,18 @@
 
   <!-- COLLISION PANEL -->
   <div class="cp" id="cp">
-    <h3>&#9888; 40 Date Collisions</h3>
+    <h3>&#9888; 44 Date Collisions</h3>
+    <div class="ci"><div class="cd">May 2</div><div><span class="a-au">Autumn!</span> Chicago | <span class="a-bs">Black Smurf</span> Charlotte</div></div>
+    <div class="ci"><div class="cd">May 3</div><div><span class="a-au">Autumn!</span> Columbus | <span class="a-bs">Black Smurf</span> Chicago</div></div>
+    <div class="ci"><div class="cd">May 10</div><div><span class="a-au">Autumn!</span> Philadelphia | <span class="a-bs">Black Smurf</span> Phoenix</div></div>
     <div class="ci"><div class="cd">May 13</div><div><span class="a-fm">Fattmack</span> Atlanta | <span class="a-bfe">BabyFxce E</span> Detroit</div></div>
     <div class="ci"><div class="cd">May 14</div><div><span class="a-bfe">BabyFxce E</span> Chicago | <span class="a-au">Autumn!</span> Calgary</div></div>
     <div class="ci"><div class="cd">May 15</div><div><span class="a-fm">Fattmack</span> Dallas <span class="b b-dal">DAL</span> | <span class="a-bfe">BabyFxce E</span> Milwaukee</div></div>
-    <div class="ci"><div class="cd">May 17 <span class="triple">3x</span></div><div><span class="a-fm">Fattmack</span> Houston <span class="b b-tx">TX</span> | <span class="a-bfe">BabyFxce E</span> Minneapolis | <span class="a-au">Autumn!</span> Boston</div></div>
+    <div class="ci"><div class="cd">May 16</div><div><span class="a-au">Autumn!</span> Edmonton | <span class="a-bs">Black Smurf</span> Las Vegas</div></div>
+    <div class="ci"><div class="cd">May 17 <span class="triple">4x</span></div><div><span class="a-fm">Fattmack</span> Houston <span class="b b-tx">TX</span> | <span class="a-bfe">BabyFxce E</span> Minneapolis | <span class="a-au">Autumn!</span> Boston | <span class="a-bs">Black Smurf</span> DC</div></div>
     <div class="ci"><div class="cd">May 18</div><div><span class="a-fm">Fattmack</span> LA | <span class="a-bfe">BabyFxce E</span> Kansas City</div></div>
     <div class="ci"><div class="cd">May 20</div><div><span class="a-bfe">BabyFxce E</span> Denver | <span class="a-au">Autumn!</span> Indianapolis</div></div>
-    <div class="ci"><div class="cd">May 23</div><div><span class="a-bfe">BabyFxce E</span> Las Vegas | <span class="a-au">Autumn!</span> Greensboro</div></div>
+    <div class="ci"><div class="cd">May 23 <span class="triple">3x</span></div><div><span class="a-bfe">BabyFxce E</span> Las Vegas | <span class="a-au">Autumn!</span> Greensboro | <span class="a-bs">Black Smurf</span> Minneapolis</div></div>
     <div class="ci"><div class="cd">May 26</div><div><span class="a-fm">Fattmack</span> Chicago | <span class="a-bfe">BabyFxce E</span> LA</div></div>
     <div class="ci"><div class="cd">May 27</div><div><span class="a-fm">Fattmack</span> New York | <span class="a-au">Autumn!</span> Miami</div></div>
     <div class="ci"><div class="cd">May 29 <span class="triple">3x</span></div><div><span class="a-fm">Fattmack</span> Charlotte | <span class="a-bfe">BabyFxce E</span> Dallas <span class="b b-dal">DAL</span> | <span class="a-au">Autumn!</span> Albuquerque</div></div>
@@ -267,43 +275,53 @@
 
   <div class="mh">May 2026</div>
   <table class="tbl"><thead><tr><th>Date</th><th>Artist</th><th>City</th><th>Venue</th><th>Tags</th></tr></thead><tbody>
-    <tr data-t="au"><td>May 2</td><td class="a-au">Autumn!</td><td>Chicago, IL</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>May 3</td><td class="a-au">Autumn!</td><td>Columbus, OH</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>May 10</td><td class="a-au">Autumn!</td><td>Philadelphia, PA</td><td>&mdash;</td><td></td></tr>
+    <tr data-t="bs"><td>May 1</td><td class="a-bs">Black Smurf</td><td>Atlanta, GA</td><td>NDSTRY ATL <span class="cap">300</span></td><td></td></tr>
+    <tr data-t="au" data-c="1"><td>May 2</td><td class="a-au">Autumn!</td><td>Chicago, IL</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="bs" data-c="1"><td>May 2</td><td class="a-bs">Black Smurf</td><td>Charlotte, NC</td><td>The Bridge Studios <span class="cap">400</span></td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="au" data-c="1"><td>May 3</td><td class="a-au">Autumn!</td><td>Columbus, OH</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="bs" data-c="1"><td>May 3</td><td class="a-bs">Black Smurf</td><td>Chicago, IL</td><td>Bookclub <span class="cap">230</span></td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="bs"><td>May 8</td><td class="a-bs">Black Smurf</td><td>Los Angeles, CA</td><td>Los Globos <span class="cap">840</span></td><td></td></tr>
+    <tr data-t="bs"><td>May 9</td><td class="a-bs">Black Smurf</td><td>Tucson, AZ</td><td>Club Congress <span class="cap">400</span></td><td></td></tr>
+    <tr data-t="au" data-c="1"><td>May 10</td><td class="a-au">Autumn!</td><td>Philadelphia, PA</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="bs" data-c="1"><td>May 10</td><td class="a-bs">Black Smurf</td><td>Mesa, AZ</td><td>The Nile Theater <span class="cap">1000</span></td><td><span class="b b-col">2x</span></td></tr>
     <tr data-t="au"><td>May 11</td><td class="a-au">Autumn!</td><td>New York, NY</td><td>&mdash;</td><td></td></tr>
     <tr data-t="au"><td>May 12</td><td class="a-au">Autumn!</td><td>Toronto, ON</td><td>&mdash;</td><td></td></tr>
     <tr data-t="fm" data-c="1"><td>May 13</td><td class="a-fm">Fattmack</td><td>Atlanta, GA</td><td>&mdash;</td><td><span class="b b-so">SOLD OUT</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 13</td><td class="a-bfe">BabyFxce E</td><td>Detroit, MI</td><td>El Club</td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="bfe" data-c="1"><td>May 13</td><td class="a-bfe">BabyFxce E</td><td>Detroit, MI</td><td>El Club <span class="cap">300</span></td><td><span class="b b-col">2x</span></td></tr>
     <tr data-t="bfe" data-c="1"><td>May 14</td><td class="a-bfe">BabyFxce E</td><td>Chicago, IL</td><td>Avondale Music Hall</td><td><span class="b b-col">2x</span></td></tr>
     <tr data-t="au" data-c="1"><td>May 14</td><td class="a-au">Autumn!</td><td>Calgary, AB</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
     <tr data-t="fm" data-d="1" data-x="1" data-c="1" class="dal"><td>May 15</td><td class="a-fm">Fattmack</td><td>Dallas, TX</td><td>&mdash;</td><td><span class="b b-dal">DALLAS</span><span class="b b-so">SOLD OUT</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 15</td><td class="a-bfe">BabyFxce E</td><td>Milwaukee, WI</td><td>The Rave</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="au"><td>May 16</td><td class="a-au">Autumn!</td><td>Edmonton, AB</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="fm" data-x="1" data-c="1" class="tx"><td>May 17</td><td class="a-fm">Fattmack</td><td>Houston, TX</td><td>&mdash;</td><td><span class="b b-tx">TX</span><span class="b b-so">SOLD OUT</span><span class="b b-col">3x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 17</td><td class="a-bfe">BabyFxce E</td><td>Minneapolis, MN</td><td>Fine Line</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 17</td><td class="a-au">Autumn!</td><td>Boston, MA</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
+    <tr data-t="bfe" data-c="1"><td>May 15</td><td class="a-bfe">BabyFxce E</td><td>Milwaukee, WI</td><td>The Rave <span class="cap">2500</span></td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="au" data-c="1"><td>May 16</td><td class="a-au">Autumn!</td><td>Edmonton, AB</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="bs" data-c="1"><td>May 16</td><td class="a-bs">Black Smurf</td><td>Las Vegas, NV</td><td>C3 Lounge <span class="cap">200</span></td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="fm" data-x="1" data-c="1" class="tx"><td>May 17</td><td class="a-fm">Fattmack</td><td>Houston, TX</td><td>&mdash;</td><td><span class="b b-tx">TX</span><span class="b b-so">SOLD OUT</span><span class="b b-col">4x</span></td></tr>
+    <tr data-t="bfe" data-c="1"><td>May 17</td><td class="a-bfe">BabyFxce E</td><td>Minneapolis, MN</td><td>Fine Line <span class="cap">650</span></td><td><span class="b b-col">4x</span></td></tr>
+    <tr data-t="au" data-c="1"><td>May 17</td><td class="a-au">Autumn!</td><td>Boston, MA</td><td>&mdash;</td><td><span class="b b-col">4x</span></td></tr>
+    <tr data-t="bs" data-c="1"><td>May 17</td><td class="a-bs">Black Smurf</td><td>Washington, DC</td><td>DC9 <span class="cap">250</span></td><td><span class="b b-col">4x</span></td></tr>
     <tr data-t="fm" data-c="1"><td>May 18</td><td class="a-fm">Fattmack</td><td>Los Angeles, CA</td><td>&mdash;</td><td><span class="b b-lo">LOW</span><span class="b b-col">2x</span></td></tr>
     <tr data-t="bfe" data-c="1"><td>May 18</td><td class="a-bfe">BabyFxce E</td><td>Kansas City, MO</td><td>The Bottleneck</td><td><span class="b b-col">2x</span></td></tr>
     <tr data-t="bfe" data-c="1"><td>May 20</td><td class="a-bfe">BabyFxce E</td><td>Denver, CO</td><td>Summit</td><td><span class="b b-col">2x</span></td></tr>
     <tr data-t="au" data-c="1"><td>May 20</td><td class="a-au">Autumn!</td><td>Indianapolis, IN</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
     <tr data-t="au"><td>May 21</td><td class="a-au">Autumn!</td><td>Atlanta, GA</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 23</td><td class="a-bfe">BabyFxce E</td><td>Las Vegas, NV</td><td>KLTRE</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 23</td><td class="a-au">Autumn!</td><td>Greensboro, NC</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="bs"><td>May 22</td><td class="a-bs">Black Smurf</td><td>Orlando, FL</td><td>Have Knotz <span class="cap">300</span></td><td></td></tr>
+    <tr data-t="bfe" data-c="1"><td>May 23</td><td class="a-bfe">BabyFxce E</td><td>Las Vegas, NV</td><td>KLTRE</td><td><span class="b b-col">3x</span></td></tr>
+    <tr data-t="au" data-c="1"><td>May 23</td><td class="a-au">Autumn!</td><td>Greensboro, NC</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
+    <tr data-t="bs" data-c="1"><td>May 23</td><td class="a-bs">Black Smurf</td><td>Minneapolis, MN</td><td>Underground Music Cafe <span class="cap">540</span></td><td><span class="b b-col">3x</span></td></tr>
     <tr data-t="bfe"><td>May 24</td><td class="a-bfe">BabyFxce E</td><td>Mesa, AZ</td><td>The Rosetta Room</td><td></td></tr>
     <tr data-t="au"><td>May 25</td><td class="a-au">Autumn!</td><td>Orlando, FL</td><td>&mdash;</td><td></td></tr>
     <tr data-t="fm" data-c="1"><td>May 26</td><td class="a-fm">Fattmack</td><td>Chicago, IL</td><td>&mdash;</td><td><span class="b b-so">SOLD OUT</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 26</td><td class="a-bfe">BabyFxce E</td><td>Los Angeles, CA</td><td>Echoplex</td><td><span class="b b-so">SOLD OUT</span><span class="b b-col">2x</span></td></tr>
+    <tr data-t="bfe" data-c="1"><td>May 26</td><td class="a-bfe">BabyFxce E</td><td>Los Angeles, CA</td><td>Echoplex <span class="cap">800</span></td><td><span class="b b-so">SOLD OUT</span><span class="b b-col">2x</span></td></tr>
     <tr data-t="fm" data-c="1"><td>May 27</td><td class="a-fm">Fattmack</td><td>New York, NY</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
     <tr data-t="au" data-c="1"><td>May 27</td><td class="a-au">Autumn!</td><td>Miami, FL</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-x="1" class="tx"><td>May 28</td><td class="a-bfe">BabyFxce E</td><td>Houston, TX</td><td>House of Blues</td><td><span class="b b-tx">TX</span></td></tr>
+    <tr data-t="bfe" data-x="1" class="tx"><td>May 28</td><td class="a-bfe">BabyFxce E</td><td>Houston, TX</td><td>House of Blues <span class="cap">1600</span></td><td><span class="b b-tx">TX</span></td></tr>
     <tr data-t="fm" data-c="1"><td>May 29</td><td class="a-fm">Fattmack</td><td>Charlotte, NC</td><td>&mdash;</td><td><span class="b b-so">SOLD OUT</span><span class="b b-col">3x</span></td></tr>
-    <tr data-t="bfe" data-d="1" data-x="1" data-c="1" class="dal"><td>May 29</td><td class="a-bfe">BabyFxce E</td><td>Dallas, TX</td><td>House of Blues</td><td><span class="b b-dal">DALLAS</span><span class="b b-col">3x</span></td></tr>
+    <tr data-t="bfe" data-d="1" data-x="1" data-c="1" class="dal"><td>May 29</td><td class="a-bfe">BabyFxce E</td><td>Dallas, TX</td><td>House of Blues <span class="cap">1600</span></td><td><span class="b b-dal">DALLAS</span><span class="b b-col">3x</span></td></tr>
     <tr data-t="au" data-c="1"><td>May 29</td><td class="a-au">Autumn!</td><td>Albuquerque, NM</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>May 30</td><td class="a-br">Babyface Ray &amp; 42 Dugg</td><td>Cincinnati, OH</td><td>Bogart's</td><td><span class="b b-col">2x</span></td></tr>
+    <tr data-t="br" data-c="1"><td>May 30</td><td class="a-br">Babyface Ray &amp; 42 Dugg</td><td>Cincinnati, OH</td><td>Bogart's <span class="cap">1500</span></td><td><span class="b b-col">2x</span></td></tr>
     <tr data-t="au" data-c="1"><td>May 30</td><td class="a-au">Autumn!</td><td>Los Angeles, CA</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
     <tr data-t="fm" data-c="1"><td>May 31</td><td class="a-fm">Fattmack</td><td>Nashville, TN</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>May 31</td><td class="a-br">Babyface Ray &amp; 42 Dugg</td><td>Cleveland, OH</td><td>House of Blues</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 31</td><td class="a-bfe">BabyFxce E</td><td>Atlanta, GA</td><td>The Masquerade</td><td><span class="b b-col">3x</span></td></tr>
+    <tr data-t="br" data-c="1"><td>May 31</td><td class="a-br">Babyface Ray &amp; 42 Dugg</td><td>Cleveland, OH</td><td>House of Blues <span class="cap">1400</span></td><td><span class="b b-col">3x</span></td></tr>
+    <tr data-t="bfe" data-c="1"><td>May 31</td><td class="a-bfe">BabyFxce E</td><td>Atlanta, GA</td><td>The Masquerade <span class="cap">1000</span></td><td><span class="b b-col">3x</span></td></tr>
   </tbody></table>
 
   <div class="mh">June 2026</div>
@@ -451,8 +469,8 @@
 
 <script>
 try {
-var at={fm:1,br:1,rio:1,ct:1,bfe:1,yh:1,'2s':1,au:1},hl=null,curM=4;
-var AN={fm:'Fattmack',br:'Babyface Ray & 42 Dugg',rio:'Rio Da Yung OG',ct:'Chris Travis',bfe:'BabyFxce E',yh:'Yhapojj','2s':'2Slimey',au:'Autumn!'};
+var at={fm:1,br:1,rio:1,ct:1,bfe:1,yh:1,'2s':1,au:1,bs:1},hl=null,curM=4;
+var AN={fm:'Fattmack',br:'Babyface Ray & 42 Dugg',rio:'Rio Da Yung OG',ct:'Chris Travis',bfe:'BabyFxce E',yh:'Yhapojj','2s':'2Slimey',au:'Autumn!',bs:'Black Smurf'};
 var E=[
 {d:'2026-05-02',a:'au',n:'Autumn!',c:'Chicago, IL',v:'',s:''},
 {d:'2026-05-03',a:'au',n:'Autumn!',c:'Columbus, OH',v:'',s:''},
@@ -596,7 +614,17 @@ var E=[
 {d:'2026-08-29',a:'rio',n:'Rio Da Yung OG',c:'New York, NY',v:'Irving Plaza',s:''},
 {d:'2026-09-03',a:'rio',n:'Rio Da Yung OG',c:'Charlotte, NC',v:'The Underground',s:''},
 {d:'2026-09-04',a:'rio',n:'Rio Da Yung OG',c:'Charleston, SC',v:'Charleston Music Hall',s:''},
-{d:'2026-09-08',a:'rio',n:'Rio Da Yung OG',c:'Miami, FL',v:'ZeyZey',s:''}
+{d:'2026-09-08',a:'rio',n:'Rio Da Yung OG',c:'Miami, FL',v:'ZeyZey',s:''},
+{d:'2026-05-01',a:'bs',n:'Black Smurf',c:'Atlanta, GA',v:'NDSTRY ATL',cap:300,s:''},
+{d:'2026-05-02',a:'bs',n:'Black Smurf',c:'Charlotte, NC',v:'The Bridge Studios',cap:400,s:''},
+{d:'2026-05-03',a:'bs',n:'Black Smurf',c:'Chicago, IL',v:'Bookclub',cap:230,s:''},
+{d:'2026-05-08',a:'bs',n:'Black Smurf',c:'Los Angeles, CA',v:'Los Globos',cap:840,s:''},
+{d:'2026-05-09',a:'bs',n:'Black Smurf',c:'Tucson, AZ',v:'Club Congress',cap:400,s:''},
+{d:'2026-05-10',a:'bs',n:'Black Smurf',c:'Mesa, AZ',v:'The Nile Theater',cap:1000,s:''},
+{d:'2026-05-16',a:'bs',n:'Black Smurf',c:'Las Vegas, NV',v:'C3 Lounge',cap:200,s:''},
+{d:'2026-05-17',a:'bs',n:'Black Smurf',c:'Washington, DC',v:'DC9',cap:250,s:''},
+{d:'2026-05-22',a:'bs',n:'Black Smurf',c:'Orlando, FL',v:'Have Knotz',cap:300,s:''},
+{d:'2026-05-23',a:'bs',n:'Black Smurf',c:'Minneapolis, MN',v:'Underground Music Cafe',cap:540,s:''}
 ];
 
 var dm={};for(var i=0;i<E.length;i++){var e=E[i];if(!dm[e.d])dm[e.d]=[];dm[e.d].push(e);}
@@ -696,7 +724,7 @@ function showDD(ds){
     var ev=vis[i];
     h+='<div class="dd-ev"><div class="dd-artist a-'+ev.a+'">'+ev.n+'</div>';
     h+='<div class="dd-city">'+ev.c+'</div>';
-    if(ev.v)h+='<div class="dd-venue">'+ev.v+'</div>';
+    if(ev.v)h+='<div class="dd-venue">'+ev.v+(ev.cap?' <span style="font-size:10px;color:#666;border:1px solid #444;padding:0 5px;border-radius:8px;margin-left:4px">Cap: '+ev.cap+'</span>':'')+'</div>';
     if(ev.s==='SO')h+='<div style="color:#ff5555;font-size:12px;margin-top:2px;font-weight:600">SOLD OUT</div>';
     if(ev.s==='LO')h+='<div style="color:#ffaa00;font-size:12px;margin-top:2px;font-weight:600">LOW TICKETS</div>';
     h+='</div>';
