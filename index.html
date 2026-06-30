@@ -533,7 +533,11 @@
 
   /* Phone: one month at a time, full-width, tap a day for details */
   @media (max-width: 768px) {
-    main { padding: 10px; }
+    main { padding: 10px; display: flex; flex-direction: column; }
+    /* Calendar up top; collision panel + note banner below it */
+    #calendar-view, #list-view { order: 1; }
+    #collision-panel { order: 2; }
+    #note-banner { order: 3; }
     .calendar-grid { gap: 0; }
     .cal-mobile-nav { display: flex; }
     .month-block h2 { display: none; }
