@@ -2,742 +2,1215 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>1K Productions — Tour Date Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thousand Productions — Tour Date Tracker</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',system-ui,sans-serif;background:#0d0d0d;color:#e8e8e8;min-height:100vh;overflow-x:hidden}
-
-  /* HEADER */
-  header{background:linear-gradient(135deg,#111,#1a1a1a);border-bottom:1px solid #333;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-  .logo h1{font-size:18px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-  .logo span{font-size:10px;color:#888;letter-spacing:2px;text-transform:uppercase}
-  .stats-bar{display:flex;gap:16px;flex-wrap:wrap}
-  .stat{text-align:center}
-  .stat-value{font-size:22px;font-weight:700}
-  .stat-label{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:1px}
-  .s-dal{color:#00E5FF}.s-tx{color:#FF6B35}.s-col{color:#FF9500}
-
-  /* CONTROLS */
-  .controls{background:#1a1a1a;border-bottom:1px solid #333;padding:10px 20px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-  .fg{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
-  .fg label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-right:2px}
-  .fb{padding:4px 10px;border-radius:16px;border:1px solid #333;background:transparent;color:#e8e8e8;font-size:10px;cursor:pointer;transition:all .2s;white-space:nowrap}
-  .fb:hover{background:#242424}
-  .fb.on{border-color:currentColor;background:rgba(255,255,255,.08)}
-  .c-fm{color:#FFD700}.c-br{color:#C4A265}.c-rio{color:#FF4444}.c-ct{color:#B366FF}
-  .c-bfe{color:#00CED1}.c-yh{color:#E91E63}.c-2s{color:#76FF03}.c-au{color:#FF7043}.c-bs{color:#90A4AE}
-  .c-dal{color:#00E5FF}.c-tx{color:#FF6B35}.c-col{color:#FF9500}
-  .dv{width:1px;height:20px;background:#333;margin:0 4px}
-  .vtog{margin-left:auto;display:flex;gap:3px}
-  .vb{padding:4px 10px;border-radius:5px;border:1px solid #333;background:transparent;color:#888;font-size:10px;cursor:pointer;transition:all .2s}
-  .vb.on{background:#242424;color:#e8e8e8;border-color:#555}
-
-  /* MAIN */
-  main{padding:20px;max-width:1440px;margin:0 auto}
-
-  /* LEGEND */
-  .legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;padding:10px 14px;background:#1a1a1a;border:1px solid #333;border-radius:8px;font-size:10px}
-  .li{display:flex;align-items:center;gap:4px}
-  .ld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-
-  /* COLLISION PANEL */
-  .cp{background:#1a1a1a;border:1px solid rgba(255,149,0,.3);border-radius:10px;padding:16px 20px;margin-bottom:20px}
-  .cp h3{font-size:13px;color:#FF9500;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-  .ci{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid #222;font-size:11px;align-items:flex-start}
-  .ci:last-child{border-bottom:none}
-  .cd{font-weight:700;min-width:95px;color:#FF9500;white-space:nowrap;font-size:11px}
-
-  /* LIST VIEW */
-  .tbl{width:100%;border-collapse:collapse;margin-bottom:6px}
-  .tbl th{text-align:left;padding:6px 8px;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #333}
-  .tbl td{padding:6px 8px;font-size:11px;border-bottom:1px solid #1a1a1a}
-  .tbl tr:hover{background:#1a1a1a}
-  .tbl tr.dal{background:rgba(0,229,255,.06)}
-  .tbl tr.tx{border-left:3px solid #FF6B35}
-  .a-fm{color:#FFD700}.a-br{color:#C4A265}.a-rio{color:#FF4444}.a-ct{color:#B366FF}
-  .a-bfe{color:#00CED1}.a-yh{color:#E91E63}.a-2s{color:#76FF03}.a-au{color:#FF7043}.a-bs{color:#90A4AE}
-  .b{display:inline-block;font-size:8px;padding:1px 5px;border-radius:8px;font-weight:600;white-space:nowrap;margin-left:2px}
-  .b-dal{background:rgba(0,229,255,.15);color:#00E5FF;border:1px solid rgba(0,229,255,.3)}
-  .b-tx{background:rgba(255,107,53,.15);color:#FF6B35;border:1px solid rgba(255,107,53,.3)}
-  .b-col{background:rgba(255,149,0,.15);color:#FF9500;border:1px solid rgba(255,149,0,.3)}
-  .b-so{background:rgba(255,51,51,.2);color:#ff5555;border:1px solid rgba(255,51,51,.3)}
-  .b-lo{background:rgba(255,149,0,.2);color:#ffaa00;border:1px solid rgba(255,149,0,.3)}
-  .b-5x{background:rgba(255,0,0,.2);color:#ff3333;border:1px solid rgba(255,0,0,.4)}
-  .mh{font-size:16px;font-weight:600;padding:16px 0 6px;border-bottom:1px solid #333;margin-bottom:2px}
-  .mh:first-of-type{padding-top:0}
-  .triple{color:#ff3333;font-size:9px;font-weight:800}
-  .cap{font-size:8px;color:#666;border:1px solid #333;padding:0 4px;border-radius:8px;margin-left:3px;white-space:nowrap}
-
-  /* ===== VIEW TOGGLE (CSS-only for no-JS previews) ===== */
-  #v-list,#v-cal{position:absolute;opacity:0;pointer-events:none}
-  #v-cal:checked ~ #list-view,
-  #v-cal:checked ~ #cp{display:none}
-  #v-cal:checked ~ #cal-view{display:block}
-  body:has(#v-list:checked) .vtog label[for="v-list"],
-  body:has(#v-cal:checked) .vtog label[for="v-cal"]{background:#242424;color:#e8e8e8;border-color:#555}
-
-  /* ===== CALENDAR VIEW ===== */
-  #cal-view{display:none}
-
-  .cal-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px;padding:8px 0}
-  .cal-nav button{background:none;border:1px solid #444;color:#e8e8e8;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
-  .cal-nav button:hover{background:#333}
-  .cal-nav h2{font-size:18px;font-weight:600;min-width:160px;text-align:center}
-
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#222;border:1px solid #222;border-radius:8px;overflow:hidden}
-  .cal-dh{text-align:center;font-size:10px;color:#999;text-transform:uppercase;letter-spacing:1px;padding:10px 0;background:#1a1a1a;font-weight:600}
-  .cal-cell{background:#111;min-height:110px;padding:4px;position:relative;transition:background .15s;cursor:pointer}
-  .cal-cell:hover{background:#1a1a1a}
-  .cal-cell.empty{background:#0d0d0d;cursor:default}
-  .cal-cell.today{background:#1a1a2a}
-
-  .cal-dn{font-size:12px;font-weight:600;color:#666;padding:2px 4px;margin-bottom:2px}
-  .cal-cell.is-dal{box-shadow:inset 0 0 0 2px #00E5FF}
-  .cal-cell.is-dal .cal-dn{color:#00E5FF;font-weight:700}
-  .cal-cell.is-tx{box-shadow:inset 3px 0 0 #FF6B35}
-  .cal-cell.is-col .cal-dn::after{content:" !";color:#FF9500;font-weight:800}
-  .cal-cell.is-5x{box-shadow:inset 0 0 0 2px #ff3333;animation:p5 2s ease-in-out infinite}
-  @keyframes p5{0%,100%{box-shadow:inset 0 0 0 2px #ff3333}50%{box-shadow:inset 0 0 0 2px #ff3333,0 0 8px rgba(255,51,51,.3)}}
-
-  .cal-ev{font-size:9px;padding:2px 4px;border-radius:3px;margin-bottom:1px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .cal-ev.t-fm{background:rgba(255,215,0,.15);color:#FFD700;border-left:2px solid #FFD700}
-  .cal-ev.t-br{background:rgba(196,162,101,.15);color:#C4A265;border-left:2px solid #C4A265}
-  .cal-ev.t-rio{background:rgba(255,68,68,.15);color:#FF4444;border-left:2px solid #FF4444}
-  .cal-ev.t-ct{background:rgba(179,102,255,.15);color:#B366FF;border-left:2px solid #B366FF}
-  .cal-ev.t-bfe{background:rgba(0,206,209,.15);color:#00CED1;border-left:2px solid #00CED1}
-  .cal-ev.t-yh{background:rgba(233,30,99,.15);color:#E91E63;border-left:2px solid #E91E63}
-  .cal-ev.t-2s{background:rgba(118,255,3,.15);color:#76FF03;border-left:2px solid #76FF03}
-  .cal-ev.t-au{background:rgba(255,112,67,.15);color:#FF7043;border-left:2px solid #FF7043}
-  .cal-ev.t-bs{background:rgba(144,164,174,.15);color:#90A4AE;border-left:2px solid #90A4AE}
-  .cal-cb{position:absolute;top:3px;right:3px;background:#FF9500;color:#000;font-size:8px;font-weight:800;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-  .cal-cb.c5{background:#ff3333;color:#fff}
-  .cal-so{font-size:7px;background:#ff3333;color:#fff;padding:0 3px;border-radius:2px;margin-left:2px;font-weight:700}
-
-  /* Day detail popup (mobile tap) */
-  .day-detail{display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;border-top:2px solid #444;padding:16px 20px;z-index:100;max-height:50vh;overflow-y:auto;border-radius:16px 16px 0 0}
-  .day-detail.open{display:block}
-  .day-detail h3{font-size:16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
-  .day-detail .dd-close{background:none;border:none;color:#888;font-size:24px;cursor:pointer;padding:0 4px}
-  .dd-ev{padding:10px 0;border-bottom:1px solid #333;font-size:13px}
-  .dd-ev:last-child{border-bottom:none}
-  .dd-artist{font-weight:600;font-size:14px}
-  .dd-city{color:#ccc;margin-top:2px}
-  .dd-venue{color:#888;font-size:12px;margin-top:1px}
-  .day-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:99}
-  .day-overlay.open{display:block}
-
-  /* MOBILE: full-screen calendar like Apple/Google Calendar */
-  @media(max-width:768px){
-    header{padding:12px 16px}
-    .controls{padding:8px 12px;gap:4px}
-    .fb{padding:3px 8px;font-size:9px}
-    .fg label{font-size:9px}
-    .dv{display:none}
-    main{padding:8px}
-    .legend{padding:8px 10px;gap:8px;font-size:9px;margin-bottom:10px}
-    .cp{padding:12px 14px;margin-bottom:12px}
-    .ci{font-size:10px;flex-direction:column;gap:2px}
-    .cd{min-width:auto}
-
-    /* Calendar takes full width, no padding */
-    .cal-grid{border-radius:0;border:none;gap:0}
-    .cal-cell{min-height:calc((100vw - 16px) / 7 * 1.4);border-right:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a}
-    .cal-dh{padding:8px 0;font-size:9px}
-    .cal-dn{font-size:11px;text-align:center;padding:4px 0;margin-bottom:1px}
-    .cal-ev{font-size:7px;padding:1px 2px;border-left-width:2px;margin-bottom:1px;border-radius:2px}
-    .cal-cb{width:13px;height:13px;font-size:7px;top:2px;right:2px}
-    .cal-nav h2{font-size:16px;min-width:140px}
-
-    /* List view mobile */
-    .tbl th:nth-child(4),.tbl td:nth-child(4){display:none}
-    .tbl th:nth-child(5),.tbl td:nth-child(5){display:none}
-    .stat-value{font-size:18px}
-    .stats-bar{gap:10px}
+  :root {
+    --bg: #0d0d0d;
+    --surface: #1a1a1a;
+    --surface2: #242424;
+    --border: #333;
+    --text: #e8e8e8;
+    --text-dim: #888;
+    --fattmack: #FFD700;
+    --fattmack-bg: rgba(255,215,0,0.12);
+    --babyface: #C4A265;
+    --babyface-bg: rgba(196,162,101,0.12);
+    --rio: #FF4444;
+    --rio-bg: rgba(255,68,68,0.12);
+    --travis: #B366FF;
+    --travis-bg: rgba(179,102,255,0.12);
+    --realest: #00CED1;
+    --realest-bg: rgba(0,206,209,0.12);
+    --autumn: #FF7043;
+    --autumn-bg: rgba(255,112,67,0.12);
+    --smurf: #90A4AE;
+    --smurf-bg: rgba(144,164,174,0.12);
+    --yhapojj: #E91E63;
+    --yhapojj-bg: rgba(233,30,99,0.12);
+    --slimey: #76FF03;
+    --slimey-bg: rgba(118,255,3,0.12);
+    --dallas: #00E5FF;
+    --texas: #FF6B35;
+    --collision: #FF9500;
   }
 
-  @media(max-width:380px){
-    .cal-cell{min-height:calc((100vw - 16px) / 7 * 1.2)}
-    .cal-ev{font-size:6px;padding:1px 1px}
-    .cal-dn{font-size:10px}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  header {
+    background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .logo span {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .controls {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .filter-group label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: 4px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover { background: var(--surface2); }
+
+  .filter-btn.active {
+    border-color: currentColor;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .filter-btn[data-tour="fattmack"] { color: var(--fattmack); }
+  .filter-btn[data-tour="babyface"] { color: var(--babyface); }
+  .filter-btn[data-tour="rio"] { color: var(--rio); }
+  .filter-btn[data-tour="travis"] { color: var(--travis); }
+  .filter-btn[data-tour="realest"] { color: var(--realest); }
+  .filter-btn[data-tour="autumn"] { color: var(--autumn); }
+  .filter-btn[data-tour="smurf"] { color: var(--smurf); }
+  .filter-btn[data-tour="yhapojj"] { color: var(--yhapojj); }
+  .filter-btn[data-tour="slimey"] { color: var(--slimey); }
+  .filter-btn[data-highlight="dallas"] { color: var(--dallas); }
+  .filter-btn[data-highlight="texas"] { color: var(--texas); }
+  .filter-btn[data-highlight="collision"] { color: var(--collision); }
+
+  .divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 0 8px;
+  }
+
+  .view-toggle {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+  }
+
+  .view-btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .view-btn.active {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: #555;
+  }
+
+  main {
+    padding: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Calendar Grid View */
+  .calendar-grid { display: flex; flex-direction: column; gap: 40px; }
+
+  .month-block h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+
+  .month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .day-header {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 4px;
+  }
+
+  .day-cell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    min-height: 100px;
+    padding: 6px;
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  .day-cell:hover { border-color: #555; }
+  .day-cell.empty { background: transparent; border-color: transparent; }
+  .day-cell.today { border-color: #fff; }
+
+  .day-number {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .day-cell.has-dallas {
+    box-shadow: 0 0 0 2px var(--dallas), 0 0 12px rgba(0,229,255,0.25);
+  }
+
+  .day-cell.has-dallas .day-number { color: var(--dallas); }
+
+  .day-cell.has-texas {
+    border-left: 3px solid var(--texas);
+  }
+
+  .day-cell.has-collision {
+    animation: pulse-collision 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-collision {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,149,0,0); }
+    50% { box-shadow: 0 0 0 3px rgba(255,149,0,0.3); }
+  }
+
+  .day-cell.has-dallas.has-collision {
+    animation: pulse-dallas-collision 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dallas-collision {
+    0%, 100% { box-shadow: 0 0 0 2px var(--dallas), 0 0 12px rgba(0,229,255,0.25); }
+    50% { box-shadow: 0 0 0 2px var(--dallas), 0 0 12px rgba(0,229,255,0.25), 0 0 0 5px rgba(255,149,0,0.3); }
+  }
+
+  .event-chip {
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+    line-height: 1.3;
+    position: relative;
+  }
+
+  .event-chip:hover { filter: brightness(1.3); transform: scale(1.02); }
+
+  .event-chip[data-tour="fattmack"] { background: var(--fattmack-bg); color: var(--fattmack); border-left: 2px solid var(--fattmack); }
+  .event-chip[data-tour="babyface"] { background: var(--babyface-bg); color: var(--babyface); border-left: 2px solid var(--babyface); }
+  .event-chip[data-tour="rio"] { background: var(--rio-bg); color: var(--rio); border-left: 2px solid var(--rio); }
+  .event-chip[data-tour="travis"] { background: var(--travis-bg); color: var(--travis); border-left: 2px solid var(--travis); }
+  .event-chip[data-tour="realest"] { background: var(--realest-bg); color: var(--realest); border-left: 2px solid var(--realest); }
+  .event-chip[data-tour="autumn"] { background: var(--autumn-bg); color: var(--autumn); border-left: 2px solid var(--autumn); }
+  .event-chip[data-tour="smurf"] { background: var(--smurf-bg); color: var(--smurf); border-left: 2px solid var(--smurf); }
+  .event-chip[data-tour="yhapojj"] { background: var(--yhapojj-bg); color: var(--yhapojj); border-left: 2px solid var(--yhapojj); }
+  .event-chip[data-tour="slimey"] { background: var(--slimey-bg); color: var(--slimey); border-left: 2px solid var(--slimey); }
+
+  .event-chip .sold-out {
+    font-size: 8px;
+    background: #ff3333;
+    color: #fff;
+    padding: 1px 4px;
+    border-radius: 3px;
+    margin-left: 4px;
+    font-weight: 700;
+  }
+
+  .event-chip .low-tickets {
+    font-size: 8px;
+    background: #ff9500;
+    color: #000;
+    padding: 1px 4px;
+    border-radius: 3px;
+    margin-left: 4px;
+    font-weight: 700;
+  }
+
+  .collision-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: var(--collision);
+    color: #000;
+    font-size: 9px;
+    font-weight: 800;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dallas-star {
+    position: absolute;
+    top: 4px;
+    right: 24px;
+    font-size: 14px;
+    color: var(--dallas);
+  }
+
+  .texas-flag {
+    position: absolute;
+    top: 5px;
+    right: 24px;
+    font-size: 11px;
+  }
+
+  /* List View */
+  .list-view { display: none; }
+  .list-view.active { display: block; }
+  .calendar-grid.active { display: flex; }
+
+  .list-month-header {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 16px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+    margin-top: 24px;
+  }
+
+  .list-month-header:first-child { margin-top: 0; }
+
+  .list-item {
+    display: grid;
+    grid-template-columns: 80px 160px 1fr 160px 120px;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    align-items: center;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+
+  .list-item:hover {
+    background: var(--surface);
+    border-color: var(--border);
+  }
+
+  .list-item.dallas-row {
+    background: rgba(0,229,255,0.05);
+    border-color: rgba(0,229,255,0.2);
+  }
+
+  .list-item.texas-row {
+    border-left: 3px solid var(--texas);
+  }
+
+  .list-item.collision-row {
+    background: rgba(255,149,0,0.05);
+  }
+
+  .list-date {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .list-artist {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .list-artist[data-tour="fattmack"] { color: var(--fattmack); }
+  .list-artist[data-tour="babyface"] { color: var(--babyface); }
+  .list-artist[data-tour="rio"] { color: var(--rio); }
+  .list-artist[data-tour="travis"] { color: var(--travis); }
+  .list-artist[data-tour="realest"] { color: var(--realest); }
+  .list-artist[data-tour="autumn"] { color: var(--autumn); }
+  .list-artist[data-tour="smurf"] { color: var(--smurf); }
+  .list-artist[data-tour="yhapojj"] { color: var(--yhapojj); }
+  .list-artist[data-tour="slimey"] { color: var(--slimey); }
+
+  .list-city { font-size: 13px; color: var(--text); }
+  .list-venue { font-size: 12px; color: var(--text-dim); }
+
+  .list-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .badge-dallas { background: rgba(0,229,255,0.15); color: var(--dallas); border: 1px solid rgba(0,229,255,0.3); }
+  .badge-texas { background: rgba(255,107,53,0.15); color: var(--texas); border: 1px solid rgba(255,107,53,0.3); }
+  .badge-collision { background: rgba(255,149,0,0.15); color: var(--collision); border: 1px solid rgba(255,149,0,0.3); }
+  .badge-soldout { background: rgba(255,51,51,0.2); color: #ff5555; border: 1px solid rgba(255,51,51,0.3); }
+  .badge-low { background: rgba(255,149,0,0.2); color: #ffaa00; border: 1px solid rgba(255,149,0,0.3); }
+
+  /* Detail Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .modal h3 { font-size: 18px; margin-bottom: 16px; }
+  .modal-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .modal-row:last-child { border-bottom: none; }
+  .modal-label { color: var(--text-dim); }
+
+  /* Collision Panel */
+  .collision-panel {
+    background: var(--surface);
+    border: 1px solid rgba(255,149,0,0.3);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+
+  .collision-panel h3 {
+    font-size: 14px;
+    color: var(--collision);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .collision-item {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    align-items: flex-start;
+  }
+
+  .collision-item:last-child { border-bottom: none; }
+
+  .collision-date {
+    font-weight: 700;
+    min-width: 80px;
+    color: var(--collision);
+  }
+
+  .collision-artists {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .month-grid { grid-template-columns: repeat(7, 1fr); }
+    .day-cell { min-height: 70px; padding: 4px; }
+    .event-chip { font-size: 8px; padding: 2px 4px; }
+    .list-item { grid-template-columns: 70px 1fr 1fr; }
+    .list-venue, .list-badges { display: none; }
+    main { padding: 16px; }
+    header { padding: 16px; }
+    .controls { padding: 12px 16px; }
+  }
+
+  .hidden { display: none !important; }
+
+  .note-banner {
+    background: rgba(0,206,209,0.08);
+    border: 1px solid rgba(0,206,209,0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: var(--realest);
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo"><div>
-    <h1>1K Productions</h1>
-    <span>Tour Date Tracker &mdash; 2026</span>
-  </div></div>
+  <div class="logo">
+    <div>
+      <h1>Thousand Productions</h1>
+      <span>Tour Date Tracker &mdash; 2026</span>
+    </div>
+  </div>
   <div class="stats-bar">
-    <div class="stat"><div class="stat-value">154</div><div class="stat-label">Total Shows</div></div>
-    <div class="stat"><div class="stat-value s-dal">3</div><div class="stat-label">Dallas</div></div>
-    <div class="stat"><div class="stat-value s-tx">21</div><div class="stat-label">Texas</div></div>
-    <div class="stat"><div class="stat-value s-col">44</div><div class="stat-label">Collisions</div></div>
+    <div class="stat">
+      <div class="stat-value" id="stat-total">0</div>
+      <div class="stat-label">Total Shows</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" style="color:var(--dallas)" id="stat-dallas">0</div>
+      <div class="stat-label">Dallas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" style="color:var(--texas)" id="stat-texas">0</div>
+      <div class="stat-label">Texas</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" style="color:var(--collision)" id="stat-collisions">0</div>
+      <div class="stat-label">Collisions</div>
+    </div>
   </div>
 </header>
 
 <div class="controls">
-  <div class="fg">
+  <div class="filter-group">
     <label>Artists</label>
-    <button class="fb on c-fm" data-t="fm" onclick="tf(this)">Fattmack</button>
-    <button class="fb on c-br" data-t="br" onclick="tf(this)">BR &amp; 42 Dugg</button>
-    <button class="fb on c-rio" data-t="rio" onclick="tf(this)">Rio</button>
-    <button class="fb on c-ct" data-t="ct" onclick="tf(this)">Chris Travis</button>
-    <button class="fb on c-bfe" data-t="bfe" onclick="tf(this)">BabyFxce E</button>
-    <button class="fb on c-yh" data-t="yh" onclick="tf(this)">Yhapojj</button>
-    <button class="fb on c-2s" data-t="2s" onclick="tf(this)">2Slimey</button>
-    <button class="fb on c-au" data-t="au" onclick="tf(this)">Autumn!</button>
-    <button class="fb on c-bs" data-t="bs" onclick="tf(this)">Black Smurf</button>
+    <button class="filter-btn active" data-tour="fattmack" onclick="toggleFilter(this)">Fattmack</button>
+    <button class="filter-btn active" data-tour="babyface" onclick="toggleFilter(this)">Babyface Ray & 42 Dugg</button>
+    <button class="filter-btn active" data-tour="rio" onclick="toggleFilter(this)">Rio Da Yung OG</button>
+    <button class="filter-btn active" data-tour="travis" onclick="toggleFilter(this)">Chris Travis</button>
+    <button class="filter-btn active" data-tour="realest" onclick="toggleFilter(this)">BabyFxce E</button>
+    <button class="filter-btn active" data-tour="autumn" onclick="toggleFilter(this)">Autumn!</button>
+    <button class="filter-btn active" data-tour="smurf" onclick="toggleFilter(this)">Black Smurf</button>
+    <button class="filter-btn active" data-tour="yhapojj" onclick="toggleFilter(this)">Yhapojj</button>
+    <button class="filter-btn active" data-tour="slimey" onclick="toggleFilter(this)">2Slimey</button>
   </div>
-  <div class="dv"></div>
-  <div class="fg">
-    <button class="fb c-dal" data-h="dal" onclick="th(this)">Dallas</button>
-    <button class="fb c-tx" data-h="tx" onclick="th(this)">Texas</button>
-    <button class="fb c-col" data-h="col" onclick="th(this)">Collisions</button>
+  <div class="divider"></div>
+  <div class="filter-group">
+    <label>Highlights</label>
+    <button class="filter-btn" data-highlight="dallas" onclick="toggleHighlight(this)">Dallas Only</button>
+    <button class="filter-btn" data-highlight="texas" onclick="toggleHighlight(this)">Texas Only</button>
+    <button class="filter-btn" data-highlight="collision" onclick="toggleHighlight(this)">Collisions Only</button>
   </div>
-  <div class="vtog">
-    <label for="v-list" class="vb" id="vb-list" onclick="sv&&sv('list')">List</label>
-    <label for="v-cal" class="vb" id="vb-cal" onclick="sv&&sv('cal')">Calendar</label>
+  <div class="view-toggle">
+    <button class="view-btn active" onclick="setView('calendar', this)">Calendar</button>
+    <button class="view-btn" onclick="setView('list', this)">List</button>
   </div>
 </div>
 
 <main>
-  <input type="radio" name="vw" id="v-list" checked>
-  <input type="radio" name="vw" id="v-cal">
-  <div class="legend">
-    <div class="li"><div class="ld" style="background:#FFD700"></div>Fattmack</div>
-    <div class="li"><div class="ld" style="background:#C4A265"></div>Babyface Ray &amp; 42 Dugg</div>
-    <div class="li"><div class="ld" style="background:#FF4444"></div>Rio Da Yung OG</div>
-    <div class="li"><div class="ld" style="background:#B366FF"></div>Chris Travis</div>
-    <div class="li"><div class="ld" style="background:#00CED1"></div>BabyFxce E</div>
-    <div class="li"><div class="ld" style="background:#E91E63"></div>Yhapojj</div>
-    <div class="li"><div class="ld" style="background:#76FF03"></div>2Slimey</div>
-    <div class="li"><div class="ld" style="background:#FF7043"></div>Autumn!</div>
-    <div class="li"><div class="ld" style="background:#90A4AE"></div>Black Smurf</div>
-    <div class="li"><span style="color:#00E5FF">&#9733;</span>Dallas</div>
-    <div class="li"><span style="color:#FF6B35;font-weight:700">TX</span>Texas</div>
-    <div class="li"><span style="color:#FF9500;font-weight:700">!</span>Collision</div>
+  <div class="note-banner" id="note-banner">
+    <strong>Note:</strong> BabyFxce E "Be Da Realest Tour" dates sourced from Ticketmaster &amp; toursetlist.com. Rio Da Yung OG flyer was page 2/2 &mdash; earlier dates may exist.
   </div>
 
-  <!-- COLLISION PANEL -->
-  <div class="cp" id="cp">
-    <h3>&#9888; 44 Date Collisions</h3>
-    <div class="ci"><div class="cd">May 2</div><div><span class="a-au">Autumn!</span> Chicago | <span class="a-bs">Black Smurf</span> Charlotte</div></div>
-    <div class="ci"><div class="cd">May 3</div><div><span class="a-au">Autumn!</span> Columbus | <span class="a-bs">Black Smurf</span> Chicago</div></div>
-    <div class="ci"><div class="cd">May 10</div><div><span class="a-au">Autumn!</span> Philadelphia | <span class="a-bs">Black Smurf</span> Phoenix</div></div>
-    <div class="ci"><div class="cd">May 13</div><div><span class="a-fm">Fattmack</span> Atlanta | <span class="a-bfe">BabyFxce E</span> Detroit</div></div>
-    <div class="ci"><div class="cd">May 14</div><div><span class="a-bfe">BabyFxce E</span> Chicago | <span class="a-au">Autumn!</span> Calgary</div></div>
-    <div class="ci"><div class="cd">May 15</div><div><span class="a-fm">Fattmack</span> Dallas <span class="b b-dal">DAL</span> | <span class="a-bfe">BabyFxce E</span> Milwaukee</div></div>
-    <div class="ci"><div class="cd">May 16</div><div><span class="a-au">Autumn!</span> Edmonton | <span class="a-bs">Black Smurf</span> Las Vegas</div></div>
-    <div class="ci"><div class="cd">May 17 <span class="triple">4x</span></div><div><span class="a-fm">Fattmack</span> Houston <span class="b b-tx">TX</span> | <span class="a-bfe">BabyFxce E</span> Minneapolis | <span class="a-au">Autumn!</span> Boston | <span class="a-bs">Black Smurf</span> DC</div></div>
-    <div class="ci"><div class="cd">May 18</div><div><span class="a-fm">Fattmack</span> LA | <span class="a-bfe">BabyFxce E</span> Kansas City</div></div>
-    <div class="ci"><div class="cd">May 20</div><div><span class="a-bfe">BabyFxce E</span> Denver | <span class="a-au">Autumn!</span> Indianapolis</div></div>
-    <div class="ci"><div class="cd">May 23 <span class="triple">3x</span></div><div><span class="a-bfe">BabyFxce E</span> Las Vegas | <span class="a-au">Autumn!</span> Greensboro | <span class="a-bs">Black Smurf</span> Minneapolis</div></div>
-    <div class="ci"><div class="cd">May 26</div><div><span class="a-fm">Fattmack</span> Chicago | <span class="a-bfe">BabyFxce E</span> LA</div></div>
-    <div class="ci"><div class="cd">May 27</div><div><span class="a-fm">Fattmack</span> New York | <span class="a-au">Autumn!</span> Miami</div></div>
-    <div class="ci"><div class="cd">May 29 <span class="triple">3x</span></div><div><span class="a-fm">Fattmack</span> Charlotte | <span class="a-bfe">BabyFxce E</span> Dallas <span class="b b-dal">DAL</span> | <span class="a-au">Autumn!</span> Albuquerque</div></div>
-    <div class="ci"><div class="cd">May 30</div><div><span class="a-br">BR/42D</span> Cincinnati | <span class="a-au">Autumn!</span> Los Angeles</div></div>
-    <div class="ci"><div class="cd">May 31 <span class="triple">3x</span></div><div><span class="a-fm">Fattmack</span> Nashville | <span class="a-br">BR/42D</span> Cleveland | <span class="a-bfe">BabyFxce E</span> Atlanta</div></div>
-    <div class="ci"><div class="cd">Jun 1</div><div><span class="a-fm">Fattmack</span> Birmingham | <span class="a-bfe">BabyFxce E</span> Ft Lauderdale</div></div>
-    <div class="ci"><div class="cd">Jun 4</div><div><span class="a-br">BR/42D</span> Pittsburgh | <span class="a-bfe">BabyFxce E</span> DC</div></div>
-    <div class="ci"><div class="cd">Jun 6</div><div><span class="a-br">BR/42D</span> Rochester | <span class="a-bfe">BabyFxce E</span> Philly</div></div>
-    <div class="ci"><div class="cd">Jun 9</div><div><span class="a-br">BR/42D</span> NYC | <span class="a-bfe">BabyFxce E</span> Cleveland</div></div>
-    <div class="ci"><div class="cd">Jun 19</div><div><span class="a-br">BR/42D</span> Raleigh | <span class="a-ct">Travis</span> Atlanta</div></div>
-    <div class="ci"><div class="cd">Jun 20 <span class="triple">3x</span></div><div><span class="a-br">BR/42D</span> Charleston | <span class="a-ct">Travis</span> Orlando | <span class="a-yh">Yhapojj</span> Miami</div></div>
-    <div class="ci"><div class="cd">Jun 21</div><div><span class="a-br">BR/42D</span> Norfolk | <span class="a-ct">Travis</span> Miami</div></div>
-    <div class="ci"><div class="cd">Jun 26</div><div><span class="a-br">BR/42D</span> Nashville | <span class="a-ct">Travis</span> Seattle</div></div>
-    <div class="ci"><div class="cd">Jun 27</div><div><span class="a-br">BR/42D</span> Joliet | <span class="a-ct">Travis</span> Portland</div></div>
-    <div class="ci"><div class="cd">Jul 2</div><div><span class="a-br">BR/42D</span> Denver | <span class="a-ct">Travis</span> SLC</div></div>
-    <div class="ci"><div class="cd">Jul 9</div><div><span class="a-br">BR/42D</span> Phoenix | <span class="a-2s">2Slimey</span> San Diego</div></div>
-    <div class="ci"><div class="cd">Jul 10 <span class="triple">3x</span></div><div><span class="a-br">BR/42D</span> LA | <span class="a-ct">Travis</span> Chicago | <span class="a-2s">2Slimey</span> Berkeley</div></div>
-    <div class="ci"><div class="cd">Jul 11 <span class="triple">3x</span></div><div><span class="a-br">BR/42D</span> Berkeley | <span class="a-ct">Travis</span> OKC | <span class="a-yh">Yhapojj</span> Seattle</div></div>
-    <div class="ci"><div class="cd">Jul 12 <span class="triple">3x</span></div><div><span class="a-br">BR/42D</span> Sacramento | <span class="a-ct">Travis</span> Denver | <span class="a-yh">Yhapojj</span> Portland</div></div>
-    <div class="ci"><div class="cd">Jul 15</div><div><span class="a-ct">Travis</span> El Paso <span class="b b-tx">TX</span> | <span class="a-yh">Yhapojj</span> LA</div></div>
-    <div class="ci"><div class="cd">Jul 17 <span class="triple">3x</span></div><div><span class="a-br">BR/42D</span> Lincoln | <span class="a-ct">Travis</span> Tucson | <span class="a-2s">2Slimey</span> NYC</div></div>
-    <div class="ci"><div class="cd">Jul 18 <span class="triple">3x</span></div><div><span class="a-br">BR/42D</span> Indianapolis | <span class="a-ct">Travis</span> Phoenix | <span class="a-2s">2Slimey</span> Philly</div></div>
-    <div class="ci"><div class="cd">Jul 19 <span class="triple">4x</span></div><div><span class="a-br">BR/42D</span> Louisville | <span class="a-ct">Travis</span> ABQ | <span class="a-yh">Yhapojj</span> Phoenix | <span class="a-2s">2Slimey</span> DC</div></div>
-    <div class="ci"><div class="cd">Jul 23</div><div><span class="a-ct">Travis</span> Sacramento | <span class="a-yh">Yhapojj</span> OKC</div></div>
-    <div class="ci"><div class="cd">Jul 24 <span class="triple">4x</span></div><div><span class="a-ct">Travis</span> SLO | <span class="a-rio">Rio</span> New Orleans | <span class="a-yh">Yhapojj</span> Denver | <span class="a-2s">2Slimey</span> Atlanta</div></div>
-    <div class="ci"><div class="cd">Jul 25 <span class="triple">3x</span></div><div><span class="a-ct">Travis</span> Santa Ana | <span class="a-rio">Rio</span> Houston <span class="b b-tx">TX</span> | <span class="a-2s">2Slimey</span> Miami</div></div>
-    <div class="ci"><div class="cd">Jul 26 <span class="triple">3x</span></div><div><span class="a-br">BR/42D</span> Charlotte | <span class="a-ct">Travis</span> San Diego | <span class="a-rio">Rio</span> San Antonio <span class="b b-tx">TX</span></div></div>
-    <div class="ci"><div class="cd" style="color:#ff3333">Jul 31 <span class="triple">5x!</span></div><div><span class="a-br">BR/42D</span> Detroit | <span class="a-ct">Travis</span> Dallas <span class="b b-dal">DAL</span> | <span class="a-rio">Rio</span> ABQ | <span class="a-yh">Yhapojj</span> Charlotte | <span class="a-2s">2Slimey</span> Houston <span class="b b-tx">TX</span></div></div>
-    <div class="ci"><div class="cd">Aug 1</div><div><span class="a-ct">Travis</span> Houston <span class="b b-tx">TX</span> | <span class="a-rio">Rio</span> Phoenix</div></div>
-    <div class="ci"><div class="cd">Aug 2</div><div><span class="a-ct">Travis</span> San Antonio <span class="b b-tx">TX</span> | <span class="a-2s">2Slimey</span> Denver</div></div>
-    <div class="ci"><div class="cd">Aug 7</div><div><span class="a-yh">Yhapojj</span> Houston <span class="b b-tx">TX</span> | <span class="a-2s">2Slimey</span> Santa Ana</div></div>
-    <div class="ci"><div class="cd">Aug 8</div><div><span class="a-ct">Travis</span> Reno | <span class="a-rio">Rio</span> Salem</div></div>
-    <div class="ci"><div class="cd">Aug 21</div><div><span class="a-ct">Travis</span> LA | <span class="a-rio">Rio</span> Milwaukee</div></div>
+  <div id="collision-panel" class="collision-panel" style="display:none">
+    <h3><span style="font-size:16px">&#9888;</span> Date Collisions</h3>
+    <div id="collision-list"></div>
   </div>
 
-  <!-- LIST VIEW -->
-  <div id="list-view">
-
-  <div class="mh">May 2026</div>
-  <table class="tbl"><thead><tr><th>Date</th><th>Artist</th><th>City</th><th>Venue</th><th>Tags</th></tr></thead><tbody>
-    <tr data-t="bs"><td>May 1</td><td class="a-bs">Black Smurf</td><td>Atlanta, GA</td><td>NDSTRY ATL <span class="cap">300</span></td><td></td></tr>
-    <tr data-t="au" data-c="1"><td>May 2</td><td class="a-au">Autumn!</td><td>Chicago, IL</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bs" data-c="1"><td>May 2</td><td class="a-bs">Black Smurf</td><td>Charlotte, NC</td><td>The Bridge Studios <span class="cap">400</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 3</td><td class="a-au">Autumn!</td><td>Columbus, OH</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bs" data-c="1"><td>May 3</td><td class="a-bs">Black Smurf</td><td>Chicago, IL</td><td>Bookclub <span class="cap">230</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bs"><td>May 8</td><td class="a-bs">Black Smurf</td><td>Los Angeles, CA</td><td>Los Globos <span class="cap">840</span></td><td></td></tr>
-    <tr data-t="bs"><td>May 9</td><td class="a-bs">Black Smurf</td><td>Tucson, AZ</td><td>Club Congress <span class="cap">400</span></td><td></td></tr>
-    <tr data-t="au" data-c="1"><td>May 10</td><td class="a-au">Autumn!</td><td>Philadelphia, PA</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bs" data-c="1"><td>May 10</td><td class="a-bs">Black Smurf</td><td>Mesa, AZ</td><td>The Nile Theater <span class="cap">1000</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="au"><td>May 11</td><td class="a-au">Autumn!</td><td>New York, NY</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="au"><td>May 12</td><td class="a-au">Autumn!</td><td>Toronto, ON</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="fm" data-c="1"><td>May 13</td><td class="a-fm">Fattmack</td><td>Atlanta, GA</td><td>&mdash;</td><td><span class="b b-so">SOLD OUT</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 13</td><td class="a-bfe">BabyFxce E</td><td>Detroit, MI</td><td>El Club <span class="cap">300</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 14</td><td class="a-bfe">BabyFxce E</td><td>Chicago, IL</td><td>Avondale Music Hall</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 14</td><td class="a-au">Autumn!</td><td>Calgary, AB</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="fm" data-d="1" data-x="1" data-c="1" class="dal"><td>May 15</td><td class="a-fm">Fattmack</td><td>Dallas, TX</td><td>&mdash;</td><td><span class="b b-dal">DALLAS</span><span class="b b-so">SOLD OUT</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 15</td><td class="a-bfe">BabyFxce E</td><td>Milwaukee, WI</td><td>The Rave <span class="cap">2500</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 16</td><td class="a-au">Autumn!</td><td>Edmonton, AB</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bs" data-c="1"><td>May 16</td><td class="a-bs">Black Smurf</td><td>Las Vegas, NV</td><td>C3 Lounge <span class="cap">200</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="fm" data-x="1" data-c="1" class="tx"><td>May 17</td><td class="a-fm">Fattmack</td><td>Houston, TX</td><td>&mdash;</td><td><span class="b b-tx">TX</span><span class="b b-so">SOLD OUT</span><span class="b b-col">4x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 17</td><td class="a-bfe">BabyFxce E</td><td>Minneapolis, MN</td><td>Fine Line <span class="cap">650</span></td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 17</td><td class="a-au">Autumn!</td><td>Boston, MA</td><td>&mdash;</td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="bs" data-c="1"><td>May 17</td><td class="a-bs">Black Smurf</td><td>Washington, DC</td><td>DC9 <span class="cap">250</span></td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="fm" data-c="1"><td>May 18</td><td class="a-fm">Fattmack</td><td>Los Angeles, CA</td><td>&mdash;</td><td><span class="b b-lo">LOW</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 18</td><td class="a-bfe">BabyFxce E</td><td>Kansas City, MO</td><td>The Bottleneck</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 20</td><td class="a-bfe">BabyFxce E</td><td>Denver, CO</td><td>Summit</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 20</td><td class="a-au">Autumn!</td><td>Indianapolis, IN</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="au"><td>May 21</td><td class="a-au">Autumn!</td><td>Atlanta, GA</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="bs"><td>May 22</td><td class="a-bs">Black Smurf</td><td>Orlando, FL</td><td>Have Knotz <span class="cap">300</span></td><td></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 23</td><td class="a-bfe">BabyFxce E</td><td>Las Vegas, NV</td><td>KLTRE</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 23</td><td class="a-au">Autumn!</td><td>Greensboro, NC</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="bs" data-c="1"><td>May 23</td><td class="a-bs">Black Smurf</td><td>Minneapolis, MN</td><td>Underground Music Cafe <span class="cap">540</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="bfe"><td>May 24</td><td class="a-bfe">BabyFxce E</td><td>Mesa, AZ</td><td>The Rosetta Room <span class="cap">200</span></td><td></td></tr>
-    <tr data-t="au"><td>May 25</td><td class="a-au">Autumn!</td><td>Orlando, FL</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="fm" data-c="1"><td>May 26</td><td class="a-fm">Fattmack</td><td>Chicago, IL</td><td>&mdash;</td><td><span class="b b-so">SOLD OUT</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 26</td><td class="a-bfe">BabyFxce E</td><td>Los Angeles, CA</td><td>Echoplex <span class="cap">800</span></td><td><span class="b b-so">SOLD OUT</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="fm" data-c="1"><td>May 27</td><td class="a-fm">Fattmack</td><td>New York, NY</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 27</td><td class="a-au">Autumn!</td><td>Miami, FL</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-x="1" class="tx"><td>May 28</td><td class="a-bfe">BabyFxce E</td><td>Houston, TX</td><td>House of Blues <span class="cap">1600</span></td><td><span class="b b-tx">TX</span></td></tr>
-    <tr data-t="fm" data-c="1"><td>May 29</td><td class="a-fm">Fattmack</td><td>Charlotte, NC</td><td>&mdash;</td><td><span class="b b-so">SOLD OUT</span><span class="b b-col">3x</span></td></tr>
-    <tr data-t="bfe" data-d="1" data-x="1" data-c="1" class="dal"><td>May 29</td><td class="a-bfe">BabyFxce E</td><td>Dallas, TX</td><td>House of Blues <span class="cap">1600</span></td><td><span class="b b-dal">DALLAS</span><span class="b b-col">3x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 29</td><td class="a-au">Autumn!</td><td>Albuquerque, NM</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>May 30</td><td class="a-br">Babyface Ray &amp; 42 Dugg</td><td>Cincinnati, OH</td><td>Bogart's <span class="cap">1500</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="au" data-c="1"><td>May 30</td><td class="a-au">Autumn!</td><td>Los Angeles, CA</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="fm" data-c="1"><td>May 31</td><td class="a-fm">Fattmack</td><td>Nashville, TN</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>May 31</td><td class="a-br">Babyface Ray &amp; 42 Dugg</td><td>Cleveland, OH</td><td>House of Blues <span class="cap">1400</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>May 31</td><td class="a-bfe">BabyFxce E</td><td>Atlanta, GA</td><td>The Masquerade <span class="cap">1000</span></td><td><span class="b b-col">3x</span></td></tr>
-  </tbody></table>
-
-  <div class="mh">June 2026</div>
-  <table class="tbl"><thead><tr><th>Date</th><th>Artist</th><th>City</th><th>Venue</th><th>Tags</th></tr></thead><tbody>
-    <tr data-t="fm" data-c="1"><td>Jun 1</td><td class="a-fm">Fattmack</td><td>Birmingham, AL</td><td>&mdash;</td><td><span class="b b-so">SOLD OUT</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>Jun 1</td><td class="a-bfe">BabyFxce E</td><td>Ft Lauderdale, FL</td><td>Revolution Live <span class="cap">1050</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="br"><td>Jun 2</td><td class="a-br">BR &amp; 42 Dugg</td><td>Columbus, OH</td><td>Kemba Live! <span class="cap">2200</span></td><td></td></tr>
-    <tr data-t="bfe"><td>Jun 3</td><td class="a-bfe">BabyFxce E</td><td>Charlotte, NC</td><td>The Underground <span class="cap">500</span></td><td></td></tr>
-    <tr data-t="br" data-c="1"><td>Jun 4</td><td class="a-br">BR &amp; 42 Dugg</td><td>Pittsburgh, PA</td><td>Roxian Theatre <span class="cap">1400</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>Jun 4</td><td class="a-bfe">BabyFxce E</td><td>Washington, DC</td><td>Union Stage <span class="cap">450</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jun 6</td><td class="a-br">BR &amp; 42 Dugg</td><td>Rochester, NY</td><td>Waterstreet <span class="cap">1000</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>Jun 6</td><td class="a-bfe">BabyFxce E</td><td>Philadelphia, PA</td><td>The Foundry <span class="cap">450</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="br"><td>Jun 7</td><td class="a-br">BR &amp; 42 Dugg</td><td>Hartford, CT</td><td>The Webster <span class="cap">1500</span></td><td></td></tr>
-    <tr data-t="br" data-c="1"><td>Jun 9</td><td class="a-br">BR &amp; 42 Dugg</td><td>New York, NY</td><td>Webster Hall <span class="cap">1500</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe" data-c="1"><td>Jun 9</td><td class="a-bfe">BabyFxce E</td><td>Cleveland, OH</td><td>House of Blues <span class="cap">1800</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="bfe"><td>Jun 11</td><td class="a-bfe">BabyFxce E</td><td>Columbus, OH</td><td>A&amp;R Music Bar <span class="cap">400</span></td><td></td></tr>
-    <tr data-t="br"><td>Jun 12</td><td class="a-br">BR &amp; 42 Dugg</td><td>Silver Spring, MD</td><td>The Fillmore <span class="cap">2000</span></td><td></td></tr>
-    <tr data-t="bfe"><td>Jun 13</td><td class="a-bfe">BabyFxce E</td><td>Millvale, PA</td><td>Mr. Smalls <span class="cap">600</span></td><td></td></tr>
-    <tr data-t="br"><td>Jun 14</td><td class="a-br">BR &amp; 42 Dugg</td><td>Boston, MA</td><td>Big Night Live <span class="cap">1200</span></td><td></td></tr>
-    <tr data-t="bfe"><td>Jun 15</td><td class="a-bfe">BabyFxce E</td><td>New York, NY</td><td>Gramercy Theatre <span class="cap">600</span></td><td></td></tr>
-    <tr data-t="ct"><td>Jun 16</td><td class="a-ct">Chris Travis</td><td>New York, NY</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="ct"><td>Jun 17</td><td class="a-ct">Chris Travis</td><td>Washington, DC</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="ct"><td>Jun 18</td><td class="a-ct">Chris Travis</td><td>Nashville, TN</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="br" data-c="1"><td>Jun 19</td><td class="a-br">BR &amp; 42 Dugg</td><td>Raleigh, NC</td><td>The Ritz <span class="cap">2000</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jun 19</td><td class="a-ct">Chris Travis</td><td>Atlanta, GA</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jun 20</td><td class="a-br">BR &amp; 42 Dugg</td><td>Charleston, SC</td><td>Charleston Music Hall <span class="cap">950</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jun 20</td><td class="a-ct">Chris Travis</td><td>Orlando, FL</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="yh" data-c="1"><td>Jun 20</td><td class="a-yh">Yhapojj</td><td>Miami, FL</td><td>Boombox <span class="cap">300</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jun 21</td><td class="a-br">BR &amp; 42 Dugg</td><td>Norfolk, VA</td><td>The Norva <span class="cap">1500</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jun 21</td><td class="a-ct">Chris Travis</td><td>Miami, FL</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="br"><td>Jun 25</td><td class="a-br">BR &amp; 42 Dugg</td><td>Atlanta, GA</td><td>The Eastern <span class="cap">2500</span></td><td></td></tr>
-    <tr data-t="br" data-c="1"><td>Jun 26</td><td class="a-br">BR &amp; 42 Dugg</td><td>Nashville, TN</td><td>Cannery Hall <span class="cap">900</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jun 26</td><td class="a-ct">Chris Travis</td><td>Seattle, WA</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jun 27</td><td class="a-br">BR &amp; 42 Dugg</td><td>Joliet, IL</td><td>The Forge <span class="cap">1200</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jun 27</td><td class="a-ct">Chris Travis</td><td>Portland, OR</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="br"><td>Jun 28</td><td class="a-br">BR &amp; 42 Dugg</td><td>Milwaukee, WI</td><td>The Rave <span class="cap">1500</span></td><td></td></tr>
-    <tr data-t="br"><td>Jun 30</td><td class="a-br">BR &amp; 42 Dugg</td><td>Minneapolis, MN</td><td>First Avenue <span class="cap">1550</span></td><td></td></tr>
-  </tbody></table>
-
-  <div class="mh">July 2026</div>
-  <table class="tbl"><thead><tr><th>Date</th><th>Artist</th><th>City</th><th>Venue</th><th>Tags</th></tr></thead><tbody>
-    <tr data-t="br" data-c="1"><td>Jul 2</td><td class="a-br">BR &amp; 42 Dugg</td><td>Denver, CO</td><td>Summit Music Hall <span class="cap">1000</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 2</td><td class="a-ct">Chris Travis</td><td>Salt Lake City, UT</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="yh" data-x="1" class="tx"><td>Jul 4</td><td class="a-yh">Yhapojj</td><td>Austin, TX</td><td>Regal Room <span class="cap">300</span></td><td><span class="b b-tx">TX</span></td></tr>
-    <tr data-t="br" data-x="1" class="tx"><td>Jul 7</td><td class="a-br">BR &amp; 42 Dugg</td><td>Houston, TX</td><td>Warehouse Live <span class="cap">1400</span></td><td><span class="b b-tx">TX</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jul 9</td><td class="a-br">BR &amp; 42 Dugg</td><td>Phoenix, AZ</td><td>The Van Buren <span class="cap">1800</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="2s" data-c="1"><td>Jul 9</td><td class="a-2s">2Slimey</td><td>San Diego, CA</td><td>SOMA Sidestage <span class="cap">400</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jul 10</td><td class="a-br">BR &amp; 42 Dugg</td><td>Los Angeles, CA</td><td>The Belasco <span class="cap">1500</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 10</td><td class="a-ct">Chris Travis</td><td>Chicago, IL</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="2s" data-c="1"><td>Jul 10</td><td class="a-2s">2Slimey</td><td>Berkeley, CA</td><td>Cornerstone <span class="cap">400</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jul 11</td><td class="a-br">BR &amp; 42 Dugg</td><td>Berkeley, CA</td><td>UC Theater <span class="cap">1400</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 11</td><td class="a-ct">Chris Travis</td><td>OKC, OK</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="yh" data-c="1"><td>Jul 11</td><td class="a-yh">Yhapojj</td><td>Seattle, WA</td><td>Private Location</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jul 12</td><td class="a-br">BR &amp; 42 Dugg</td><td>Sacramento, CA</td><td>Ace of Spades <span class="cap">1000</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 12</td><td class="a-ct">Chris Travis</td><td>Denver, CO</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="yh" data-c="1"><td>Jul 12</td><td class="a-yh">Yhapojj</td><td>Portland, OR</td><td>High Limit Room <span class="cap">200</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="yh"><td>Jul 13</td><td class="a-yh">Yhapojj</td><td>Sacramento, CA</td><td>The Rink Studios <span class="cap">300</span></td><td></td></tr>
-    <tr data-t="br"><td>Jul 14</td><td class="a-br">BR &amp; 42 Dugg</td><td>Salt Lake City, UT</td><td>Rockwell <span class="cap">500</span></td><td></td></tr>
-    <tr data-t="ct" data-x="1" data-c="1" class="tx"><td>Jul 15</td><td class="a-ct">Chris Travis</td><td>El Paso, TX</td><td>&mdash;</td><td><span class="b b-tx">TX</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="yh" data-c="1"><td>Jul 15</td><td class="a-yh">Yhapojj</td><td>Los Angeles, CA</td><td>Los Globos <span class="cap">840</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="2s"><td>Jul 16</td><td class="a-2s">2Slimey</td><td>Toronto, ON</td><td>Mod Club <span class="cap">600</span></td><td></td></tr>
-    <tr data-t="br" data-c="1"><td>Jul 17</td><td class="a-br">BR &amp; 42 Dugg</td><td>Lincoln, NE</td><td>The Royal Grove <span class="cap">950</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 17</td><td class="a-ct">Chris Travis</td><td>Tucson, AZ</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="2s" data-c="1"><td>Jul 17</td><td class="a-2s">2Slimey</td><td>New York, NY</td><td>Gramercy Theatre <span class="cap">600</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jul 18</td><td class="a-br">BR &amp; 42 Dugg</td><td>Indianapolis, IN</td><td>Warren PAC <span class="cap">1800</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 18</td><td class="a-ct">Chris Travis</td><td>Phoenix, AZ</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="2s" data-c="1"><td>Jul 18</td><td class="a-2s">2Slimey</td><td>Philadelphia, PA</td><td>The Foundry <span class="cap">450</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jul 19</td><td class="a-br">BR &amp; 42 Dugg</td><td>Louisville, KY</td><td>Paristown Hall <span class="cap">900</span></td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 19</td><td class="a-ct">Chris Travis</td><td>Albuquerque, NM</td><td>&mdash;</td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="yh" data-c="1"><td>Jul 19</td><td class="a-yh">Yhapojj</td><td>Phoenix, AZ</td><td>The Rosetta Room <span class="cap">200</span></td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="2s" data-c="1"><td>Jul 19</td><td class="a-2s">2Slimey</td><td>Washington, DC</td><td>Union Stage <span class="cap">450</span></td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="ct"><td>Jul 22</td><td class="a-ct">Chris Travis</td><td>San Francisco, CA</td><td>&mdash;</td><td></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 23</td><td class="a-ct">Chris Travis</td><td>Sacramento, CA</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="yh" data-c="1"><td>Jul 23</td><td class="a-yh">Yhapojj</td><td>OKC, OK</td><td>The Bridge <span class="cap">400</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 24</td><td class="a-ct">Chris Travis</td><td>San Luis Obispo, CA</td><td>&mdash;</td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="rio" data-c="1"><td>Jul 24</td><td class="a-rio">Rio Da Yung OG</td><td>New Orleans, LA</td><td>House of Blues <span class="cap">1800</span></td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="yh" data-c="1"><td>Jul 24</td><td class="a-yh">Yhapojj</td><td>Denver, CO</td><td>Marquis <span class="cap">500</span></td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="2s" data-c="1"><td>Jul 24</td><td class="a-2s">2Slimey</td><td>Atlanta, GA</td><td>Center Stage <span class="cap">1050</span></td><td><span class="b b-col">4x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 25</td><td class="a-ct">Chris Travis</td><td>Santa Ana, CA</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="rio" data-x="1" data-c="1" class="tx"><td>Jul 25</td><td class="a-rio">Rio Da Yung OG</td><td>Houston, TX</td><td>House of Blues <span class="cap">1800</span></td><td><span class="b b-tx">TX</span><span class="b b-col">3x</span></td></tr>
-    <tr data-t="2s" data-c="1"><td>Jul 25</td><td class="a-2s">2Slimey</td><td>Miami, FL</td><td>Midline <span class="cap">300</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jul 26</td><td class="a-br">BR &amp; 42 Dugg</td><td>Charlotte, NC</td><td>The Fillmore <span class="cap">2000</span></td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Jul 26</td><td class="a-ct">Chris Travis</td><td>San Diego, CA</td><td>&mdash;</td><td><span class="b b-col">3x</span></td></tr>
-    <tr data-t="rio" data-x="1" data-c="1" class="tx"><td>Jul 26</td><td class="a-rio">Rio Da Yung OG</td><td>San Antonio, TX</td><td>Studio 210 <span class="cap">500</span></td><td><span class="b b-tx">TX</span><span class="b b-col">3x</span></td></tr>
-    <tr data-t="rio" data-x="1" class="tx"><td>Jul 28</td><td class="a-rio">Rio Da Yung OG</td><td>Fort Worth, TX</td><td>Haltom Theater <span class="cap">800</span></td><td><span class="b b-tx">TX</span></td></tr>
-    <tr data-t="rio" data-x="1" class="tx"><td>Jul 29</td><td class="a-rio">Rio Da Yung OG</td><td>Austin, TX</td><td>Antone's <span class="cap">500</span></td><td><span class="b b-tx">TX</span></td></tr>
-    <tr data-t="ct" data-x="1" class="tx"><td>Jul 30</td><td class="a-ct">Chris Travis</td><td>Austin, TX</td><td>&mdash;</td><td><span class="b b-tx">TX</span></td></tr>
-    <tr data-t="br" data-c="1"><td>Jul 31</td><td class="a-br">BR &amp; 42 Dugg</td><td>Detroit, MI</td><td>The Fillmore <span class="cap">2000</span></td><td><span class="b b-5x">5x!</span></td></tr>
-    <tr data-t="ct" data-d="1" data-x="1" data-c="1" class="dal"><td>Jul 31</td><td class="a-ct">Chris Travis</td><td>Dallas, TX</td><td>&mdash;</td><td><span class="b b-dal">DALLAS</span><span class="b b-5x">5x!</span></td></tr>
-    <tr data-t="rio" data-c="1"><td>Jul 31</td><td class="a-rio">Rio Da Yung OG</td><td>Albuquerque, NM</td><td>Revel <span class="cap">700</span></td><td><span class="b b-5x">5x!</span></td></tr>
-    <tr data-t="yh" data-c="1"><td>Jul 31</td><td class="a-yh">Yhapojj</td><td>Charlotte, NC</td><td>The Rabbit Hole <span class="cap">300</span></td><td><span class="b b-5x">5x!</span></td></tr>
-    <tr data-t="2s" data-x="1" data-c="1" class="tx"><td>Jul 31</td><td class="a-2s">2Slimey</td><td>Houston, TX</td><td>White Oak Music Hall <span class="cap">1000</span></td><td><span class="b b-tx">TX</span><span class="b b-5x">5x!</span></td></tr>
-  </tbody></table>
-
-  <div class="mh">August 2026</div>
-  <table class="tbl"><thead><tr><th>Date</th><th>Artist</th><th>City</th><th>Venue</th><th>Tags</th></tr></thead><tbody>
-    <tr data-t="ct" data-x="1" data-c="1" class="tx"><td>Aug 1</td><td class="a-ct">Chris Travis</td><td>Houston, TX</td><td>&mdash;</td><td><span class="b b-tx">TX</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="rio" data-c="1"><td>Aug 1</td><td class="a-rio">Rio Da Yung OG</td><td>Phoenix, AZ</td><td>Marquee Theater <span class="cap">800</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="ct" data-x="1" data-c="1" class="tx"><td>Aug 2</td><td class="a-ct">Chris Travis</td><td>San Antonio, TX</td><td>&mdash;</td><td><span class="b b-tx">TX</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="2s" data-c="1"><td>Aug 2</td><td class="a-2s">2Slimey</td><td>Denver, CO</td><td>Marquis <span class="cap">500</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="rio"><td>Aug 3</td><td class="a-rio">Rio Da Yung OG</td><td>San Diego, CA</td><td>Music Box <span class="cap">700</span></td><td></td></tr>
-    <tr data-t="rio"><td>Aug 5</td><td class="a-rio">Rio Da Yung OG</td><td>Santa Ana, CA</td><td>Observatory <span class="cap">1100</span></td><td></td></tr>
-    <tr data-t="yh" data-x="1" class="tx"><td>Aug 6</td><td class="a-yh">Yhapojj</td><td>San Antonio, TX</td><td>Studio 210 <span class="cap">500</span></td><td><span class="b b-tx">TX</span></td></tr>
-    <tr data-t="yh" data-x="1" data-c="1" class="tx"><td>Aug 7</td><td class="a-yh">Yhapojj</td><td>Houston, TX</td><td>The Secret Group <span class="cap">250</span></td><td><span class="b b-tx">TX</span><span class="b b-col">2x</span></td></tr>
-    <tr data-t="2s" data-c="1"><td>Aug 7</td><td class="a-2s">2Slimey</td><td>Santa Ana, CA</td><td>The Observatory <span class="cap">1100</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="ct" data-c="1"><td>Aug 8</td><td class="a-ct">Chris Travis</td><td>Reno, NV</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="rio" data-c="1"><td>Aug 8</td><td class="a-rio">Rio Da Yung OG</td><td>Salem, OR</td><td>Fuego <span class="cap">300</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="yh" data-x="1" class="tx"><td>Aug 9</td><td class="a-yh">Yhapojj</td><td>El Paso, TX</td><td>Rosewood Bar <span class="cap">200</span></td><td><span class="b b-tx">TX</span></td></tr>
-    <tr data-t="rio"><td>Aug 12</td><td class="a-rio">Rio Da Yung OG</td><td>Boise, ID</td><td>Revolution <span class="cap">900</span></td><td></td></tr>
-    <tr data-t="rio"><td>Aug 14</td><td class="a-rio">Rio Da Yung OG</td><td>Denver, CO</td><td>Summit Music Hall <span class="cap">1000</span></td><td></td></tr>
-    <tr data-t="rio"><td>Aug 15</td><td class="a-rio">Rio Da Yung OG</td><td>Lincoln, NE</td><td>The Royal Grove <span class="cap">950</span></td><td></td></tr>
-    <tr data-t="ct" data-c="1"><td>Aug 21</td><td class="a-ct">Chris Travis</td><td>Los Angeles, CA</td><td>&mdash;</td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="rio" data-c="1"><td>Aug 21</td><td class="a-rio">Rio Da Yung OG</td><td>Milwaukee, WI</td><td>The Rave <span class="cap">1500</span></td><td><span class="b b-col">2x</span></td></tr>
-    <tr data-t="rio"><td>Aug 26</td><td class="a-rio">Rio Da Yung OG</td><td>Pittsburgh, PA</td><td>Mr Smalls <span class="cap">600</span></td><td></td></tr>
-    <tr data-t="rio"><td>Aug 29</td><td class="a-rio">Rio Da Yung OG</td><td>New York, NY</td><td>Irving Plaza <span class="cap">1025</span></td><td></td></tr>
-  </tbody></table>
-
-  <div class="mh">September 2026</div>
-  <table class="tbl"><thead><tr><th>Date</th><th>Artist</th><th>City</th><th>Venue</th><th>Tags</th></tr></thead><tbody>
-    <tr data-t="rio"><td>Sep 3</td><td class="a-rio">Rio Da Yung OG</td><td>Charlotte, NC</td><td>The Underground <span class="cap">500</span></td><td></td></tr>
-    <tr data-t="rio"><td>Sep 4</td><td class="a-rio">Rio Da Yung OG</td><td>Charleston, SC</td><td>Charleston Music Hall <span class="cap">950</span></td><td></td></tr>
-    <tr data-t="rio"><td>Sep 8</td><td class="a-rio">Rio Da Yung OG</td><td>Miami, FL</td><td>ZeyZey <span class="cap">300</span></td><td></td></tr>
-  </tbody></table>
-
-  </div>
-
-  <!-- CALENDAR VIEW -->
-  <div id="cal-view">
-    <div style="text-align:center;padding:60px 20px;color:#666">
-      <div style="font-size:40px;margin-bottom:12px">&#128197;</div>
-      <p style="font-size:15px;color:#aaa;margin-bottom:6px">Interactive calendar requires a browser</p>
-      <p style="font-size:12px">Open this file in Safari or Chrome for the full calendar experience.</p>
-      <p style="font-size:12px;margin-top:8px">All tour dates are available in List view.</p>
-    </div>
-  </div>
-
-  <!-- Day detail sheet (mobile) -->
-  <div class="day-overlay" id="dd-overlay" onclick="closeDD()"></div>
-  <div class="day-detail" id="dd">
-    <h3><span id="dd-title"></span><button class="dd-close" onclick="closeDD()">&times;</button></h3>
-    <div id="dd-body"></div>
-  </div>
-
+  <div id="calendar-view" class="calendar-grid active"></div>
+  <div id="list-view" class="list-view"></div>
 </main>
 
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h3 id="modal-title"></h3>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
 <script>
-try {
-var at={fm:1,br:1,rio:1,ct:1,bfe:1,yh:1,'2s':1,au:1,bs:1},hl=null,curM=4;
-var AN={fm:'Fattmack',br:'Babyface Ray & 42 Dugg',rio:'Rio Da Yung OG',ct:'Chris Travis',bfe:'BabyFxce E',yh:'Yhapojj','2s':'2Slimey',au:'Autumn!',bs:'Black Smurf'};
-var E=[
-{d:'2026-05-02',a:'au',n:'Autumn!',c:'Chicago, IL',v:'',s:''},
-{d:'2026-05-03',a:'au',n:'Autumn!',c:'Columbus, OH',v:'',s:''},
-{d:'2026-05-10',a:'au',n:'Autumn!',c:'Philadelphia, PA',v:'',s:''},
-{d:'2026-05-11',a:'au',n:'Autumn!',c:'New York, NY',v:'',s:''},
-{d:'2026-05-12',a:'au',n:'Autumn!',c:'Toronto, ON',v:'',s:''},
-{d:'2026-05-13',a:'fm',n:'Fattmack',c:'Atlanta, GA',v:'',s:'SO'},
-{d:'2026-05-13',a:'bfe',n:'BabyFxce E',c:'Detroit, MI',v:'El Club',cap:400,s:''},
-{d:'2026-05-14',a:'bfe',n:'BabyFxce E',c:'Chicago, IL',v:'Avondale Music Hall',s:''},
-{d:'2026-05-14',a:'au',n:'Autumn!',c:'Calgary, AB',v:'',s:''},
-{d:'2026-05-15',a:'fm',n:'Fattmack',c:'Dallas, TX',v:'',s:'SO'},
-{d:'2026-05-15',a:'bfe',n:'BabyFxce E',c:'Milwaukee, WI',v:'The Rave',cap:1500,s:''},
-{d:'2026-05-16',a:'au',n:'Autumn!',c:'Edmonton, AB',v:'',s:''},
-{d:'2026-05-17',a:'fm',n:'Fattmack',c:'Houston, TX',v:'',s:'SO'},
-{d:'2026-05-17',a:'bfe',n:'BabyFxce E',c:'Minneapolis, MN',v:'Fine Line',s:''},
-{d:'2026-05-17',a:'au',n:'Autumn!',c:'Boston, MA',v:'',s:''},
-{d:'2026-05-18',a:'fm',n:'Fattmack',c:'Los Angeles, CA',v:'',s:'LO'},
-{d:'2026-05-18',a:'bfe',n:'BabyFxce E',c:'Kansas City, MO',v:'The Bottleneck',s:''},
-{d:'2026-05-20',a:'bfe',n:'BabyFxce E',c:'Denver, CO',v:'Summit',s:''},
-{d:'2026-05-20',a:'au',n:'Autumn!',c:'Indianapolis, IN',v:'',s:''},
-{d:'2026-05-21',a:'au',n:'Autumn!',c:'Atlanta, GA',v:'',s:''},
-{d:'2026-05-23',a:'bfe',n:'BabyFxce E',c:'Las Vegas, NV',v:'KLTRE',s:''},
-{d:'2026-05-23',a:'au',n:'Autumn!',c:'Greensboro, NC',v:'',s:''},
-{d:'2026-05-24',a:'bfe',n:'BabyFxce E',c:'Mesa, AZ',v:'The Rosetta Room',cap:200,s:''},
-{d:'2026-05-25',a:'au',n:'Autumn!',c:'Orlando, FL',v:'',s:''},
-{d:'2026-05-26',a:'fm',n:'Fattmack',c:'Chicago, IL',v:'',s:'SO'},
-{d:'2026-05-26',a:'bfe',n:'BabyFxce E',c:'Los Angeles, CA',v:'Echoplex',s:'SO'},
-{d:'2026-05-27',a:'fm',n:'Fattmack',c:'New York, NY',v:'',s:''},
-{d:'2026-05-27',a:'au',n:'Autumn!',c:'Miami, FL',v:'',s:''},
-{d:'2026-05-28',a:'bfe',n:'BabyFxce E',c:'Houston, TX',v:'House of Blues',cap:1800,s:''},
-{d:'2026-05-29',a:'fm',n:'Fattmack',c:'Charlotte, NC',v:'',s:'SO'},
-{d:'2026-05-29',a:'bfe',n:'BabyFxce E',c:'Dallas, TX',v:'House of Blues',cap:1800,s:''},
-{d:'2026-05-29',a:'au',n:'Autumn!',c:'Albuquerque, NM',v:'',s:''},
-{d:'2026-05-30',a:'br',n:'BR & 42D',c:'Cincinnati, OH',v:"Bogart's",s:''},
-{d:'2026-05-30',a:'au',n:'Autumn!',c:'Los Angeles, CA',v:'',s:''},
-{d:'2026-05-31',a:'fm',n:'Fattmack',c:'Nashville, TN',v:'',s:''},
-{d:'2026-05-31',a:'br',n:'BR & 42D',c:'Cleveland, OH',v:'House of Blues',cap:1800,s:''},
-{d:'2026-05-31',a:'bfe',n:'BabyFxce E',c:'Atlanta, GA',v:'The Masquerade',s:''},
-{d:'2026-06-01',a:'fm',n:'Fattmack',c:'Birmingham, AL',v:'',s:'SO'},
-{d:'2026-06-01',a:'bfe',n:'BabyFxce E',c:'Ft Lauderdale, FL',v:'Revolution Live',cap:1050,s:''},
-{d:'2026-06-02',a:'br',n:'BR & 42D',c:'Columbus, OH',v:'Kemba Live!',cap:2200,s:''},
-{d:'2026-06-03',a:'bfe',n:'BabyFxce E',c:'Charlotte, NC',v:'The Underground',cap:500,s:''},
-{d:'2026-06-04',a:'br',n:'BR & 42D',c:'Pittsburgh, PA',v:'Roxian Theatre',cap:1400,s:''},
-{d:'2026-06-04',a:'bfe',n:'BabyFxce E',c:'Washington, DC',v:'Union Stage',cap:450,s:''},
-{d:'2026-06-06',a:'br',n:'BR & 42D',c:'Rochester, NY',v:'Waterstreet',cap:1000,s:''},
-{d:'2026-06-06',a:'bfe',n:'BabyFxce E',c:'Philadelphia, PA',v:'The Foundry',cap:450,s:''},
-{d:'2026-06-07',a:'br',n:'BR & 42D',c:'Hartford, CT',v:'The Webster',cap:1500,s:''},
-{d:'2026-06-09',a:'br',n:'BR & 42D',c:'New York, NY',v:'Webster Hall',cap:1500,s:''},
-{d:'2026-06-09',a:'bfe',n:'BabyFxce E',c:'Cleveland, OH',v:'House of Blues',cap:1800,s:''},
-{d:'2026-06-11',a:'bfe',n:'BabyFxce E',c:'Columbus, OH',v:'A&R Music Bar',cap:400,s:''},
-{d:'2026-06-12',a:'br',n:'BR & 42D',c:'Silver Spring, MD',v:'The Fillmore',cap:2000,s:''},
-{d:'2026-06-13',a:'bfe',n:'BabyFxce E',c:'Millvale, PA',v:'Mr. Smalls',cap:600,s:''},
-{d:'2026-06-14',a:'br',n:'BR & 42D',c:'Boston, MA',v:'Big Night Live',cap:1200,s:''},
-{d:'2026-06-15',a:'bfe',n:'BabyFxce E',c:'New York, NY',v:'Gramercy Theatre',cap:600,s:''},
-{d:'2026-06-16',a:'ct',n:'Chris Travis',c:'New York, NY',v:'',s:''},
-{d:'2026-06-17',a:'ct',n:'Chris Travis',c:'Washington, DC',v:'',s:''},
-{d:'2026-06-18',a:'ct',n:'Chris Travis',c:'Nashville, TN',v:'',s:''},
-{d:'2026-06-19',a:'br',n:'BR & 42D',c:'Raleigh, NC',v:'The Ritz',cap:2000,s:''},
-{d:'2026-06-19',a:'ct',n:'Chris Travis',c:'Atlanta, GA',v:'',s:''},
-{d:'2026-06-20',a:'br',n:'BR & 42D',c:'Charleston, SC',v:'Charleston Music Hall',cap:950,s:''},
-{d:'2026-06-20',a:'ct',n:'Chris Travis',c:'Orlando, FL',v:'',s:''},
-{d:'2026-06-20',a:'yh',n:'Yhapojj',c:'Miami, FL',v:'Boombox',cap:300,s:''},
-{d:'2026-06-21',a:'br',n:'BR & 42D',c:'Norfolk, VA',v:'The Norva',cap:1500,s:''},
-{d:'2026-06-21',a:'ct',n:'Chris Travis',c:'Miami, FL',v:'',s:''},
-{d:'2026-06-25',a:'br',n:'BR & 42D',c:'Atlanta, GA',v:'The Eastern',cap:2500,s:''},
-{d:'2026-06-26',a:'br',n:'BR & 42D',c:'Nashville, TN',v:'Cannery Hall',cap:900,s:''},
-{d:'2026-06-26',a:'ct',n:'Chris Travis',c:'Seattle, WA',v:'',s:''},
-{d:'2026-06-27',a:'br',n:'BR & 42D',c:'Joliet, IL',v:'The Forge',cap:1200,s:''},
-{d:'2026-06-27',a:'ct',n:'Chris Travis',c:'Portland, OR',v:'',s:''},
-{d:'2026-06-28',a:'br',n:'BR & 42D',c:'Milwaukee, WI',v:'The Rave',cap:1500,s:''},
-{d:'2026-06-30',a:'br',n:'BR & 42D',c:'Minneapolis, MN',v:'First Avenue',cap:1550,s:''},
-{d:'2026-07-02',a:'br',n:'BR & 42D',c:'Denver, CO',v:'Summit Music Hall',cap:1000,s:''},
-{d:'2026-07-02',a:'ct',n:'Chris Travis',c:'Salt Lake City, UT',v:'',s:''},
-{d:'2026-07-04',a:'yh',n:'Yhapojj',c:'Austin, TX',v:'Regal Room',cap:300,s:''},
-{d:'2026-07-07',a:'br',n:'BR & 42D',c:'Houston, TX',v:'Warehouse Live',cap:1400,s:''},
-{d:'2026-07-09',a:'br',n:'BR & 42D',c:'Phoenix, AZ',v:'The Van Buren',cap:1800,s:''},
-{d:'2026-07-09',a:'2s',n:'2Slimey',c:'San Diego, CA',v:'SOMA Sidestage',cap:400,s:''},
-{d:'2026-07-10',a:'br',n:'BR & 42D',c:'Los Angeles, CA',v:'The Belasco',cap:1500,s:''},
-{d:'2026-07-10',a:'ct',n:'Chris Travis',c:'Chicago, IL',v:'',s:''},
-{d:'2026-07-10',a:'2s',n:'2Slimey',c:'Berkeley, CA',v:'Cornerstone',cap:400,s:''},
-{d:'2026-07-11',a:'br',n:'BR & 42D',c:'Berkeley, CA',v:'UC Theater',cap:1400,s:''},
-{d:'2026-07-11',a:'ct',n:'Chris Travis',c:'OKC, OK',v:'',s:''},
-{d:'2026-07-11',a:'yh',n:'Yhapojj',c:'Seattle, WA',v:'Private Location',s:''},
-{d:'2026-07-12',a:'br',n:'BR & 42D',c:'Sacramento, CA',v:'Ace of Spades',cap:1000,s:''},
-{d:'2026-07-12',a:'ct',n:'Chris Travis',c:'Denver, CO',v:'',s:''},
-{d:'2026-07-12',a:'yh',n:'Yhapojj',c:'Portland, OR',v:'High Limit Room',cap:200,s:''},
-{d:'2026-07-13',a:'yh',n:'Yhapojj',c:'Sacramento, CA',v:'The Rink Studios',cap:300,s:''},
-{d:'2026-07-14',a:'br',n:'BR & 42D',c:'Salt Lake City, UT',v:'Rockwell',cap:500,s:''},
-{d:'2026-07-15',a:'ct',n:'Chris Travis',c:'El Paso, TX',v:'',s:''},
-{d:'2026-07-15',a:'yh',n:'Yhapojj',c:'Los Angeles, CA',v:'Los Globos',cap:840,s:''},
-{d:'2026-07-16',a:'2s',n:'2Slimey',c:'Toronto, ON',v:'Mod Club',cap:600,s:''},
-{d:'2026-07-17',a:'br',n:'BR & 42D',c:'Lincoln, NE',v:'The Royal Grove',cap:950,s:''},
-{d:'2026-07-17',a:'ct',n:'Chris Travis',c:'Tucson, AZ',v:'',s:''},
-{d:'2026-07-17',a:'2s',n:'2Slimey',c:'New York, NY',v:'Gramercy Theatre',cap:600,s:''},
-{d:'2026-07-18',a:'br',n:'BR & 42D',c:'Indianapolis, IN',v:'Warren PAC',cap:1800,s:''},
-{d:'2026-07-18',a:'ct',n:'Chris Travis',c:'Phoenix, AZ',v:'',s:''},
-{d:'2026-07-18',a:'2s',n:'2Slimey',c:'Philadelphia, PA',v:'The Foundry',cap:450,s:''},
-{d:'2026-07-19',a:'br',n:'BR & 42D',c:'Louisville, KY',v:'Paristown Hall',cap:900,s:''},
-{d:'2026-07-19',a:'ct',n:'Chris Travis',c:'Albuquerque, NM',v:'',s:''},
-{d:'2026-07-19',a:'yh',n:'Yhapojj',c:'Phoenix, AZ',v:'The Rosetta Room',cap:200,s:''},
-{d:'2026-07-19',a:'2s',n:'2Slimey',c:'Washington, DC',v:'Union Stage',cap:450,s:''},
-{d:'2026-07-22',a:'ct',n:'Chris Travis',c:'San Francisco, CA',v:'',s:''},
-{d:'2026-07-23',a:'ct',n:'Chris Travis',c:'Sacramento, CA',v:'',s:''},
-{d:'2026-07-23',a:'yh',n:'Yhapojj',c:'OKC, OK',v:'The Bridge',cap:400,s:''},
-{d:'2026-07-24',a:'ct',n:'Chris Travis',c:'San Luis Obispo, CA',v:'',s:''},
-{d:'2026-07-24',a:'rio',n:'Rio Da Yung OG',c:'New Orleans, LA',v:'House of Blues',cap:1800,s:''},
-{d:'2026-07-24',a:'yh',n:'Yhapojj',c:'Denver, CO',v:'Marquis',cap:500,s:''},
-{d:'2026-07-24',a:'2s',n:'2Slimey',c:'Atlanta, GA',v:'Center Stage',cap:1050,s:''},
-{d:'2026-07-25',a:'ct',n:'Chris Travis',c:'Santa Ana, CA',v:'',s:''},
-{d:'2026-07-25',a:'rio',n:'Rio Da Yung OG',c:'Houston, TX',v:'House of Blues',cap:1800,s:''},
-{d:'2026-07-25',a:'2s',n:'2Slimey',c:'Miami, FL',v:'Midline',cap:300,s:''},
-{d:'2026-07-26',a:'br',n:'BR & 42D',c:'Charlotte, NC',v:'The Fillmore',cap:2000,s:''},
-{d:'2026-07-26',a:'ct',n:'Chris Travis',c:'San Diego, CA',v:'',s:''},
-{d:'2026-07-26',a:'rio',n:'Rio Da Yung OG',c:'San Antonio, TX',v:'Studio 210',cap:500,s:''},
-{d:'2026-07-28',a:'rio',n:'Rio Da Yung OG',c:'Fort Worth, TX',v:'Haltom Theater',cap:800,s:''},
-{d:'2026-07-29',a:'rio',n:'Rio Da Yung OG',c:'Austin, TX',v:"Antone's",s:''},
-{d:'2026-07-30',a:'ct',n:'Chris Travis',c:'Austin, TX',v:'',s:''},
-{d:'2026-07-31',a:'br',n:'BR & 42D',c:'Detroit, MI',v:'The Fillmore',cap:2000,s:''},
-{d:'2026-07-31',a:'ct',n:'Chris Travis',c:'Dallas, TX',v:'',s:''},
-{d:'2026-07-31',a:'rio',n:'Rio Da Yung OG',c:'Albuquerque, NM',v:'Revel',cap:700,s:''},
-{d:'2026-07-31',a:'yh',n:'Yhapojj',c:'Charlotte, NC',v:'The Rabbit Hole',cap:300,s:''},
-{d:'2026-07-31',a:'2s',n:'2Slimey',c:'Houston, TX',v:'White Oak Music Hall',cap:1000,s:''},
-{d:'2026-08-01',a:'ct',n:'Chris Travis',c:'Houston, TX',v:'',s:''},
-{d:'2026-08-01',a:'rio',n:'Rio Da Yung OG',c:'Phoenix, AZ',v:'Marquee Theater',cap:800,s:''},
-{d:'2026-08-02',a:'ct',n:'Chris Travis',c:'San Antonio, TX',v:'',s:''},
-{d:'2026-08-02',a:'2s',n:'2Slimey',c:'Denver, CO',v:'Marquis',cap:500,s:''},
-{d:'2026-08-03',a:'rio',n:'Rio Da Yung OG',c:'San Diego, CA',v:'Music Box',cap:700,s:''},
-{d:'2026-08-05',a:'rio',n:'Rio Da Yung OG',c:'Santa Ana, CA',v:'Observatory',cap:1100,s:''},
-{d:'2026-08-06',a:'yh',n:'Yhapojj',c:'San Antonio, TX',v:'Studio 210',cap:500,s:''},
-{d:'2026-08-07',a:'yh',n:'Yhapojj',c:'Houston, TX',v:'The Secret Group',cap:250,s:''},
-{d:'2026-08-07',a:'2s',n:'2Slimey',c:'Santa Ana, CA',v:'The Observatory',cap:1100,s:''},
-{d:'2026-08-08',a:'ct',n:'Chris Travis',c:'Reno, NV',v:'',s:''},
-{d:'2026-08-08',a:'rio',n:'Rio Da Yung OG',c:'Salem, OR',v:'Fuego',cap:300,s:''},
-{d:'2026-08-09',a:'yh',n:'Yhapojj',c:'El Paso, TX',v:'Rosewood Bar',cap:200,s:''},
-{d:'2026-08-12',a:'rio',n:'Rio Da Yung OG',c:'Boise, ID',v:'Revolution',cap:900,s:''},
-{d:'2026-08-14',a:'rio',n:'Rio Da Yung OG',c:'Denver, CO',v:'Summit Music Hall',cap:1000,s:''},
-{d:'2026-08-15',a:'rio',n:'Rio Da Yung OG',c:'Lincoln, NE',v:'The Royal Grove',cap:950,s:''},
-{d:'2026-08-21',a:'ct',n:'Chris Travis',c:'Los Angeles, CA',v:'',s:''},
-{d:'2026-08-21',a:'rio',n:'Rio Da Yung OG',c:'Milwaukee, WI',v:'The Rave',cap:1500,s:''},
-{d:'2026-08-26',a:'rio',n:'Rio Da Yung OG',c:'Pittsburgh, PA',v:'Mr Smalls',cap:600,s:''},
-{d:'2026-08-29',a:'rio',n:'Rio Da Yung OG',c:'New York, NY',v:'Irving Plaza',cap:1025,s:''},
-{d:'2026-09-03',a:'rio',n:'Rio Da Yung OG',c:'Charlotte, NC',v:'The Underground',cap:500,s:''},
-{d:'2026-09-04',a:'rio',n:'Rio Da Yung OG',c:'Charleston, SC',v:'Charleston Music Hall',cap:950,s:''},
-{d:'2026-09-08',a:'rio',n:'Rio Da Yung OG',c:'Miami, FL',v:'ZeyZey',cap:300,s:''},
-{d:'2026-05-01',a:'bs',n:'Black Smurf',c:'Atlanta, GA',v:'NDSTRY ATL',cap:300,s:''},
-{d:'2026-05-02',a:'bs',n:'Black Smurf',c:'Charlotte, NC',v:'The Bridge Studios',cap:400,s:''},
-{d:'2026-05-03',a:'bs',n:'Black Smurf',c:'Chicago, IL',v:'Bookclub',cap:230,s:''},
-{d:'2026-05-08',a:'bs',n:'Black Smurf',c:'Los Angeles, CA',v:'Los Globos',cap:840,s:''},
-{d:'2026-05-09',a:'bs',n:'Black Smurf',c:'Tucson, AZ',v:'Club Congress',cap:400,s:''},
-{d:'2026-05-10',a:'bs',n:'Black Smurf',c:'Mesa, AZ',v:'The Nile Theater',cap:1000,s:''},
-{d:'2026-05-16',a:'bs',n:'Black Smurf',c:'Las Vegas, NV',v:'C3 Lounge',cap:200,s:''},
-{d:'2026-05-17',a:'bs',n:'Black Smurf',c:'Washington, DC',v:'DC9',cap:250,s:''},
-{d:'2026-05-22',a:'bs',n:'Black Smurf',c:'Orlando, FL',v:'Have Knotz',cap:300,s:''},
-{d:'2026-05-23',a:'bs',n:'Black Smurf',c:'Minneapolis, MN',v:'Underground Music Cafe',cap:540,s:''}
+const TOURS = [
+  {
+    id: 'fattmack',
+    artist: 'Fattmack',
+    tour: 'The McKenzie Tour',
+    special: 'Special Guests: Jay Montana & TheregoMarcus',
+    dates: [
+      { date: '2026-05-13', city: 'Atlanta', state: 'GA', venue: '', status: 'sold_out' },
+      { date: '2026-05-15', city: 'Dallas', state: 'TX', venue: '', status: 'sold_out' },
+      { date: '2026-05-17', city: 'Houston', state: 'TX', venue: '', status: 'sold_out' },
+      { date: '2026-05-18', city: 'Los Angeles', state: 'CA', venue: '', status: 'low_tickets' },
+      { date: '2026-05-26', city: 'Chicago', state: 'IL', venue: '', status: 'sold_out' },
+      { date: '2026-05-27', city: 'New York', state: 'NY', venue: '', status: '' },
+      { date: '2026-05-29', city: 'Charlotte', state: 'NC', venue: '', status: 'sold_out' },
+      { date: '2026-05-31', city: 'Nashville', state: 'TN', venue: '', status: '' },
+      { date: '2026-06-01', city: 'Birmingham', state: 'AL', venue: '', status: 'sold_out' },
+      { date: '2026-08-19', city: 'Columbia', state: 'SC', venue: '', status: '' },
+      { date: '2026-08-20', city: 'Raleigh', state: 'NC', venue: '', status: '' },
+      { date: '2026-08-22', city: 'Richmond', state: 'VA', venue: '', status: '' },
+      { date: '2026-08-23', city: 'Washington', state: 'DC', venue: '', status: '' },
+      { date: '2026-08-24', city: 'Baltimore', state: 'MD', venue: '', status: '' },
+      { date: '2026-08-26', city: 'Philadelphia', state: 'PA', venue: '', status: '' },
+      { date: '2026-08-27', city: 'Cleveland', state: 'OH', venue: '', status: '' },
+      { date: '2026-08-28', city: 'Detroit', state: 'MI', venue: '', status: '' },
+      { date: '2026-08-30', city: 'Indianapolis', state: 'IN', venue: '', status: '' },
+      { date: '2026-08-31', city: 'St. Louis', state: 'MO', venue: '', status: '' },
+      { date: '2026-09-02', city: 'New Orleans', state: 'LA', venue: '', status: '' },
+      { date: '2026-09-04', city: 'Orlando', state: 'FL', venue: '', status: '' },
+      { date: '2026-09-05', city: 'Atlanta', state: 'GA', venue: '', status: '' },
+    ]
+  },
+  {
+    id: 'babyface',
+    artist: 'Babyface Ray & 42 Dugg',
+    tour: '4 The Trenches Tour',
+    special: '',
+    dates: [
+      { date: '2026-05-30', city: 'Cincinnati', state: 'OH', venue: "Bogart's", status: '' },
+      { date: '2026-05-31', city: 'Cleveland', state: 'OH', venue: 'House of Blues', status: '' },
+      { date: '2026-06-02', city: 'Columbus', state: 'OH', venue: 'Kemba Live!', status: '' },
+      { date: '2026-06-04', city: 'Pittsburgh', state: 'PA', venue: 'The Roxian Theatre', status: '' },
+      { date: '2026-06-06', city: 'Rochester', state: 'NY', venue: 'Waterstreet Music Hall', status: '' },
+      { date: '2026-06-07', city: 'Hartford', state: 'CT', venue: 'The Webster', status: '' },
+      { date: '2026-06-09', city: 'New York', state: 'NY', venue: 'Webster Hall', status: '' },
+      { date: '2026-06-12', city: 'Silver Spring', state: 'MD', venue: 'The Fillmore', status: '' },
+      { date: '2026-06-14', city: 'Boston', state: 'MA', venue: 'Big Night Live', status: '' },
+      { date: '2026-06-19', city: 'Raleigh', state: 'NC', venue: 'The Ritz', status: '' },
+      { date: '2026-06-20', city: 'Charleston', state: 'SC', venue: 'Charleston Music Hall', status: '' },
+      { date: '2026-06-21', city: 'Norfolk', state: 'VA', venue: 'The Norva', status: '' },
+      { date: '2026-06-25', city: 'Atlanta', state: 'GA', venue: 'The Eastern', status: '' },
+      { date: '2026-06-26', city: 'Nashville', state: 'TN', venue: 'Cannery Hall', status: '' },
+      { date: '2026-06-27', city: 'Joliet', state: 'IL', venue: 'The Forge', status: '' },
+      { date: '2026-06-28', city: 'Milwaukee', state: 'WI', venue: 'The Rave', status: '' },
+      { date: '2026-07-02', city: 'Denver', state: 'CO', venue: 'Summit Music Hall', status: '' },
+      { date: '2026-07-07', city: 'Houston', state: 'TX', venue: 'Warehouse Live', status: '' },
+      { date: '2026-07-09', city: 'Phoenix', state: 'AZ', venue: 'The Van Buren', status: '' },
+      { date: '2026-07-10', city: 'Los Angeles', state: 'CA', venue: 'The Belasco', status: '' },
+      { date: '2026-07-11', city: 'Berkeley', state: 'CA', venue: 'The UC Theater', status: '' },
+      { date: '2026-07-12', city: 'Sacramento', state: 'CA', venue: 'Ace of Spades', status: '' },
+      { date: '2026-07-14', city: 'Salt Lake City', state: 'UT', venue: 'Rockwell at the Complex', status: '' },
+      { date: '2026-07-17', city: 'Lincoln', state: 'NE', venue: 'The Royal Grove', status: '' },
+      { date: '2026-07-18', city: 'Indianapolis', state: 'IN', venue: 'Warren Performing Arts Center', status: '' },
+      { date: '2026-07-19', city: 'Louisville', state: 'KY', venue: "Old Forester's Paristown Hall", status: '' },
+      { date: '2026-07-26', city: 'Charlotte', state: 'NC', venue: 'The Fillmore', status: '' },
+      { date: '2026-07-31', city: 'Detroit', state: 'MI', venue: 'The Fillmore', status: '' },
+      { date: '2026-07-03', city: 'Albuquerque', state: 'NM', venue: 'Oasis', status: '' },
+      { date: '2026-07-04', city: 'Dallas', state: 'TX', venue: 'The Pagoda', status: '' },
+      { date: '2026-07-05', city: 'Austin', state: 'TX', venue: 'Riviere', status: '' },
+      { date: '2026-07-23', city: 'Birmingham', state: 'AL', venue: 'Iron City', status: '' },
+      { date: '2026-07-24', city: 'Memphis', state: 'TN', venue: 'Minglewood Hall', status: '' },
+      { date: '2026-07-30', city: 'Kansas City', state: 'MO', venue: 'The Truman', status: '' },
+      { date: '2026-08-01', city: 'St. Louis', state: 'MO', venue: 'The Hawthorn', status: '' },
+      { date: '2026-08-07', city: 'Little Rock', state: 'AR', venue: 'The Hall', status: '' },
+      { date: '2026-08-08', city: 'New Orleans', state: 'LA', venue: 'Joy Theater', status: '' },
+      { date: '2026-08-21', city: 'Detroit', state: 'MI', venue: 'Aretha Franklin Amphitheater', status: '' },
+    ]
+  },
+  {
+    id: 'rio',
+    artist: 'Rio Da Yung OG',
+    tour: 'Live Tour',
+    special: 'Page 2 of 2 — earlier dates may exist',
+    dates: [
+      { date: '2026-07-24', city: 'New Orleans', state: 'LA', venue: 'House of Blues', status: '' },
+      { date: '2026-07-25', city: 'Houston', state: 'TX', venue: 'House of Blues', status: '' },
+      { date: '2026-07-26', city: 'San Antonio', state: 'TX', venue: 'Studio 210', status: '' },
+      { date: '2026-07-28', city: 'Fort Worth', state: 'TX', venue: 'Haltom Theater', status: '' },
+      { date: '2026-07-29', city: 'Austin', state: 'TX', venue: "Antone's", status: '' },
+      { date: '2026-07-31', city: 'Albuquerque', state: 'NM', venue: 'Revel', status: '' },
+      { date: '2026-08-01', city: 'Phoenix', state: 'AZ', venue: 'Marquee Theater', status: '' },
+      { date: '2026-08-03', city: 'San Diego', state: 'CA', venue: 'Music Box', status: '' },
+      { date: '2026-08-05', city: 'Santa Ana', state: 'CA', venue: 'Observatory', status: '' },
+      { date: '2026-08-08', city: 'Salem', state: 'OR', venue: 'Fuego', status: '' },
+      { date: '2026-08-12', city: 'Boise', state: 'ID', venue: 'Revolution', status: '' },
+      { date: '2026-08-14', city: 'Denver', state: 'CO', venue: 'Summit Music Hall', status: '' },
+      { date: '2026-08-15', city: 'Lincoln', state: 'NE', venue: 'The Royal Grove', status: '' },
+      { date: '2026-08-21', city: 'Milwaukee', state: 'WI', venue: 'The Rave', status: '' },
+      { date: '2026-08-26', city: 'Pittsburgh', state: 'PA', venue: 'Mr Smalls', status: '' },
+      { date: '2026-08-29', city: 'New York City', state: 'NY', venue: 'Irving Plaza', status: '' },
+      { date: '2026-09-03', city: 'Charlotte', state: 'NC', venue: 'The Underground', status: '' },
+      { date: '2026-09-04', city: 'Charleston', state: 'SC', venue: 'Charleston Music Hall', status: '' },
+      { date: '2026-09-08', city: 'Miami', state: 'FL', venue: 'ZeyZey', status: '' },
+    ]
+  },
+  {
+    id: 'travis',
+    artist: 'Chris Travis',
+    tour: 'The Prefix Tour',
+    special: 'Waterboyz',
+    dates: [
+      { date: '2026-06-16', city: 'New York', state: 'NY', venue: '', status: '' },
+      { date: '2026-06-17', city: 'Washington', state: 'DC', venue: '', status: '' },
+      { date: '2026-06-18', city: 'Nashville', state: 'TN', venue: '', status: '' },
+      { date: '2026-06-19', city: 'Atlanta', state: 'GA', venue: '', status: '' },
+      { date: '2026-06-20', city: 'Orlando', state: 'FL', venue: '', status: '' },
+      { date: '2026-06-21', city: 'Miami', state: 'FL', venue: '', status: '' },
+      { date: '2026-06-26', city: 'Seattle', state: 'WA', venue: '', status: '' },
+      { date: '2026-06-27', city: 'Portland', state: 'OR', venue: '', status: '' },
+      { date: '2026-07-02', city: 'Salt Lake City', state: 'UT', venue: '', status: '' },
+      { date: '2026-07-10', city: 'Chicago', state: 'IL', venue: '', status: '' },
+      { date: '2026-07-11', city: 'Oklahoma City', state: 'OK', venue: '', status: '' },
+      { date: '2026-07-12', city: 'Denver', state: 'CO', venue: '', status: '' },
+      { date: '2026-07-15', city: 'El Paso', state: 'TX', venue: '', status: '' },
+      { date: '2026-07-17', city: 'Tucson', state: 'AZ', venue: '', status: '' },
+      { date: '2026-07-18', city: 'Phoenix', state: 'AZ', venue: '', status: '' },
+      { date: '2026-07-19', city: 'Albuquerque', state: 'NM', venue: '', status: '' },
+      { date: '2026-07-22', city: 'San Francisco', state: 'CA', venue: '', status: '' },
+      { date: '2026-07-23', city: 'Sacramento', state: 'CA', venue: '', status: '' },
+      { date: '2026-07-24', city: 'San Luis Obispo', state: 'CA', venue: '', status: '' },
+      { date: '2026-07-25', city: 'Santa Ana', state: 'CA', venue: '', status: '' },
+      { date: '2026-07-26', city: 'San Diego', state: 'CA', venue: '', status: '' },
+      { date: '2026-07-30', city: 'Austin', state: 'TX', venue: '', status: '' },
+      { date: '2026-07-31', city: 'Dallas', state: 'TX', venue: '', status: '' },
+      { date: '2026-08-01', city: 'Houston', state: 'TX', venue: '', status: '' },
+      { date: '2026-08-02', city: 'San Antonio', state: 'TX', venue: '', status: '' },
+      { date: '2026-08-08', city: 'Reno', state: 'NV', venue: '', status: '' },
+      { date: '2026-08-21', city: 'Los Angeles', state: 'CA', venue: '', status: '' },
+    ]
+  },
+  {
+    id: 'realest',
+    artist: 'BabyFxce E',
+    tour: 'Be Da Realest Tour',
+    special: 'Support: Luhh Dyl',
+    dates: [
+      { date: '2026-05-13', city: 'Detroit', state: 'MI', venue: 'El Club Detroit', status: '' },
+      { date: '2026-05-14', city: 'Chicago', state: 'IL', venue: 'Avondale Music Hall', status: '' },
+      { date: '2026-05-15', city: 'Milwaukee', state: 'WI', venue: 'The Rave', status: '' },
+      { date: '2026-05-17', city: 'Minneapolis', state: 'MN', venue: 'Fine Line', status: '' },
+      { date: '2026-05-18', city: 'Kansas City', state: 'MO', venue: 'The Bottleneck', status: '' },
+      { date: '2026-05-20', city: 'Denver', state: 'CO', venue: 'Summit', status: '' },
+      { date: '2026-05-23', city: 'Las Vegas', state: 'NV', venue: 'KLTRE', status: '' },
+      { date: '2026-05-24', city: 'Mesa', state: 'AZ', venue: 'The Rosetta Room', status: '' },
+      { date: '2026-05-26', city: 'Los Angeles', state: 'CA', venue: 'Echoplex', status: 'sold_out' },
+      { date: '2026-05-28', city: 'Houston', state: 'TX', venue: 'House of Blues (Bronze Peacock)', status: '' },
+      { date: '2026-05-29', city: 'Dallas', state: 'TX', venue: 'House of Blues (Cambridge Room)', status: '' },
+      { date: '2026-05-31', city: 'Atlanta', state: 'GA', venue: 'The Masquerade (Purgatory)', status: '' },
+      { date: '2026-06-01', city: 'Fort Lauderdale', state: 'FL', venue: 'Revolution Live', status: '' },
+      { date: '2026-06-03', city: 'Charlotte', state: 'NC', venue: 'The Underground', status: '' },
+      { date: '2026-06-04', city: 'Washington', state: 'DC', venue: 'Union Stage', status: '' },
+      { date: '2026-06-06', city: 'Philadelphia', state: 'PA', venue: 'The Foundry', status: '' },
+      { date: '2026-06-09', city: 'Cleveland', state: 'OH', venue: 'House of Blues', status: '' },
+      { date: '2026-06-11', city: 'Columbus', state: 'OH', venue: 'A&R Music Bar', status: '' },
+      { date: '2026-06-13', city: 'Millvale', state: 'PA', venue: 'Mr. Smalls Theatre', status: '' },
+      { date: '2026-06-15', city: 'New York City', state: 'NY', venue: 'Gramercy Theatre', status: '' },
+    ]
+  },
+  {
+    id: 'autumn',
+    artist: 'Autumn!',
+    tour: 'Live Tour',
+    special: '',
+    dates: [
+      { date: '2026-05-02', city: 'Chicago', state: 'IL', venue: '', status: '' },
+      { date: '2026-05-03', city: 'Columbus', state: 'OH', venue: '', status: '' },
+      { date: '2026-05-10', city: 'Philadelphia', state: 'PA', venue: '', status: '' },
+      { date: '2026-05-11', city: 'New York', state: 'NY', venue: '', status: '' },
+      { date: '2026-05-12', city: 'Toronto', state: 'ON', venue: '', status: '' },
+      { date: '2026-05-14', city: 'Calgary', state: 'AB', venue: '', status: '' },
+      { date: '2026-05-16', city: 'Edmonton', state: 'AB', venue: '', status: '' },
+      { date: '2026-05-17', city: 'Boston', state: 'MA', venue: '', status: '' },
+      { date: '2026-05-20', city: 'Indianapolis', state: 'IN', venue: '', status: '' },
+      { date: '2026-05-21', city: 'Atlanta', state: 'GA', venue: '', status: '' },
+      { date: '2026-05-23', city: 'Greensboro', state: 'NC', venue: '', status: '' },
+      { date: '2026-05-25', city: 'Orlando', state: 'FL', venue: '', status: '' },
+      { date: '2026-05-27', city: 'Miami', state: 'FL', venue: '', status: '' },
+      { date: '2026-05-29', city: 'Albuquerque', state: 'NM', venue: '', status: '' },
+      { date: '2026-05-30', city: 'Los Angeles', state: 'CA', venue: '', status: '' },
+    ]
+  },
+  {
+    id: 'smurf',
+    artist: 'Black Smurf',
+    tour: 'Live Tour',
+    special: '',
+    dates: [
+      { date: '2026-05-01', city: 'Atlanta', state: 'GA', venue: 'NDSTRY ATL', status: '' },
+      { date: '2026-05-02', city: 'Charlotte', state: 'NC', venue: 'The Bridge Studios', status: '' },
+      { date: '2026-05-03', city: 'Chicago', state: 'IL', venue: 'Bookclub', status: '' },
+      { date: '2026-05-08', city: 'Los Angeles', state: 'CA', venue: 'Los Globos', status: '' },
+      { date: '2026-05-09', city: 'Tucson', state: 'AZ', venue: 'Club Congress', status: '' },
+      { date: '2026-05-10', city: 'Mesa', state: 'AZ', venue: 'The Nile Theater', status: '' },
+      { date: '2026-05-16', city: 'Las Vegas', state: 'NV', venue: 'C3 Lounge', status: '' },
+      { date: '2026-05-17', city: 'Washington', state: 'DC', venue: 'DC9', status: '' },
+      { date: '2026-05-22', city: 'Orlando', state: 'FL', venue: 'Have Knotz', status: '' },
+      { date: '2026-05-23', city: 'Minneapolis', state: 'MN', venue: 'Underground Music Cafe', status: '' },
+    ]
+  },
+  {
+    id: 'yhapojj',
+    artist: 'Yhapojj',
+    tour: 'Live Tour',
+    special: '',
+    dates: [
+      { date: '2026-06-20', city: 'Miami', state: 'FL', venue: 'Boombox', status: '' },
+      { date: '2026-07-04', city: 'Austin', state: 'TX', venue: 'Regal Room', status: '' },
+      { date: '2026-07-11', city: 'Seattle', state: 'WA', venue: 'Private Location', status: '' },
+      { date: '2026-07-12', city: 'Portland', state: 'OR', venue: 'High Limit Room', status: '' },
+      { date: '2026-07-13', city: 'Sacramento', state: 'CA', venue: 'The Rink Studios', status: '' },
+      { date: '2026-07-15', city: 'Los Angeles', state: 'CA', venue: 'Los Globos', status: '' },
+      { date: '2026-07-19', city: 'Phoenix', state: 'AZ', venue: 'The Rosetta Room', status: '' },
+      { date: '2026-07-23', city: 'OKC', state: 'OK', venue: 'The Bridge', status: '' },
+      { date: '2026-07-24', city: 'Denver', state: 'CO', venue: 'Marquis', status: '' },
+      { date: '2026-07-31', city: 'Charlotte', state: 'NC', venue: 'The Rabbit Hole', status: '' },
+      { date: '2026-08-06', city: 'San Antonio', state: 'TX', venue: 'Studio 210', status: '' },
+      { date: '2026-08-07', city: 'Houston', state: 'TX', venue: 'The Secret Group', status: '' },
+      { date: '2026-08-09', city: 'El Paso', state: 'TX', venue: 'Rosewood Bar', status: '' },
+    ]
+  },
+  {
+    id: 'slimey',
+    artist: '2Slimey',
+    tour: 'Live Tour',
+    special: '',
+    dates: [
+      { date: '2026-07-09', city: 'San Diego', state: 'CA', venue: 'SOMA Sidestage', status: '' },
+      { date: '2026-07-10', city: 'Berkeley', state: 'CA', venue: 'Cornerstone', status: '' },
+      { date: '2026-07-16', city: 'Toronto', state: 'ON', venue: 'Mod Club', status: '' },
+      { date: '2026-07-17', city: 'New York', state: 'NY', venue: 'Gramercy Theatre', status: '' },
+      { date: '2026-07-18', city: 'Philadelphia', state: 'PA', venue: 'The Foundry', status: '' },
+      { date: '2026-07-19', city: 'Washington', state: 'DC', venue: 'Union Stage', status: '' },
+      { date: '2026-07-24', city: 'Atlanta', state: 'GA', venue: 'Center Stage', status: '' },
+      { date: '2026-07-25', city: 'Miami', state: 'FL', venue: 'Midline', status: '' },
+      { date: '2026-07-31', city: 'Houston', state: 'TX', venue: 'White Oak Music Hall', status: '' },
+      { date: '2026-08-02', city: 'Denver', state: 'CO', venue: 'Marquis', status: '' },
+      { date: '2026-08-07', city: 'Santa Ana', state: 'CA', venue: 'The Observatory', status: '' },
+    ]
+  }
 ];
 
-var dm={};for(var i=0;i<E.length;i++){var e=E[i];if(!dm[e.d])dm[e.d]=[];dm[e.d].push(e);}
+// Flatten all events
+let allEvents = [];
+TOURS.forEach(tour => {
+  tour.dates.forEach(d => {
+    allEvents.push({
+      ...d,
+      tourId: tour.id,
+      artist: tour.artist,
+      tourName: tour.tour,
+      isDallas: d.city === 'Dallas',
+      isTexas: d.state === 'TX',
+    });
+  });
+});
 
-function af(){
-  var rows=document.querySelectorAll('.tbl tr[data-t]');
-  for(var i=0;i<rows.length;i++){
-    var r=rows[i],t=r.getAttribute('data-t'),show=at[t];
-    if(show&&hl==='dal')show=r.getAttribute('data-d')==='1';
-    if(show&&hl==='tx')show=r.getAttribute('data-x')==='1';
-    if(show&&hl==='col')show=r.getAttribute('data-c')==='1';
-    r.style.display=show?'':'none';
+// Find collisions (multiple artists on the same date)
+const dateMap = {};
+allEvents.forEach(e => {
+  if (!dateMap[e.date]) dateMap[e.date] = [];
+  dateMap[e.date].push(e);
+});
+
+const collisionDates = {};
+Object.keys(dateMap).forEach(date => {
+  const artists = [...new Set(dateMap[date].map(e => e.tourId))];
+  if (artists.length > 1) collisionDates[date] = dateMap[date];
+});
+
+// State
+let activeFilters = { fattmack: true, babyface: true, rio: true, travis: true, realest: true, autumn: true, smurf: true, yhapojj: true, slimey: true };
+let activeHighlight = null;
+let currentView = 'calendar';
+
+// Stats
+function updateStats() {
+  const visible = allEvents.filter(e => activeFilters[e.tourId]);
+  const filtered = activeHighlight
+    ? visible.filter(e =>
+        activeHighlight === 'dallas' ? e.isDallas :
+        activeHighlight === 'texas' ? e.isTexas :
+        activeHighlight === 'collision' ? !!collisionDates[e.date] : true)
+    : visible;
+
+  document.getElementById('stat-total').textContent = filtered.length;
+  document.getElementById('stat-dallas').textContent = filtered.filter(e => e.isDallas).length;
+  document.getElementById('stat-texas').textContent = filtered.filter(e => e.isTexas).length;
+
+  const collisionCount = [...new Set(
+    filtered.filter(e => collisionDates[e.date]).map(e => e.date)
+  )].length;
+  document.getElementById('stat-collisions').textContent = collisionCount;
+}
+
+// Filters
+function toggleFilter(btn) {
+  const tour = btn.dataset.tour;
+  activeFilters[tour] = !activeFilters[tour];
+  btn.classList.toggle('active');
+  render();
+}
+
+function toggleHighlight(btn) {
+  const hl = btn.dataset.highlight;
+  if (activeHighlight === hl) {
+    activeHighlight = null;
+    btn.classList.remove('active');
+  } else {
+    document.querySelectorAll('[data-highlight]').forEach(b => b.classList.remove('active'));
+    activeHighlight = hl;
+    btn.classList.add('active');
   }
-}
-function tf(b){var t=b.getAttribute('data-t');at[t]=at[t]?0:1;b.classList.toggle('on');af();if(document.getElementById('v-cal').checked)buildCal();}
-function th(b){
-  var h=b.getAttribute('data-h');
-  if(hl===h){hl=null;b.classList.remove('on');}
-  else{var bs=document.querySelectorAll('[data-h]');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');hl=h;b.classList.add('on');}
-  af();if(document.getElementById('v-cal').checked)buildCal();
+  render();
 }
 
-function sv(v){
-  document.getElementById(v==='cal'?'v-cal':'v-list').checked=true;
-  if(v==='cal')buildCal();
+function setView(view, btn) {
+  currentView = view;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
 }
 
-function buildCal(){
-  var el=document.getElementById('cal-view');
-  var MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  var h='<div class="cal-nav">';
-  h+='<button onclick="chgM(-1)">&#8249;</button>';
-  h+='<h2>'+MN[curM]+' 2026</h2>';
-  h+='<button onclick="chgM(1)">&#8250;</button></div>';
-  h+='<div class="cal-grid">';
-  for(var di=0;di<7;di++)h+='<div class="cal-dh">'+DN[di]+'</div>';
-  var first=new Date(2026,curM,1).getDay();
-  var total=new Date(2026,curM+1,0).getDate();
-  var today=new Date();var todayS=today.toISOString().split('T')[0];
-  for(var p=0;p<first;p++)h+='<div class="cal-cell empty"></div>';
-  for(var d=1;d<=total;d++){
-    var ds='2026-'+String(curM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    var evts=dm[ds]||[];
-    var vis=[];for(var ei=0;ei<evts.length;ei++){if(at[evts[ei].a])vis.push(evts[ei]);}
-    var isDal=false,isTx=false;
-    var tours={};
-    for(var vi=0;vi<vis.length;vi++){
-      if(vis[vi].c.indexOf('Dallas')>=0)isDal=true;
-      if(vis[vi].c.indexOf(', TX')>=0)isTx=true;
-      tours[vis[vi].a]=1;
+// Calendar rendering
+function renderCalendar() {
+  const container = document.getElementById('calendar-view');
+  container.innerHTML = '';
+  container.style.display = currentView === 'calendar' ? 'flex' : 'none';
+
+  const months = [
+    { year: 2026, month: 4, name: 'May 2026' },
+    { year: 2026, month: 5, name: 'June 2026' },
+    { year: 2026, month: 6, name: 'July 2026' },
+    { year: 2026, month: 7, name: 'August 2026' },
+    { year: 2026, month: 8, name: 'September 2026' },
+  ];
+
+  const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
+
+  months.forEach(({ year, month, name }) => {
+    const block = document.createElement('div');
+    block.className = 'month-block';
+    block.innerHTML = `<h2>${name}</h2>`;
+
+    const grid = document.createElement('div');
+    grid.className = 'month-grid';
+
+    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+      const hdr = document.createElement('div');
+      hdr.className = 'day-header';
+      hdr.textContent = d;
+      grid.appendChild(hdr);
+    });
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let i = 0; i < firstDay; i++) {
+      const empty = document.createElement('div');
+      empty.className = 'day-cell empty';
+      grid.appendChild(empty);
     }
-    var tc=Object.keys(tours).length;
-    var cls='cal-cell';
-    if(ds===todayS)cls+=' today';
-    if(isDal)cls+=' is-dal';
-    else if(isTx)cls+=' is-tx';
-    if(tc>1)cls+=' is-col';
-    if(tc>=5)cls+=' is-5x';
 
-    var dimmed=false;
-    if(hl==='dal'&&!isDal&&vis.length>0)dimmed=true;
-    if(hl==='tx'&&!isTx&&vis.length>0)dimmed=true;
-    if(hl==='col'&&tc<2&&vis.length>0)dimmed=true;
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      const cell = document.createElement('div');
+      cell.className = 'day-cell';
 
-    h+='<div class="'+cls+'" onclick="showDD(\''+ds+'\')"'+(dimmed?' style="opacity:.2"':'')+'>';
-    h+='<div class="cal-dn">'+d+'</div>';
-    if(tc>1)h+='<span class="cal-cb'+(tc>=5?' c5':'')+'">'+tc+'</span>';
-    for(var ci=0;ci<vis.length;ci++){
-      var ev=vis[ci];
-      var sH=ev.s==='SO'?'<span class="cal-so">SO</span>':'';
-      h+='<div class="cal-ev t-'+ev.a+'">'+ev.n.split(' ')[0]+sH+'</div>';
+      if (dateStr === todayStr) cell.classList.add('today');
+
+      const dayEvents = (dateMap[dateStr] || []).filter(e => activeFilters[e.tourId]);
+      let show = true;
+      if (activeHighlight === 'dallas') show = dayEvents.some(e => e.isDallas);
+      if (activeHighlight === 'texas') show = dayEvents.some(e => e.isTexas);
+      if (activeHighlight === 'collision') show = !!collisionDates[dateStr] && dayEvents.length > 1;
+
+      if (activeHighlight && !show && dayEvents.length > 0) {
+        cell.style.opacity = '0.25';
+      }
+
+      const hasDallas = dayEvents.some(e => e.isDallas);
+      const hasTexas = dayEvents.some(e => e.isTexas);
+      const uniqueTourIds = [...new Set(dayEvents.map(e => e.tourId))];
+      const hasCollision = uniqueTourIds.length > 1;
+
+      if (hasDallas) cell.classList.add('has-dallas');
+      else if (hasTexas) cell.classList.add('has-texas');
+      if (hasCollision) cell.classList.add('has-collision');
+
+      let inner = `<div class="day-number">${day}</div>`;
+
+      if (hasDallas) inner += `<span class="dallas-star" title="Dallas show">&#9733;</span>`;
+      else if (hasTexas) inner += `<span class="texas-flag" title="Texas show">TX</span>`;
+
+      if (hasCollision) inner += `<span class="collision-badge" title="${uniqueTourIds.length} artists">${uniqueTourIds.length}</span>`;
+
+      dayEvents.forEach(e => {
+        let statusHtml = '';
+        if (e.status === 'sold_out') statusHtml = '<span class="sold-out">SOLD OUT</span>';
+        else if (e.status === 'low_tickets') statusHtml = '<span class="low-tickets">LOW</span>';
+        inner += `<div class="event-chip" data-tour="${e.tourId}" onclick="showDetail(event, '${e.date}', '${e.tourId}')">${e.artist.split(' ')[0]}${statusHtml}<br><span style="opacity:0.7">${e.city}, ${e.state}</span></div>`;
+      });
+
+      cell.innerHTML = inner;
+      grid.appendChild(cell);
     }
-    h+='</div>';
-  }
-  h+='</div>';
-  el.innerHTML=h;
+
+    block.appendChild(grid);
+    container.appendChild(block);
+  });
 }
 
-function chgM(dir){
-  curM+=dir;
-  if(curM<4)curM=4;
-  if(curM>8)curM=8;
-  buildCal();
+// List rendering
+function renderList() {
+  const container = document.getElementById('list-view');
+  container.innerHTML = '';
+  container.style.display = currentView === 'list' ? 'block' : 'none';
+
+  const sorted = [...allEvents]
+    .filter(e => activeFilters[e.tourId])
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  let filtered = sorted;
+  if (activeHighlight === 'dallas') filtered = sorted.filter(e => e.isDallas);
+  if (activeHighlight === 'texas') filtered = sorted.filter(e => e.isTexas);
+  if (activeHighlight === 'collision') filtered = sorted.filter(e => collisionDates[e.date]);
+
+  let currentMonth = '';
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  filtered.forEach(e => {
+    const d = new Date(e.date + 'T12:00:00');
+    const monthKey = `${d.getFullYear()}-${d.getMonth()}`;
+    if (monthKey !== currentMonth) {
+      currentMonth = monthKey;
+      const hdr = document.createElement('div');
+      hdr.className = 'list-month-header';
+      hdr.textContent = `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+      container.appendChild(hdr);
+    }
+
+    const row = document.createElement('div');
+    row.className = 'list-item';
+    if (e.isDallas) row.classList.add('dallas-row');
+    else if (e.isTexas) row.classList.add('texas-row');
+    if (collisionDates[e.date]) row.classList.add('collision-row');
+
+    const dateDisplay = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    let badges = '';
+    if (e.isDallas) badges += '<span class="badge badge-dallas">DALLAS</span>';
+    else if (e.isTexas) badges += '<span class="badge badge-texas">TEXAS</span>';
+    if (collisionDates[e.date]) {
+      const count = [...new Set(dateMap[e.date].map(x => x.tourId))].length;
+      badges += `<span class="badge badge-collision">${count} ARTISTS</span>`;
+    }
+    if (e.status === 'sold_out') badges += '<span class="badge badge-soldout">SOLD OUT</span>';
+    if (e.status === 'low_tickets') badges += '<span class="badge badge-low">LOW TICKETS</span>';
+
+    row.innerHTML = `
+      <div class="list-date">${dateDisplay}</div>
+      <div class="list-artist" data-tour="${e.tourId}">${e.artist}</div>
+      <div class="list-city">${e.city}, ${e.state}</div>
+      <div class="list-venue">${e.venue || '—'}</div>
+      <div class="list-badges">${badges}</div>
+    `;
+
+    row.style.cursor = 'pointer';
+    row.onclick = () => showDetail(null, e.date, e.tourId);
+    container.appendChild(row);
+  });
 }
 
-function showDD(ds){
-  var evts=dm[ds]||[];
-  var vis=[];for(var i=0;i<evts.length;i++){if(at[evts[i].a])vis.push(evts[i]);}
-  if(!vis.length)return;
-  var dt=new Date(ds+'T12:00:00');
-  var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var DN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  document.getElementById('dd-title').textContent=DN[dt.getDay()]+', '+MN[dt.getMonth()]+' '+dt.getDate();
-  var h='';
-  for(var i=0;i<vis.length;i++){
-    var ev=vis[i];
-    h+='<div class="dd-ev"><div class="dd-artist a-'+ev.a+'">'+ev.n+'</div>';
-    h+='<div class="dd-city">'+ev.c+'</div>';
-    if(ev.v)h+='<div class="dd-venue">'+ev.v+(ev.cap?' <span style="font-size:10px;color:#666;border:1px solid #444;padding:0 5px;border-radius:8px;margin-left:4px">Cap: '+ev.cap+'</span>':'')+'</div>';
-    if(ev.s==='SO')h+='<div style="color:#ff5555;font-size:12px;margin-top:2px;font-weight:600">SOLD OUT</div>';
-    if(ev.s==='LO')h+='<div style="color:#ffaa00;font-size:12px;margin-top:2px;font-weight:600">LOW TICKETS</div>';
-    h+='</div>';
+// Collision panel
+function renderCollisions() {
+  const panel = document.getElementById('collision-panel');
+  const list = document.getElementById('collision-list');
+
+  const visibleCollisions = Object.entries(collisionDates).filter(([date, events]) => {
+    const visible = events.filter(e => activeFilters[e.tourId]);
+    const uniqueTours = [...new Set(visible.map(e => e.tourId))];
+    return uniqueTours.length > 1;
+  }).sort(([a],[b]) => a.localeCompare(b));
+
+  if (visibleCollisions.length === 0) {
+    panel.style.display = 'none';
+    return;
   }
-  document.getElementById('dd-body').innerHTML=h;
-  document.getElementById('dd').classList.add('open');
-  document.getElementById('dd-overlay').classList.add('open');
+
+  panel.style.display = 'block';
+  list.innerHTML = '';
+
+  visibleCollisions.forEach(([date, events]) => {
+    const visible = events.filter(e => activeFilters[e.tourId]);
+    const d = new Date(date + 'T12:00:00');
+    const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+    const item = document.createElement('div');
+    item.className = 'collision-item';
+
+    const hasDallas = visible.some(e => e.isDallas);
+    const hasTexas = visible.some(e => e.isTexas);
+    let flag = '';
+    if (hasDallas) flag = ' <span style="color:var(--dallas)">&#9733; DALLAS</span>';
+    else if (hasTexas) flag = ' <span style="color:var(--texas)">TX</span>';
+
+    item.innerHTML = `
+      <div class="collision-date">${dateStr}${flag}</div>
+      <div class="collision-artists">
+        ${visible.map(e => `<span style="color:var(--${e.tourId})">${e.artist} — ${e.city}, ${e.state}${e.venue ? ' @ ' + e.venue : ''}</span>`).join('')}
+      </div>
+    `;
+
+    list.appendChild(item);
+  });
 }
-function closeDD(){
-  document.getElementById('dd').classList.remove('open');
-  document.getElementById('dd-overlay').classList.remove('open');
+
+// Modal
+function showDetail(evt, date, tourId) {
+  if (evt) evt.stopPropagation();
+  const events = dateMap[date].filter(e => e.tourId === tourId);
+  if (!events.length) return;
+  const e = events[0];
+  const tour = TOURS.find(t => t.id === tourId);
+  const d = new Date(date + 'T12:00:00');
+
+  document.getElementById('modal-title').textContent = `${e.artist}`;
+  document.getElementById('modal-title').style.color = `var(--${tourId})`;
+
+  let rows = `
+    <div class="modal-row"><span class="modal-label">Tour</span><span>${tour.tour}</span></div>
+    <div class="modal-row"><span class="modal-label">Date</span><span>${d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span></div>
+    <div class="modal-row"><span class="modal-label">City</span><span>${e.city}, ${e.state}</span></div>
+  `;
+  if (e.venue) rows += `<div class="modal-row"><span class="modal-label">Venue</span><span>${e.venue}</span></div>`;
+
+  if (e.status === 'sold_out') rows += `<div class="modal-row"><span class="modal-label">Status</span><span style="color:#ff3333;font-weight:700">SOLD OUT</span></div>`;
+  else if (e.status === 'low_tickets') rows += `<div class="modal-row"><span class="modal-label">Status</span><span style="color:#ff9500;font-weight:700">LOW TICKETS</span></div>`;
+
+  if (e.isDallas) rows += `<div class="modal-row"><span class="modal-label">Flag</span><span style="color:var(--dallas)">&#9733; Dallas Show</span></div>`;
+  else if (e.isTexas) rows += `<div class="modal-row"><span class="modal-label">Flag</span><span style="color:var(--texas)">Texas Show</span></div>`;
+
+  if (collisionDates[date]) {
+    const others = collisionDates[date].filter(x => x.tourId !== tourId);
+    if (others.length) {
+      rows += `<div class="modal-row"><span class="modal-label">Same Date</span><span style="color:var(--collision)">${others.map(o => `${o.artist} (${o.city}, ${o.state})`).join(', ')}</span></div>`;
+    }
+  }
+
+  if (tour.special) rows += `<div class="modal-row"><span class="modal-label">Notes</span><span style="color:var(--text-dim)">${tour.special}</span></div>`;
+  if (e.uncertain) rows += `<div class="modal-row"><span class="modal-label">Accuracy</span><span style="color:var(--realest)">Unverified — low-res source</span></div>`;
+
+  document.getElementById('modal-body').innerHTML = rows;
+  document.getElementById('modal').classList.add('active');
 }
-}catch(e){}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// Main render
+function render() {
+  updateStats();
+  renderCalendar();
+  renderList();
+  renderCollisions();
+}
+
+// On first load, jump the calendar to today (or the nearest upcoming month
+// if today falls outside the rendered May–Sep 2026 window).
+function scrollToToday() {
+  if (currentView !== 'calendar') return;
+  const todayCell = document.querySelector('.day-cell.today');
+  if (todayCell) {
+    todayCell.scrollIntoView({ block: 'center' });
+    return;
+  }
+  const now = new Date();
+  const blocks = document.querySelectorAll('.month-block');
+  const rendered = [[2026,4],[2026,5],[2026,6],[2026,7],[2026,8]]; // May–Sep 2026
+  let idx = rendered.findIndex(([y,m]) =>
+    now.getFullYear() < y || (now.getFullYear() === y && now.getMonth() <= m));
+  if (idx === -1) idx = blocks.length - 1; // past the window → last month
+  if (blocks[idx]) blocks[idx].scrollIntoView({ block: 'start' });
+}
+
+render();
+requestAnimationFrame(scrollToToday);
 </script>
 </body>
 </html>
