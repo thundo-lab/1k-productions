@@ -510,16 +510,43 @@
     gap: 2px;
   }
 
+  /* Mobile single-month calendar nav */
+  .cal-mobile-nav { display: none; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; }
+  .cal-mobile-nav h2 { font-size: 18px; font-weight: 600; min-width: 150px; text-align: center; }
+  .cal-mobile-nav button { background: none; border: 1px solid var(--border); color: var(--text); width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .cal-mobile-nav button:disabled { opacity: 0.3; cursor: default; }
+
+  /* Day sheet rows (tap a day on mobile) */
+  .day-sheet-row { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .day-sheet-row:last-child { border-bottom: none; }
+  .day-sheet-artist { font-size: 15px; font-weight: 700; }
+  .day-sheet-city { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+
   /* Responsive */
   @media (max-width: 900px) {
-    .month-grid { grid-template-columns: repeat(7, 1fr); }
-    .day-cell { min-height: 70px; padding: 4px; }
-    .event-chip { font-size: 8px; padding: 2px 4px; }
     .list-item { grid-template-columns: 70px 1fr 1fr; }
     .list-venue, .list-badges { display: none; }
     main { padding: 16px; }
     header { padding: 16px; }
     .controls { padding: 12px 16px; }
+  }
+
+  /* Phone: one month at a time, full-width, tap a day for details */
+  @media (max-width: 768px) {
+    main { padding: 10px; }
+    .calendar-grid { gap: 0; }
+    .cal-mobile-nav { display: flex; }
+    .month-block h2 { display: none; }
+    .month-grid { gap: 1px; }
+    .day-header { padding: 6px 0; font-size: 10px; }
+    .day-cell { min-height: calc((100vw - 24px) / 7 * 1.5); min-width: 0; padding: 2px; border-radius: 3px; overflow: hidden; }
+    .day-number { font-size: 11px; margin-bottom: 2px; }
+    .event-chip { font-size: 8px; padding: 1px 3px; margin-bottom: 1px; border-left-width: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+    .collision-badge { width: 14px; height: 14px; font-size: 8px; top: 2px; right: 2px; }
+    .dallas-star { font-size: 11px; top: 2px; right: 18px; }
+    .texas-flag { font-size: 9px; top: 3px; right: 18px; }
+    .filter-btn { font-size: 11px; padding: 5px 10px; }
+    .modal { padding: 20px; }
   }
 
   .hidden { display: none !important; }
@@ -896,6 +923,29 @@ let activeFilters = { fattmack: true, babyface: true, rio: true, travis: true, r
 let activeHighlight = null;
 let currentView = 'calendar';
 
+// Rendered tour window + mobile single-month pager state
+const MONTHS = [
+  { year: 2026, month: 4, name: 'May 2026' },
+  { year: 2026, month: 5, name: 'June 2026' },
+  { year: 2026, month: 6, name: 'July 2026' },
+  { year: 2026, month: 7, name: 'August 2026' },
+  { year: 2026, month: 8, name: 'September 2026' },
+];
+let mobileMonthIdx = null;
+function isMobile() { return window.matchMedia('(max-width: 768px)').matches; }
+function initMobileMonth() {
+  if (mobileMonthIdx !== null) return;
+  const now = new Date();
+  const idx = MONTHS.findIndex(m =>
+    now.getFullYear() < m.year || (now.getFullYear() === m.year && now.getMonth() <= m.month));
+  mobileMonthIdx = idx === -1 ? MONTHS.length - 1 : idx;
+}
+function mobileMonth(dir) {
+  initMobileMonth();
+  mobileMonthIdx = Math.max(0, Math.min(MONTHS.length - 1, mobileMonthIdx + dir));
+  renderCalendar();
+}
+
 // Stats
 function updateStats() {
   const visible = allEvents.filter(e => activeFilters[e.tourId]);
@@ -950,88 +1000,102 @@ function renderCalendar() {
   container.innerHTML = '';
   container.style.display = currentView === 'calendar' ? 'flex' : 'none';
 
-  const months = [
-    { year: 2026, month: 4, name: 'May 2026' },
-    { year: 2026, month: 5, name: 'June 2026' },
-    { year: 2026, month: 6, name: 'July 2026' },
-    { year: 2026, month: 7, name: 'August 2026' },
-    { year: 2026, month: 8, name: 'September 2026' },
-  ];
+  const todayStr = new Date().toISOString().split('T')[0];
 
-  const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
+  if (isMobile()) {
+    // Phone: one month at a time with a ‹ › pager
+    initMobileMonth();
+    const nav = document.createElement('div');
+    nav.className = 'cal-mobile-nav';
+    nav.innerHTML =
+      `<button onclick="mobileMonth(-1)" ${mobileMonthIdx <= 0 ? 'disabled' : ''}>&#8249;</button>` +
+      `<h2>${MONTHS[mobileMonthIdx].name}</h2>` +
+      `<button onclick="mobileMonth(1)" ${mobileMonthIdx >= MONTHS.length - 1 ? 'disabled' : ''}>&#8250;</button>`;
+    container.appendChild(nav);
+    container.appendChild(buildMonthBlock(MONTHS[mobileMonthIdx], todayStr, true));
+  } else {
+    MONTHS.forEach(m => container.appendChild(buildMonthBlock(m, todayStr, false)));
+  }
+}
 
-  months.forEach(({ year, month, name }) => {
-    const block = document.createElement('div');
-    block.className = 'month-block';
-    block.innerHTML = `<h2>${name}</h2>`;
+function buildMonthBlock({ year, month, name }, todayStr, mobile) {
+  const block = document.createElement('div');
+  block.className = 'month-block';
+  if (!mobile) block.innerHTML = `<h2>${name}</h2>`;
 
-    const grid = document.createElement('div');
-    grid.className = 'month-grid';
+  const grid = document.createElement('div');
+  grid.className = 'month-grid';
 
-    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
-      const hdr = document.createElement('div');
-      hdr.className = 'day-header';
-      hdr.textContent = d;
-      grid.appendChild(hdr);
-    });
+  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+    const hdr = document.createElement('div');
+    hdr.className = 'day-header';
+    hdr.textContent = d;
+    grid.appendChild(hdr);
+  });
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    for (let i = 0; i < firstDay; i++) {
-      const empty = document.createElement('div');
-      empty.className = 'day-cell empty';
-      grid.appendChild(empty);
+  for (let i = 0; i < firstDay; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'day-cell empty';
+    grid.appendChild(empty);
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+
+    if (dateStr === todayStr) cell.classList.add('today');
+
+    const dayEvents = (dateMap[dateStr] || []).filter(e => activeFilters[e.tourId]);
+    let show = true;
+    if (activeHighlight === 'dallas') show = dayEvents.some(e => e.isDallas);
+    if (activeHighlight === 'texas') show = dayEvents.some(e => e.isTexas);
+    if (activeHighlight === 'collision') show = !!collisionDates[dateStr] && dayEvents.length > 1;
+
+    if (activeHighlight && !show && dayEvents.length > 0) {
+      cell.style.opacity = '0.25';
     }
 
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-      const cell = document.createElement('div');
-      cell.className = 'day-cell';
+    const hasDallas = dayEvents.some(e => e.isDallas);
+    const hasTexas = dayEvents.some(e => e.isTexas);
+    const uniqueTourIds = [...new Set(dayEvents.map(e => e.tourId))];
+    const hasCollision = uniqueTourIds.length > 1;
 
-      if (dateStr === todayStr) cell.classList.add('today');
+    if (hasDallas) cell.classList.add('has-dallas');
+    else if (hasTexas) cell.classList.add('has-texas');
+    if (hasCollision) cell.classList.add('has-collision');
 
-      const dayEvents = (dateMap[dateStr] || []).filter(e => activeFilters[e.tourId]);
-      let show = true;
-      if (activeHighlight === 'dallas') show = dayEvents.some(e => e.isDallas);
-      if (activeHighlight === 'texas') show = dayEvents.some(e => e.isTexas);
-      if (activeHighlight === 'collision') show = !!collisionDates[dateStr] && dayEvents.length > 1;
+    let inner = `<div class="day-number">${day}</div>`;
 
-      if (activeHighlight && !show && dayEvents.length > 0) {
-        cell.style.opacity = '0.25';
-      }
+    if (hasDallas) inner += `<span class="dallas-star" title="Dallas show">&#9733;</span>`;
+    else if (hasTexas) inner += `<span class="texas-flag" title="Texas show">TX</span>`;
 
-      const hasDallas = dayEvents.some(e => e.isDallas);
-      const hasTexas = dayEvents.some(e => e.isTexas);
-      const uniqueTourIds = [...new Set(dayEvents.map(e => e.tourId))];
-      const hasCollision = uniqueTourIds.length > 1;
+    if (hasCollision) inner += `<span class="collision-badge" title="${uniqueTourIds.length} artists">${uniqueTourIds.length}</span>`;
 
-      if (hasDallas) cell.classList.add('has-dallas');
-      else if (hasTexas) cell.classList.add('has-texas');
-      if (hasCollision) cell.classList.add('has-collision');
-
-      let inner = `<div class="day-number">${day}</div>`;
-
-      if (hasDallas) inner += `<span class="dallas-star" title="Dallas show">&#9733;</span>`;
-      else if (hasTexas) inner += `<span class="texas-flag" title="Texas show">TX</span>`;
-
-      if (hasCollision) inner += `<span class="collision-badge" title="${uniqueTourIds.length} artists">${uniqueTourIds.length}</span>`;
-
+    if (mobile) {
+      // Compact chips (artist only); tapping the day opens a sheet with full details
+      dayEvents.forEach(e => {
+        inner += `<div class="event-chip" data-tour="${e.tourId}">${e.artist.split(' ')[0]}</div>`;
+      });
+      if (dayEvents.length) cell.onclick = () => openDaySheet(dateStr);
+    } else {
       dayEvents.forEach(e => {
         let statusHtml = '';
         if (e.status === 'sold_out') statusHtml = '<span class="sold-out">SOLD OUT</span>';
         else if (e.status === 'low_tickets') statusHtml = '<span class="low-tickets">LOW</span>';
         inner += `<div class="event-chip" data-tour="${e.tourId}" onclick="showDetail(event, '${e.date}', '${e.tourId}')">${e.artist.split(' ')[0]}${statusHtml}<br><span style="opacity:0.7">${e.city}, ${e.state}</span></div>`;
       });
-
-      cell.innerHTML = inner;
-      grid.appendChild(cell);
     }
 
-    block.appendChild(grid);
-    container.appendChild(block);
-  });
+    cell.innerHTML = inner;
+    grid.appendChild(cell);
+  }
+
+  block.appendChild(grid);
+  return block;
 }
 
 // List rendering
@@ -1181,7 +1245,38 @@ function closeModal() {
   document.getElementById('modal').classList.remove('active');
 }
 
+// Mobile: tapping a day shows every show that day in one sheet
+function openDaySheet(dateStr) {
+  const evs = (dateMap[dateStr] || []).filter(e => activeFilters[e.tourId]);
+  if (!evs.length) return;
+  const d = new Date(dateStr + 'T12:00:00');
+  const title = document.getElementById('modal-title');
+  title.textContent = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  title.style.color = 'var(--text)';
+  let html = '';
+  evs.forEach(e => {
+    let badges = '';
+    if (e.isDallas) badges += ' <span style="color:var(--dallas)">&#9733; Dallas</span>';
+    else if (e.isTexas) badges += ' <span style="color:var(--texas)">TX</span>';
+    if (e.status === 'sold_out') badges += ' <span style="color:#ff5555;font-weight:700">SOLD OUT</span>';
+    else if (e.status === 'low_tickets') badges += ' <span style="color:#ffaa00;font-weight:700">LOW</span>';
+    html += `<div class="day-sheet-row">` +
+      `<div class="day-sheet-artist" style="color:var(--${e.tourId})">${e.artist}</div>` +
+      `<div class="day-sheet-city">${e.city}, ${e.state}${e.venue ? ' &middot; ' + e.venue : ''}${badges}</div>` +
+      `</div>`;
+  });
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('active');
+}
+
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// Re-render the calendar when crossing the mobile/desktop breakpoint
+let _wasMobile = isMobile();
+window.addEventListener('resize', () => {
+  const m = isMobile();
+  if (m !== _wasMobile) { _wasMobile = m; if (currentView === 'calendar') renderCalendar(); }
+});
 
 // Main render
 function render() {
@@ -1194,7 +1289,7 @@ function render() {
 // On first load, jump the calendar to today (or the nearest upcoming month
 // if today falls outside the rendered May–Sep 2026 window).
 function scrollToToday() {
-  if (currentView !== 'calendar') return;
+  if (currentView !== 'calendar' || isMobile()) return;
   const todayCell = document.querySelector('.day-cell.today');
   if (todayCell) {
     todayCell.scrollIntoView({ block: 'center' });
