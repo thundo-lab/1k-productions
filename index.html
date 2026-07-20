@@ -555,6 +555,100 @@
 
   .hidden { display: none !important; }
 
+  /* Southwest flight info */
+  .chip-flights {
+    display: block;
+    font-size: 9px;
+    color: #7EC8E3;
+    opacity: 0.95;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chip-flights.no-swa { color: #ff8888; }
+
+  .flight-section {
+    margin-top: 14px;
+    background: rgba(126,200,227,0.06);
+    border: 1px solid rgba(126,200,227,0.25);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .flight-section h4 {
+    font-size: 12px;
+    color: #7EC8E3;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  /* Collapsible flight panel */
+  details.flight-section > summary {
+    cursor: pointer;
+    list-style: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  details.flight-section > summary::-webkit-details-marker { display: none; }
+  details.flight-section > summary h4 { margin-bottom: 0; }
+  details.flight-section[open] > summary h4 { margin-bottom: 8px; }
+  details.flight-section > summary h4::before {
+    content: '▸';
+    display: inline-block;
+    margin-right: 6px;
+    transition: transform 0.15s;
+  }
+  details.flight-section[open] > summary h4::before { transform: rotate(90deg); }
+
+  .flight-hint {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    margin-left: 6px;
+  }
+
+  .flight-day-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 8px 0 4px;
+  }
+
+  .flight-row {
+    font-size: 13px;
+    padding: 3px 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .flight-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .flight-links { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .flight-links a {
+    font-size: 11px;
+    color: #7EC8E3;
+    text-decoration: none;
+    border: 1px solid rgba(126,200,227,0.4);
+    border-radius: 12px;
+    padding: 3px 10px;
+  }
+
+  .flight-links a:hover { background: rgba(126,200,227,0.12); }
+
+  @media (max-width: 768px) {
+    .chip-flights { display: none; } /* too tight on phone cells; day sheet shows it */
+  }
+
   .note-banner {
     background: rgba(0,206,209,0.08);
     border: 1px solid rgba(0,206,209,0.2);
@@ -624,6 +718,7 @@
 <main>
   <div class="note-banner" id="note-banner">
     <strong>Note:</strong> BabyFxce E "Be Da Realest Tour" dates sourced from Ticketmaster &amp; toursetlist.com. Rio Da Yung OG flyer was page 2/2 &mdash; earlier dates may exist.
+    <br><strong style="color:#7EC8E3">✈ New:</strong> Southwest departures out of Love Field (DAL) now show under each city &mdash; tap any show for the full schedule, night-before times, and live-verify links (for SWA Cargo merch restocks). Times pulled Jul 19 &mdash; always verify before shipping. Heads up: <strong>Little Rock has no SWA from DAL</strong>, and Reno / Boise / Detroit / Cleveland / Norfolk are 1-stop only.
   </div>
 
   <div id="collision-panel" class="collision-panel" style="display:none">
@@ -894,6 +989,222 @@ const TOURS = [
   }
 ];
 
+// ─────────────────────────────────────────────────────────────
+// SOUTHWEST FROM DALLAS LOVE FIELD (DAL) — for SWA Cargo merch runs
+// Schedules pulled from Google Flights 2026-07-19 for each route's next
+// show date. SWA times shift slightly by weekday — verify before booking
+// cargo (links in the popup).
+// mode: 'nonstop' | 'connect' (WN connections only) | 'none'
+// ─────────────────────────────────────────────────────────────
+const SWA_ASOF = 'Jul 19';
+
+const SWA_ROUTES = {
+  HOU: { name: 'Houston Hobby', mode: 'nonstop', flights: [
+    {d:'6:10a',a:'7:20a',f:'WN1628'},{d:'8:10a',a:'9:25a',f:'WN1252'},{d:'10:00a',a:'11:15a',f:'WN15'},{d:'11:45a',a:'1:00p',f:'WN19'},{d:'1:00p',a:'2:15p',f:'WN27'},{d:'3:45p',a:'5:00p',f:'WN37'},{d:'4:50p',a:'6:10p',f:'WN41'},{d:'7:05p',a:'8:20p',f:'WN51'},{d:'8:00p',a:'9:15p',f:'WN55'}]},
+  MSY: { name: 'New Orleans', mode: 'nonstop', flights: [
+    {d:'6:05a',a:'7:30a'},{d:'7:00a',a:'8:25a'},{d:'12:55p',a:'2:25p'},{d:'3:15p',a:'4:40p'},{d:'8:50p',a:'10:20p'},{d:'10:00p',a:'11:30p'}]},
+  SAT: { name: 'San Antonio', mode: 'nonstop', flights: [
+    {d:'6:15a',a:'7:20a',f:'WN183'},{d:'9:10a',a:'10:20a',f:'WN1725'},{d:'12:15p',a:'1:20p',f:'WN864'},{d:'5:55p',a:'7:00p',f:'WN2086'},{d:'8:00p',a:'9:05p',f:'WN4415'},{d:'9:55p',a:'11:05p',f:'WN113'}]},
+  AUS: { name: 'Austin', mode: 'nonstop', flights: [
+    {d:'6:05a',a:'7:05a',f:'WN1265'},{d:'7:45a',a:'8:50a',f:'WN4172'},{d:'10:15a',a:'11:15a',f:'WN1554'},{d:'12:55p',a:'1:55p',f:'WN3624'},{d:'3:20p',a:'4:25p',f:'WN3625'},{d:'5:50p',a:'6:50p',f:'WN1689'},{d:'9:50p',a:'10:55p',f:'WN1515'}]},
+  ABQ: { name: 'Albuquerque', mode: 'nonstop', flights: [
+    {d:'10:45a',a:'11:30a',f:'WN1253'},{d:'12:40p',a:'1:25p',f:'WN148'},{d:'4:50p',a:'5:40p',f:'WN3660'},{d:'9:50p',a:'10:40p',f:'WN1255'}]},
+  PHX: { name: 'Phoenix Sky Harbor', mode: 'nonstop', flights: [
+    {d:'6:00a',a:'6:30a',f:'WN1379'},{d:'7:40a',a:'8:15a',f:'WN4410'},{d:'11:20a',a:'11:50a',f:'WN1403'},{d:'1:20p',a:'1:50p',f:'WN1382'},{d:'5:00p',a:'5:30p',f:'WN4102'},{d:'7:00p',a:'7:25p',f:'WN1529'},{d:'8:10p',a:'8:40p',f:'WN3674'}]},
+  SAN: { name: 'San Diego', mode: 'nonstop', flights: [
+    {d:'6:10a',a:'7:05a',f:'WN1393'},{d:'10:50a',a:'11:45a',f:'WN4314'},{d:'6:30p',a:'7:25p',f:'WN936'},{d:'9:40p',a:'10:40p',f:'WN1429'}]},
+  SNA: { name: 'Orange County (Santa Ana)', mode: 'nonstop', flights: [
+    {d:'6:45p',a:'7:55p',f:'WN1277'}]},
+  LAX: { name: 'Los Angeles', mode: 'nonstop', flights: [
+    {d:'6:00a',a:'7:15a',f:'WN958'},{d:'2:00p',a:'3:10p',f:'WN1714'},{d:'5:35p',a:'6:45p',f:'WN1105'},{d:'7:00p',a:'8:10p',f:'WN2088'},{d:'9:50p',a:'11:00p',f:'WN2928'}]},
+  DEN: { name: 'Denver', mode: 'nonstop', flights: [
+    {d:'6:00a',a:'7:00a',f:'WN1296'},{d:'8:40a',a:'9:45a',f:'WN239'},{d:'9:45a',a:'10:45a',f:'WN1300'},{d:'10:45a',a:'11:45a',f:'WN4394'},{d:'11:35a',a:'12:35p',f:'WN3563'},{d:'1:10p',a:'2:10p',f:'WN1346'},{d:'6:20p',a:'7:50p',f:'WN1303'},{d:'7:25p',a:'8:45p',f:'WN1304'},{d:'9:45p',a:'11:00p',f:'WN1305'}]},
+  ATL: { name: 'Atlanta', mode: 'nonstop', flights: [
+    {d:'6:00a',a:'9:05a',f:'WN1261'},{d:'9:30a',a:'12:35p',f:'WN1766'},{d:'4:30p',a:'7:40p',f:'WN1263'},{d:'7:15p',a:'10:25p',f:'WN1264'}]},
+  BHM: { name: 'Birmingham', mode: 'nonstop', flights: [
+    {d:'9:50a',a:'11:30a',f:'WN1271'},{d:'4:25p',a:'6:05p',f:'WN4389'},{d:'8:15p',a:'10:00p',f:'WN4390'}]},
+  MEM: { name: 'Memphis', mode: 'nonstop', flights: [
+    {d:'12:25p',a:'1:50p',f:'WN888'}]},
+  OKC: { name: 'Oklahoma City', mode: 'nonstop', flights: [
+    {d:'10:45a',a:'11:45a',f:'WN4128'},{d:'10:10p',a:'11:15p',f:'WN198'}]},
+  MCI: { name: 'Kansas City', mode: 'nonstop', flights: [
+    {d:'6:05a',a:'7:35a',f:'WN4631'},{d:'8:35a',a:'10:10a',f:'WN1343'},{d:'12:00p',a:'1:30p',f:'WN4327'},{d:'1:55p',a:'3:25p',f:'WN5'},{d:'3:55p',a:'5:25p',f:'WN3068'},{d:'9:15p',a:'10:50p',f:'WN4387'},{d:'10:55p',a:'12:35a',f:'WN1347'}]},
+  STL: { name: 'St. Louis', mode: 'nonstop', flights: [
+    {d:'6:05a',a:'7:50a',f:'WN4444'},{d:'9:40a',a:'11:25a',f:'WN1411'},{d:'6:15p',a:'8:00p',f:'WN2921'},{d:'9:25p',a:'11:15p',f:'WN56'}]},
+  SMF: { name: 'Sacramento', mode: 'nonstop', flights: [
+    {d:'7:40a',a:'9:15a',f:'WN4218'},{d:'9:10p',a:'10:45p',f:'WN4365'}]},
+  SFO: { name: 'San Francisco', mode: 'nonstop', flights: [
+    {d:'8:00a',a:'9:45a',f:'WN1350'}]},
+  ELP: { name: 'El Paso', mode: 'nonstop', flights: [
+    {d:'8:30a',a:'9:10a',f:'WN2466'},{d:'11:50a',a:'12:30p',f:'WN695'},{d:'2:00p',a:'2:40p',f:'WN181'},{d:'6:45p',a:'7:25p',f:'WN1100'},{d:'9:50p',a:'10:30p',f:'WN1279'}]},
+  PDX: { name: 'Portland', mode: 'nonstop', flights: [
+    {d:'8:00a',a:'9:55a',f:'WN3216'}]},
+  OMA: { name: 'Omaha', mode: 'nonstop', flights: [
+    {d:'11:40a',a:'1:25p',f:'WN4084'}]},
+  MKE: { name: 'Milwaukee', mode: 'nonstop', flights: [
+    {d:'3:20p',a:'5:40p',f:'WN2125'}]},
+  RDU: { name: 'Raleigh/Durham', mode: 'nonstop', flights: [
+    {d:'1:45p',a:'5:25p',f:'WN1513'}]},
+  CLT: { name: 'Charlotte', mode: 'nonstop', flights: [
+    {d:'5:10p',a:'8:40p',f:'WN4299'}]},
+  CHS: { name: 'Charleston SC', mode: 'nonstop', flights: [
+    {d:'1:55p',a:'5:25p',f:'WN1481'}]},
+  PIT: { name: 'Pittsburgh', mode: 'nonstop', flights: [
+    {d:'3:05p',a:'6:40p',f:'WN2046'}]},
+  PHL: { name: 'Philadelphia', mode: 'nonstop', flights: [
+    {d:'9:00a',a:'1:10p',f:'WN854'}]},
+  LGA: { name: 'New York LaGuardia', mode: 'nonstop', flights: [
+    {d:'8:15a',a:'12:30p',f:'WN1106'},{d:'2:55p',a:'7:15p',f:'WN1304'},{d:'5:25p',a:'9:45p',f:'WN1305'}]},
+  DCA: { name: 'Washington National', mode: 'nonstop', flights: [
+    {d:'6:10a',a:'10:00a',f:'WN2175'},{d:'10:10a',a:'2:05p',f:'WN4207'},{d:'2:05p',a:'6:00p',f:'WN172'},{d:'5:50p',a:'9:40p',f:'WN990'},{d:'8:05p',a:'11:55p',f:'WN1267'}]},
+  BWI: { name: 'Baltimore/Washington', mode: 'nonstop', flights: [
+    {d:'6:00a',a:'9:55a',f:'WN418'},{d:'7:20a',a:'11:20a',f:'WN251'},{d:'9:10a',a:'1:05p',f:'WN372'},{d:'2:15p',a:'6:15p',f:'WN1684'},{d:'4:15p',a:'8:15p',f:'WN949'},{d:'6:35p',a:'10:25p',f:'WN4151'},{d:'7:35p',a:'11:25p',f:'WN137'}]},
+  IND: { name: 'Indianapolis', mode: 'nonstop', flights: [
+    {d:'9:05a',a:'12:15p',f:'WN3198'},{d:'7:20p',a:'10:25p',f:'WN4917'}]},
+  MCO: { name: 'Orlando', mode: 'nonstop', flights: [
+    {d:'6:00a',a:'9:35a',f:'WN4940'},{d:'7:55a',a:'11:30a',f:'WN489'},{d:'10:00a',a:'1:40p',f:'WN1527'},{d:'12:55p',a:'4:35p',f:'WN1319'},{d:'4:35p',a:'8:15p',f:'WN246'},{d:'8:05p',a:'11:40p',f:'WN4496'}]},
+  MIA: { name: 'Miami', mode: 'nonstop', flights: [
+    {d:'6:20a',a:'10:05a',f:'WN585'},{d:'11:10a',a:'3:00p',f:'WN1361'}]},
+  DTW: { name: 'Detroit', mode: 'connect', flights: [
+    {d:'7:20a',a:'12:25p',via:'STL'},{d:'10:05a',a:'3:20p',via:'MDW'},{d:'3:00p',a:'8:35p',via:'BNA'},{d:'5:25p',a:'10:30p',via:'STL'}]},
+  CLE: { name: 'Cleveland', mode: 'connect', flights: [
+    {d:'6:00a',a:'12:15p',via:'BWI'},{d:'7:20a',a:'12:35p',via:'BNA'},{d:'7:40a',a:'1:10p',via:'STL'},{d:'1:35p',a:'6:40p',via:'MDW'},{d:'4:00p',a:'9:00p',via:'BNA'}]},
+  RNO: { name: 'Reno', mode: 'connect', flights: [
+    {d:'7:05a',a:'10:55a',via:'SAN'},{d:'8:50a',a:'12:00p',via:'PHX'},{d:'10:05a',a:'1:05p',via:'LAS'},{d:'12:05p',a:'3:05p',via:'DEN'},{d:'5:10p',a:'8:55p',via:'DEN'}]},
+  BOI: { name: 'Boise', mode: 'connect', flights: [
+    {d:'6:15a',a:'10:50a',via:'LAS'},{d:'7:10a',a:'10:55a',via:'DEN'},{d:'11:20a',a:'2:50p',via:'DEN'},{d:'1:45p',a:'7:45p',via:'SAN'},{d:'6:35p',a:'11:10p',via:'DEN'}]},
+  ORF: { name: 'Norfolk', mode: 'connect', flights: [
+    {d:'7:45a',a:'2:10p',via:'STL'},{d:'9:20a',a:'3:00p',via:'BWI'},{d:'12:10p',a:'6:15p',via:'MDW'},{d:'1:00p',a:'8:55p',via:'BWI'}]},
+  LIT: { name: 'Little Rock', mode: 'none',
+    note: 'No Southwest service DAL→LIT found (checked Jul 2026). American flies DFW→LIT nonstop — plan merch via DFW or drive it (~5 hrs).' },
+  // Airports with no upcoming shows — mapped so the popup still links out
+  MDW:{name:'Chicago Midway',mode:'nonstop',flights:[]}, BNA:{name:'Nashville',mode:'nonstop',flights:[]},
+  SDF:{name:'Louisville',mode:'nonstop',flights:[]}, CMH:{name:'Columbus',mode:'nonstop',flights:[]},
+  BOS:{name:'Boston',mode:'nonstop',flights:[]}, BDL:{name:'Hartford',mode:'nonstop',flights:[]},
+  FLL:{name:'Fort Lauderdale',mode:'nonstop',flights:[]}, LAS:{name:'Las Vegas',mode:'nonstop',flights:[]},
+  OAK:{name:'Oakland',mode:'nonstop',flights:[]}, SJC:{name:'San Jose',mode:'nonstop',flights:[]},
+  SLC:{name:'Salt Lake City',mode:'nonstop',flights:[]}, TUS:{name:'Tucson',mode:'nonstop',flights:[]},
+  SEA:{name:'Seattle',mode:'nonstop',flights:[]}, MSP:{name:'Minneapolis',mode:'nonstop',flights:[]},
+  CVG:{name:'Cincinnati',mode:'connect',flights:[]}, ROC:{name:'Rochester',mode:'connect',flights:[]},
+};
+
+// City (as written in TOURS) → { ap, drive } | 'LOCAL' | { none: reason }
+const CITY_AIRPORT = {
+  'Dallas':'LOCAL', 'Fort Worth':'LOCAL',
+  'Houston':{ap:'HOU'}, 'San Antonio':{ap:'SAT'}, 'Austin':{ap:'AUS'}, 'El Paso':{ap:'ELP'},
+  'New Orleans':{ap:'MSY'}, 'Albuquerque':{ap:'ABQ'}, 'Phoenix':{ap:'PHX'}, 'Mesa':{ap:'PHX',drive:'~25 min from PHX'},
+  'Tucson':{ap:'TUS'}, 'San Diego':{ap:'SAN'}, 'Santa Ana':{ap:'SNA'}, 'Los Angeles':{ap:'LAX'},
+  'Long Beach':{ap:'LAX'}, 'Berkeley':{ap:'OAK',drive:'~20 min from OAK'}, 'San Francisco':{ap:'SFO'},
+  'Sacramento':{ap:'SMF'}, 'Salt Lake City':{ap:'SLC'}, 'Denver':{ap:'DEN'}, 'Las Vegas':{ap:'LAS'},
+  'Reno':{ap:'RNO'}, 'Boise':{ap:'BOI'}, 'Seattle':{ap:'SEA'}, 'Portland':{ap:'PDX'},
+  'Salem':{ap:'PDX',drive:'~1 hr drive from PDX'},
+  'Oklahoma City':{ap:'OKC'}, 'OKC':{ap:'OKC'}, 'Kansas City':{ap:'MCI'}, 'St. Louis':{ap:'STL'},
+  'Omaha':{ap:'OMA'}, 'Lincoln':{ap:'OMA',drive:'~1 hr drive from OMA'}, 'Little Rock':{ap:'LIT'},
+  'Memphis':{ap:'MEM'}, 'Nashville':{ap:'BNA'}, 'Louisville':{ap:'SDF'}, 'Birmingham':{ap:'BHM'},
+  'Atlanta':{ap:'ATL'}, 'Chicago':{ap:'MDW'}, 'Joliet':{ap:'MDW',drive:'~45 min from MDW'},
+  'Milwaukee':{ap:'MKE'}, 'Minneapolis':{ap:'MSP'}, 'Indianapolis':{ap:'IND'}, 'Detroit':{ap:'DTW'},
+  'Cleveland':{ap:'CLE'}, 'Columbus':{ap:'CMH'}, 'Cincinnati':{ap:'CVG'}, 'Pittsburgh':{ap:'PIT'},
+  'Millvale':{ap:'PIT',drive:'~20 min from PIT'}, 'Rochester':{ap:'ROC'},
+  'New York':{ap:'LGA'}, 'New York City':{ap:'LGA'}, 'Boston':{ap:'BOS'}, 'Hartford':{ap:'BDL'},
+  'Philadelphia':{ap:'PHL'}, 'Baltimore':{ap:'BWI'}, 'Silver Spring':{ap:'BWI',drive:'~40 min from BWI'},
+  'Washington':{ap:'DCA'}, 'Richmond':{ap:'ORF',drive:'~1.5 hr drive from ORF (or DCA)'},
+  'Norfolk':{ap:'ORF'}, 'Raleigh':{ap:'RDU'}, 'Greensboro':{ap:'RDU',drive:'~1.5 hr drive from RDU'},
+  'Charlotte':{ap:'CLT'}, 'Columbia':{ap:'CLT',drive:'~1.5 hr drive from CLT'}, 'Charleston':{ap:'CHS'},
+  'Savannah':{ap:'CHS'}, 'Orlando':{ap:'MCO'}, 'Miami':{ap:'MIA'}, 'Fort Lauderdale':{ap:'FLL'},
+  'Toronto':{none:'Southwest doesn’t fly to Canada'},
+  'Calgary':{none:'Southwest doesn’t fly to Canada'},
+  'Edmonton':{none:'Southwest doesn’t fly to Canada'},
+  'San Luis Obispo':{none:'No Southwest airport nearby — SBP is served by American/United'},
+};
+
+function swaInfoFor(city) {
+  const m = CITY_AIRPORT[city];
+  if (!m) return null;
+  if (m === 'LOCAL') return { local: true };
+  if (m.none) return { none: m.none };
+  const r = SWA_ROUTES[m.ap];
+  if (!r) return null;
+  return { ap: m.ap, drive: m.drive, ...r };
+}
+
+function gfLink(ap, dateStr) {
+  return `https://www.google.com/travel/flights?q=${encodeURIComponent('one-way flights from DAL to ' + ap + ' on ' + dateStr)}`;
+}
+
+function fmtFlight(fl) {
+  const via = fl.via ? ` <span style="opacity:0.6">via ${fl.via}</span>` : '';
+  const fn = fl.f ? ` <span style="opacity:0.5">${fl.f}</span>` : '';
+  return `${fl.d} → ${fl.a}${via}${fn}`;
+}
+
+// Compact "✈ DAL→MSY 6:05a 12:55p 10:00p" line for calendar chips
+function chipFlightLine(e) {
+  const info = swaInfoFor(e.city);
+  if (!info || info.local) return '';
+  if (info.none) return `<span class="chip-flights no-swa">✈ no SWA</span>`;
+  if (!info.flights || !info.flights.length) {
+    if (info.mode === 'none') return `<span class="chip-flights no-swa">✈ no SWA</span>`;
+    return `<span class="chip-flights">✈ DAL→${info.ap}</span>`;
+  }
+  const deps = info.flights.map(f => f.d);
+  let shown;
+  if (deps.length <= 3) shown = deps;
+  else shown = [deps[0], deps[Math.floor(deps.length/2)], deps[deps.length-1]];
+  const extra = deps.length > 3 ? ` +${deps.length-3}` : '';
+  const conn = info.mode === 'connect' ? '·1stop' : '';
+  return `<span class="chip-flights">✈${info.ap}${conn} ${shown.join(' ')}${extra}</span>`;
+}
+
+// Full flight block for the detail modal / day sheet
+function flightSectionHtml(e) {
+  const info = swaInfoFor(e.city);
+  if (!info) return '';
+  if (info.local) {
+    return `<div class="flight-section"><h4>✈ Southwest Cargo — DAL</h4>
+      <div class="flight-note">Local show — no flight needed. Run merch straight to the venue.</div></div>`;
+  }
+  if (info.none) {
+    return `<div class="flight-section"><h4>✈ Southwest from Love Field</h4>
+      <div class="flight-note">${info.none}. SWA Cargo same-day restock isn’t an option for this stop — plan to overpack.</div></div>`;
+  }
+  const d = new Date(e.date + 'T12:00:00');
+  const prev = new Date(d); prev.setDate(prev.getDate() - 1);
+  const iso = x => x.toISOString().split('T')[0];
+  const nice = x => x.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  const driveNote = info.drive ? `<div class="flight-note">Ground leg: ${info.drive} to ${e.city}.</div>` : '';
+
+  let body = '';
+  if (info.mode === 'none') {
+    body = `<div class="flight-note">${info.note || 'No Southwest service on this route.'}</div>`;
+  } else if (!info.flights.length) {
+    body = `<div class="flight-note">Schedule not loaded for this route — tap a date below for live times.</div>`;
+  } else {
+    const rows = info.flights.map(f => `<div class="flight-row">${fmtFlight(f)}</div>`).join('');
+    const last = info.flights[info.flights.length - 1];
+    body = `
+      <div class="flight-day-label">Show day · ${nice(d)} (daily schedule)</div>
+      ${rows}
+      <div class="flight-day-label">Night before · ${nice(prev)}</div>
+      <div class="flight-note">Same daily schedule — last departure ${last.d}${last.via ? ' via ' + last.via : ''}. Ship the night before if the show-day flights land too late.</div>`;
+  }
+
+  // Collapsible: starts closed on phones so one day-sheet doesn't fill the screen
+  const nFlights = info.flights ? info.flights.length : 0;
+  const hint = nFlights ? `${nFlights} flight${nFlights > 1 ? 's' : ''}/day` : 'tap for info';
+  return `<details class="flight-section"${isMobile() ? '' : ' open'}>
+    <summary><h4>✈ SWA DAL → ${info.ap}${info.mode === 'connect' ? ' · 1-stop only' : ''} <span class="flight-hint">${hint}</span></h4></summary>
+    <div class="flight-note" style="margin-top:0">${info.name}${info.mode === 'connect' ? ' — no nonstops on this route' : ''}</div>
+    ${body}
+    ${driveNote}
+    <div class="flight-note">SWA Cargo: tender freight at the DAL cargo facility ≥90 min before departure; pickup at ${info.ap} cargo ~1–2 hrs after landing. Times pulled ${SWA_ASOF} — verify before shipping.</div>
+    <div class="flight-links">
+      <a href="${gfLink(info.ap, iso(prev))}" target="_blank">Live: night before</a>
+      <a href="${gfLink(info.ap, iso(d))}" target="_blank">Live: show day</a>
+      <a href="https://www.swacargo.com" target="_blank">SWA Cargo</a>
+    </div>
+  </details>`;
+}
+
 // Flatten all events
 let allEvents = [];
 TOURS.forEach(tour => {
@@ -1090,7 +1401,7 @@ function buildMonthBlock({ year, month, name }, todayStr, mobile) {
         let statusHtml = '';
         if (e.status === 'sold_out') statusHtml = '<span class="sold-out">SOLD OUT</span>';
         else if (e.status === 'low_tickets') statusHtml = '<span class="low-tickets">LOW</span>';
-        inner += `<div class="event-chip" data-tour="${e.tourId}" onclick="showDetail(event, '${e.date}', '${e.tourId}')">${e.artist.split(' ')[0]}${statusHtml}<br><span style="opacity:0.7">${e.city}, ${e.state}</span></div>`;
+        inner += `<div class="event-chip" data-tour="${e.tourId}" onclick="showDetail(event, '${e.date}', '${e.tourId}')">${e.artist.split(' ')[0]}${statusHtml}<br><span style="opacity:0.7">${e.city}, ${e.state}</span>${chipFlightLine(e)}</div>`;
       });
     }
 
@@ -1151,7 +1462,7 @@ function renderList() {
     row.innerHTML = `
       <div class="list-date">${dateDisplay}</div>
       <div class="list-artist" data-tour="${e.tourId}">${e.artist}</div>
-      <div class="list-city">${e.city}, ${e.state}</div>
+      <div class="list-city">${e.city}, ${e.state}${chipFlightLine(e)}</div>
       <div class="list-venue">${e.venue || '—'}</div>
       <div class="list-badges">${badges}</div>
     `;
@@ -1241,6 +1552,8 @@ function showDetail(evt, date, tourId) {
   if (tour.special) rows += `<div class="modal-row"><span class="modal-label">Notes</span><span style="color:var(--text-dim)">${tour.special}</span></div>`;
   if (e.uncertain) rows += `<div class="modal-row"><span class="modal-label">Accuracy</span><span style="color:var(--realest)">Unverified — low-res source</span></div>`;
 
+  rows += flightSectionHtml(e);
+
   document.getElementById('modal-body').innerHTML = rows;
   document.getElementById('modal').classList.add('active');
 }
@@ -1267,6 +1580,7 @@ function openDaySheet(dateStr) {
     html += `<div class="day-sheet-row">` +
       `<div class="day-sheet-artist" style="color:var(--${e.tourId})">${e.artist}</div>` +
       `<div class="day-sheet-city">${e.city}, ${e.state}${e.venue ? ' &middot; ' + e.venue : ''}${badges}</div>` +
+      flightSectionHtml(e) +
       `</div>`;
   });
   document.getElementById('modal-body').innerHTML = html;
