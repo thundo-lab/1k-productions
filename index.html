@@ -30,6 +30,8 @@
     --yhapojj-bg: rgba(233,30,99,0.12);
     --slimey: #76FF03;
     --slimey-bg: rgba(118,255,3,0.12);
+    --dutch: #FF5CF7;
+    --dutch-bg: rgba(255,92,247,0.12);
     --dallas: #00E5FF;
     --texas: #FF6B35;
     --collision: #FF9500;
@@ -151,6 +153,7 @@
   .filter-btn[data-tour="smurf"] { color: var(--smurf); }
   .filter-btn[data-tour="yhapojj"] { color: var(--yhapojj); }
   .filter-btn[data-tour="slimey"] { color: var(--slimey); }
+  .filter-btn[data-tour="dutch"] { color: var(--dutch); }
   .filter-btn[data-highlight="dallas"] { color: var(--dallas); }
   .filter-btn[data-highlight="texas"] { color: var(--texas); }
   .filter-btn[data-highlight="collision"] { color: var(--collision); }
@@ -287,6 +290,7 @@
   .event-chip[data-tour="smurf"] { background: var(--smurf-bg); color: var(--smurf); border-left: 2px solid var(--smurf); }
   .event-chip[data-tour="yhapojj"] { background: var(--yhapojj-bg); color: var(--yhapojj); border-left: 2px solid var(--yhapojj); }
   .event-chip[data-tour="slimey"] { background: var(--slimey-bg); color: var(--slimey); border-left: 2px solid var(--slimey); }
+  .event-chip[data-tour="dutch"] { background: var(--dutch-bg); color: var(--dutch); border-left: 2px solid var(--dutch); }
 
   .event-chip .sold-out {
     font-size: 8px;
@@ -404,6 +408,7 @@
   .list-artist[data-tour="smurf"] { color: var(--smurf); }
   .list-artist[data-tour="yhapojj"] { color: var(--yhapojj); }
   .list-artist[data-tour="slimey"] { color: var(--slimey); }
+  .list-artist[data-tour="dutch"] { color: var(--dutch); }
 
   .list-city { font-size: 13px; color: var(--text); }
   .list-venue { font-size: 12px; color: var(--text-dim); }
@@ -701,6 +706,7 @@
     <button class="filter-btn active" data-tour="smurf" onclick="toggleFilter(this)">Black Smurf</button>
     <button class="filter-btn active" data-tour="yhapojj" onclick="toggleFilter(this)">Yhapojj</button>
     <button class="filter-btn active" data-tour="slimey" onclick="toggleFilter(this)">2Slimey</button>
+    <button class="filter-btn active" data-tour="dutch" onclick="toggleFilter(this)">Dutch Melrose</button>
   </div>
   <div class="divider"></div>
   <div class="filter-group">
@@ -717,8 +723,9 @@
 
 <main>
   <div class="note-banner" id="note-banner">
-    <strong>Note:</strong> BabyFxce E "Be Da Realest Tour" dates sourced from Ticketmaster &amp; toursetlist.com. Rio Da Yung OG flyer was page 2/2 &mdash; earlier dates may exist.
-    <br><strong style="color:#7EC8E3">✈ New:</strong> Southwest departures out of Love Field (DAL) now show under each city &mdash; tap any show for the full schedule, night-before times, and live-verify links (for SWA Cargo merch restocks). Times pulled Jul 19 &mdash; always verify before shipping. Heads up: <strong>Little Rock has no SWA from DAL</strong>, and Reno / Boise / Detroit / Cleveland / Norfolk are 1-stop only.
+    <strong>Note:</strong> BabyFxce E "Be Da Realest Tour" dates sourced from Ticketmaster &amp; toursetlist.com.
+    <br><strong style="color:#FF5CF7">Aug 8 update:</strong> Added <strong>Dutch Melrose &mdash; The Heartbreak Hotel Tour</strong> (9 dates, incl. 3 Sept dates not on the flyer). Rio Da Yung OG reconciled against riodayungog.com: <strong>+7 dates</strong> (Tucson, LA, Sacramento, Seattle, Boston, Louisville, Pontiac) and 4 city corrections. Chris Travis: <strong>+Las Vegas 8/9</strong>, OKC moved 7/11 &rarr; 8/16, all venues filled in.
+    <br><strong style="color:#7EC8E3">✈</strong> Southwest departures out of Love Field (DAL) show under each city &mdash; tap any show for the full schedule, night-before times, and live-verify links (for SWA Cargo merch restocks). Times pulled Jul 19&ndash;Aug 8 &mdash; always verify before shipping. Heads up: <strong>Little Rock has no SWA from DAL</strong>; Tucson / Reno / Boise / Detroit / Cleveland / Norfolk are 1-stop only; Salt Lake City, Seattle, Boston &amp; Louisville are <strong>one flight a day</strong>.
   </div>
 
   <div id="collision-panel" class="collision-panel" style="display:none">
@@ -826,21 +833,28 @@ const TOURS = [
       { date: '2026-07-25', city: 'Houston', state: 'TX', venue: 'House of Blues', status: '' },
       { date: '2026-07-26', city: 'San Antonio', state: 'TX', venue: 'Studio 210', status: '' },
       { date: '2026-07-28', city: 'Fort Worth', state: 'TX', venue: 'Haltom Theater', status: '' },
-      { date: '2026-07-29', city: 'Austin', state: 'TX', venue: "Antone's", status: '' },
-      { date: '2026-07-31', city: 'Albuquerque', state: 'NM', venue: 'Revel', status: '' },
-      { date: '2026-08-01', city: 'Phoenix', state: 'AZ', venue: 'Marquee Theater', status: '' },
+      { date: '2026-07-29', city: 'Austin', state: 'TX', venue: "Antone's Nightclub", status: '' },
+      { date: '2026-07-31', city: 'Albuquerque', state: 'NM', venue: 'Revel Entertainment Center', status: '' },
+      { date: '2026-08-01', city: 'Tempe', state: 'AZ', venue: 'Marquee Theatre', status: '' },
+      { date: '2026-08-02', city: 'Tucson', state: 'AZ', venue: '191 Toole', status: '' },
       { date: '2026-08-03', city: 'San Diego', state: 'CA', venue: 'Music Box', status: '' },
-      { date: '2026-08-05', city: 'Santa Ana', state: 'CA', venue: 'Observatory', status: '' },
-      { date: '2026-08-08', city: 'Salem', state: 'OR', venue: 'Fuego', status: '' },
-      { date: '2026-08-12', city: 'Boise', state: 'ID', venue: 'Revolution', status: '' },
+      { date: '2026-08-04', city: 'Los Angeles', state: 'CA', venue: 'The Regent Theater', status: '' },
+      { date: '2026-08-05', city: 'Santa Ana', state: 'CA', venue: 'The Observatory', status: '' },
+      { date: '2026-08-06', city: 'Sacramento', state: 'CA', venue: 'Ace of Spades', status: '' },
+      { date: '2026-08-08', city: 'Keizer', state: 'OR', venue: 'Fuego Latin Club', status: '' },
+      { date: '2026-08-09', city: 'Seattle', state: 'WA', venue: 'The Showbox', status: '' },
+      { date: '2026-08-12', city: 'Garden City', state: 'ID', venue: 'Revolution Concert House', status: '' },
       { date: '2026-08-14', city: 'Denver', state: 'CO', venue: 'Summit Music Hall', status: '' },
       { date: '2026-08-15', city: 'Lincoln', state: 'NE', venue: 'The Royal Grove', status: '' },
-      { date: '2026-08-21', city: 'Milwaukee', state: 'WI', venue: 'The Rave', status: '' },
-      { date: '2026-08-26', city: 'Pittsburgh', state: 'PA', venue: 'Mr Smalls', status: '' },
+      { date: '2026-08-21', city: 'Milwaukee', state: 'WI', venue: 'The Rave – Eagles Club', status: '' },
+      { date: '2026-08-26', city: 'Millvale', state: 'PA', venue: 'Mr. Smalls Theatre', status: '' },
+      { date: '2026-08-28', city: 'Boston', state: 'MA', venue: 'House of Blues Boston', status: '' },
       { date: '2026-08-29', city: 'New York City', state: 'NY', venue: 'Irving Plaza', status: '' },
+      { date: '2026-09-01', city: 'Louisville', state: 'KY', venue: 'Mercury Ballroom', status: '' },
       { date: '2026-09-03', city: 'Charlotte', state: 'NC', venue: 'The Underground', status: '' },
       { date: '2026-09-04', city: 'Charleston', state: 'SC', venue: 'Charleston Music Hall', status: '' },
       { date: '2026-09-08', city: 'Miami', state: 'FL', venue: 'ZeyZey', status: '' },
+      { date: '2026-09-12', city: 'Pontiac', state: 'MI', venue: 'The Ballroom at The Crofoot', status: '' },
     ]
   },
   {
@@ -849,33 +863,34 @@ const TOURS = [
     tour: 'The Prefix Tour',
     special: 'Waterboyz',
     dates: [
-      { date: '2026-06-16', city: 'New York', state: 'NY', venue: '', status: '' },
-      { date: '2026-06-17', city: 'Washington', state: 'DC', venue: '', status: '' },
-      { date: '2026-06-18', city: 'Nashville', state: 'TN', venue: '', status: '' },
-      { date: '2026-06-19', city: 'Atlanta', state: 'GA', venue: '', status: '' },
-      { date: '2026-06-20', city: 'Orlando', state: 'FL', venue: '', status: '' },
-      { date: '2026-06-21', city: 'Miami', state: 'FL', venue: '', status: '' },
-      { date: '2026-06-26', city: 'Seattle', state: 'WA', venue: '', status: '' },
-      { date: '2026-06-27', city: 'Portland', state: 'OR', venue: '', status: '' },
-      { date: '2026-07-02', city: 'Salt Lake City', state: 'UT', venue: '', status: '' },
-      { date: '2026-07-10', city: 'Chicago', state: 'IL', venue: '', status: '' },
-      { date: '2026-07-11', city: 'Oklahoma City', state: 'OK', venue: '', status: '' },
-      { date: '2026-07-12', city: 'Denver', state: 'CO', venue: '', status: '' },
-      { date: '2026-07-15', city: 'El Paso', state: 'TX', venue: '', status: '' },
-      { date: '2026-07-17', city: 'Tucson', state: 'AZ', venue: '', status: '' },
-      { date: '2026-07-18', city: 'Phoenix', state: 'AZ', venue: '', status: '' },
-      { date: '2026-07-19', city: 'Albuquerque', state: 'NM', venue: '', status: '' },
-      { date: '2026-07-22', city: 'San Francisco', state: 'CA', venue: '', status: '' },
-      { date: '2026-07-23', city: 'Sacramento', state: 'CA', venue: '', status: '' },
-      { date: '2026-07-24', city: 'San Luis Obispo', state: 'CA', venue: '', status: '' },
-      { date: '2026-07-25', city: 'Santa Ana', state: 'CA', venue: '', status: '' },
-      { date: '2026-07-26', city: 'San Diego', state: 'CA', venue: '', status: '' },
-      { date: '2026-07-30', city: 'Austin', state: 'TX', venue: '', status: '' },
-      { date: '2026-07-31', city: 'Dallas', state: 'TX', venue: '', status: '' },
-      { date: '2026-08-01', city: 'Houston', state: 'TX', venue: '', status: '' },
-      { date: '2026-08-02', city: 'San Antonio', state: 'TX', venue: '', status: '' },
-      { date: '2026-08-08', city: 'Reno', state: 'NV', venue: '', status: '' },
-      { date: '2026-08-21', city: 'Los Angeles', state: 'CA', venue: '', status: '' },
+      { date: '2026-06-16', city: 'New York', state: 'NY', venue: 'Gramercy Theatre', status: '' },
+      { date: '2026-06-17', city: 'Washington', state: 'DC', venue: 'The Howard Theatre', status: '' },
+      { date: '2026-06-18', city: 'Nashville', state: 'TN', venue: 'Cannery Hall', status: '' },
+      { date: '2026-06-19', city: 'Atlanta', state: 'GA', venue: 'Buckhead Theatre', status: '' },
+      { date: '2026-06-20', city: 'Orlando', state: 'FL', venue: 'Celine Orlando', status: '' },
+      { date: '2026-06-21', city: 'Miami', state: 'FL', venue: 'Midline Miami', status: '' },
+      { date: '2026-06-26', city: 'Seattle', state: 'WA', venue: 'The Showbox', status: '' },
+      { date: '2026-06-27', city: 'Portland', state: 'OR', venue: 'Roseland Theater', status: '' },
+      { date: '2026-07-02', city: 'Salt Lake City', state: 'UT', venue: 'The Complex', status: '' },
+      { date: '2026-07-10', city: 'Chicago', state: 'IL', venue: 'House of Blues Chicago', status: '' },
+      { date: '2026-07-12', city: 'Denver', state: 'CO', venue: "Cervantes' Masterpiece Ballroom", status: '' },
+      { date: '2026-07-15', city: 'El Paso', state: 'TX', venue: '11:11 EP TX', status: '' },
+      { date: '2026-07-17', city: 'Tucson', state: 'AZ', venue: 'Encore', status: '' },
+      { date: '2026-07-18', city: 'Phoenix', state: 'AZ', venue: 'The Van Buren', status: '' },
+      { date: '2026-07-19', city: 'Albuquerque', state: 'NM', venue: 'Revel Entertainment Center', status: '' },
+      { date: '2026-07-22', city: 'San Francisco', state: 'CA', venue: 'August Hall', status: '' },
+      { date: '2026-07-23', city: 'Sacramento', state: 'CA', venue: 'Ace of Spades', status: '' },
+      { date: '2026-07-24', city: 'San Luis Obispo', state: 'CA', venue: 'Fremont Theater', status: '' },
+      { date: '2026-07-25', city: 'Santa Ana', state: 'CA', venue: 'The Observatory', status: '' },
+      { date: '2026-07-26', city: 'San Diego', state: 'CA', venue: 'House of Blues San Diego', status: '' },
+      { date: '2026-07-30', city: 'Austin', state: 'TX', venue: "Emo's Austin", status: '' },
+      { date: '2026-07-31', city: 'Dallas', state: 'TX', venue: "Mac's Southside", status: '' },
+      { date: '2026-08-01', city: 'Houston', state: 'TX', venue: 'House of Blues Houston', status: '' },
+      { date: '2026-08-02', city: 'San Antonio', state: 'TX', venue: 'Aztec Theatre', status: '' },
+      { date: '2026-08-08', city: 'Reno', state: 'NV', venue: 'Cargo Concert Hall', status: '' },
+      { date: '2026-08-09', city: 'Las Vegas', state: 'NV', venue: 'Brooklyn Bowl', status: '' },
+      { date: '2026-08-16', city: 'Oklahoma City', state: 'OK', venue: 'Beer City Music Hall', status: '', note: 'Moved from Jul 11 — same Prekindle listing now shows Aug 16' },
+      { date: '2026-08-21', city: 'Los Angeles', state: 'CA', venue: 'The Belasco', status: '' },
     ]
   },
   {
@@ -986,6 +1001,23 @@ const TOURS = [
       { date: '2026-08-02', city: 'Denver', state: 'CO', venue: 'Marquis', status: '' },
       { date: '2026-08-07', city: 'Santa Ana', state: 'CA', venue: 'The Observatory', status: '' },
     ]
+  },
+  {
+    id: 'dutch',
+    artist: 'Dutch Melrose',
+    tour: 'The Heartbreak Hotel Tour',
+    special: 'Special Guest: Benny Mayne',
+    dates: [
+      { date: '2026-08-04', city: 'Phoenix', state: 'AZ', venue: 'The Rebel Lounge', status: '' },
+      { date: '2026-08-06', city: 'Salt Lake City', state: 'UT', venue: 'Soundwell', status: '' },
+      { date: '2026-08-08', city: 'Denver', state: 'CO', venue: 'Meow Wolf', status: '' },
+      { date: '2026-08-11', city: 'Dallas', state: 'TX', venue: 'AM/FM', status: '' },
+      { date: '2026-08-14', city: 'Chicago', state: 'IL', venue: 'Subterranean', status: '' },
+      { date: '2026-08-18', city: 'Brooklyn', state: 'NY', venue: "Baby's All Right", status: '' },
+      { date: '2026-09-17', city: 'San Francisco', state: 'CA', venue: 'Brick & Mortar Music Hall', status: '', note: 'Not on the tour flyer — added since' },
+      { date: '2026-09-24', city: 'Los Angeles', state: 'CA', venue: 'The Peppermint Club', status: '', note: 'Not on the tour flyer — second LA night added' },
+      { date: '2026-09-25', city: 'Los Angeles', state: 'CA', venue: 'The Peppermint Club', status: '' },
+    ]
   }
 ];
 
@@ -996,7 +1028,7 @@ const TOURS = [
 // cargo (links in the popup).
 // mode: 'nonstop' | 'connect' (WN connections only) | 'none'
 // ─────────────────────────────────────────────────────────────
-const SWA_ASOF = 'Jul 19';
+const SWA_ASOF = 'Jul 19–Aug 8';
 
 const SWA_ROUTES = {
   HOU: { name: 'Houston Hobby', mode: 'nonstop', flights: [
@@ -1054,7 +1086,7 @@ const SWA_ROUTES = {
   PHL: { name: 'Philadelphia', mode: 'nonstop', flights: [
     {d:'9:00a',a:'1:10p',f:'WN854'}]},
   LGA: { name: 'New York LaGuardia', mode: 'nonstop', flights: [
-    {d:'8:15a',a:'12:30p',f:'WN1106'},{d:'2:55p',a:'7:15p',f:'WN1304'},{d:'5:25p',a:'9:45p',f:'WN1305'}]},
+    {d:'6:25a',a:'10:40a',f:'WN1300'},{d:'9:30a',a:'1:50p',f:'WN1301'},{d:'11:50a',a:'4:05p',f:'WN1281'},{d:'4:05p',a:'8:25p',f:'WN1304'},{d:'6:10p',a:'10:30p',f:'WN1305'}]},
   DCA: { name: 'Washington National', mode: 'nonstop', flights: [
     {d:'6:10a',a:'10:00a',f:'WN2175'},{d:'10:10a',a:'2:05p',f:'WN4207'},{d:'2:05p',a:'6:00p',f:'WN172'},{d:'5:50p',a:'9:40p',f:'WN990'},{d:'8:05p',a:'11:55p',f:'WN1267'}]},
   BWI: { name: 'Baltimore/Washington', mode: 'nonstop', flights: [
@@ -1077,14 +1109,25 @@ const SWA_ROUTES = {
     {d:'7:45a',a:'2:10p',via:'STL'},{d:'9:20a',a:'3:00p',via:'BWI'},{d:'12:10p',a:'6:15p',via:'MDW'},{d:'1:00p',a:'8:55p',via:'BWI'}]},
   LIT: { name: 'Little Rock', mode: 'none',
     note: 'No Southwest service DAL→LIT found (checked Jul 2026). American flies DFW→LIT nonstop — plan merch via DFW or drive it (~5 hrs).' },
+  MDW: { name: 'Chicago Midway', mode: 'nonstop', flights: [
+    {d:'6:00a',a:'8:10a',f:'WN105'},{d:'7:20a',a:'9:35a',f:'WN1313'},{d:'10:40a',a:'12:50p',f:'WN1324'},{d:'1:35p',a:'3:45p',f:'WN1326'},{d:'2:55p',a:'5:05p',f:'WN1327'},{d:'6:30p',a:'8:40p',f:'WN1225'},{d:'9:10p',a:'11:20p',f:'WN668'}]},
+  LAS: { name: 'Las Vegas', mode: 'nonstop', flights: [
+    {d:'6:25a',a:'7:10a',f:'WN1286'},{d:'7:55a',a:'8:40a',f:'WN184'},{d:'10:00a',a:'10:50a',f:'WN1057'},{d:'12:25p',a:'1:10p',f:'WN3145'},{d:'2:45p',a:'3:40p',f:'WN4754'},{d:'4:10p',a:'5:00p',f:'WN840'},{d:'5:25p',a:'6:15p',f:'WN4041'},{d:'8:25p',a:'9:15p',f:'WN4258'}]},
+  SLC: { name: 'Salt Lake City', mode: 'nonstop', flights: [
+    {d:'4:55p',a:'6:35p',f:'WN2094'}]},
+  SEA: { name: 'Seattle/Tacoma', mode: 'nonstop', flights: [
+    {d:'8:50a',a:'11:00a',f:'WN519'}]},
+  BOS: { name: 'Boston', mode: 'nonstop', flights: [
+    {d:'8:05a',a:'12:45p',f:'WN1253'}]},
+  SDF: { name: 'Louisville', mode: 'nonstop', flights: [
+    {d:'1:20p',a:'4:20p',f:'WN3563'}]},
+  TUS: { name: 'Tucson', mode: 'connect', flights: [
+    {d:'6:00a',a:'9:45a',via:'DEN'},{d:'6:25a',a:'9:50a',via:'LAS'},{d:'8:10a',a:'1:30p',via:'PHX'},{d:'10:45a',a:'6:25p',via:'DEN'}]},
   // Airports with no upcoming shows — mapped so the popup still links out
-  MDW:{name:'Chicago Midway',mode:'nonstop',flights:[]}, BNA:{name:'Nashville',mode:'nonstop',flights:[]},
-  SDF:{name:'Louisville',mode:'nonstop',flights:[]}, CMH:{name:'Columbus',mode:'nonstop',flights:[]},
-  BOS:{name:'Boston',mode:'nonstop',flights:[]}, BDL:{name:'Hartford',mode:'nonstop',flights:[]},
-  FLL:{name:'Fort Lauderdale',mode:'nonstop',flights:[]}, LAS:{name:'Las Vegas',mode:'nonstop',flights:[]},
+  BNA:{name:'Nashville',mode:'nonstop',flights:[]}, CMH:{name:'Columbus',mode:'nonstop',flights:[]},
+  BDL:{name:'Hartford',mode:'nonstop',flights:[]}, FLL:{name:'Fort Lauderdale',mode:'nonstop',flights:[]},
   OAK:{name:'Oakland',mode:'nonstop',flights:[]}, SJC:{name:'San Jose',mode:'nonstop',flights:[]},
-  SLC:{name:'Salt Lake City',mode:'nonstop',flights:[]}, TUS:{name:'Tucson',mode:'nonstop',flights:[]},
-  SEA:{name:'Seattle',mode:'nonstop',flights:[]}, MSP:{name:'Minneapolis',mode:'nonstop',flights:[]},
+  MSP:{name:'Minneapolis',mode:'nonstop',flights:[]},
   CVG:{name:'Cincinnati',mode:'connect',flights:[]}, ROC:{name:'Rochester',mode:'connect',flights:[]},
 };
 
@@ -1093,11 +1136,13 @@ const CITY_AIRPORT = {
   'Dallas':'LOCAL', 'Fort Worth':'LOCAL',
   'Houston':{ap:'HOU'}, 'San Antonio':{ap:'SAT'}, 'Austin':{ap:'AUS'}, 'El Paso':{ap:'ELP'},
   'New Orleans':{ap:'MSY'}, 'Albuquerque':{ap:'ABQ'}, 'Phoenix':{ap:'PHX'}, 'Mesa':{ap:'PHX',drive:'~25 min from PHX'},
+  'Tempe':{ap:'PHX',drive:'~15 min from PHX'},
   'Tucson':{ap:'TUS'}, 'San Diego':{ap:'SAN'}, 'Santa Ana':{ap:'SNA'}, 'Los Angeles':{ap:'LAX'},
   'Long Beach':{ap:'LAX'}, 'Berkeley':{ap:'OAK',drive:'~20 min from OAK'}, 'San Francisco':{ap:'SFO'},
   'Sacramento':{ap:'SMF'}, 'Salt Lake City':{ap:'SLC'}, 'Denver':{ap:'DEN'}, 'Las Vegas':{ap:'LAS'},
   'Reno':{ap:'RNO'}, 'Boise':{ap:'BOI'}, 'Seattle':{ap:'SEA'}, 'Portland':{ap:'PDX'},
-  'Salem':{ap:'PDX',drive:'~1 hr drive from PDX'},
+  'Salem':{ap:'PDX',drive:'~1 hr drive from PDX'}, 'Keizer':{ap:'PDX',drive:'~1 hr drive from PDX'},
+  'Garden City':{ap:'BOI',drive:'~10 min from BOI'},
   'Oklahoma City':{ap:'OKC'}, 'OKC':{ap:'OKC'}, 'Kansas City':{ap:'MCI'}, 'St. Louis':{ap:'STL'},
   'Omaha':{ap:'OMA'}, 'Lincoln':{ap:'OMA',drive:'~1 hr drive from OMA'}, 'Little Rock':{ap:'LIT'},
   'Memphis':{ap:'MEM'}, 'Nashville':{ap:'BNA'}, 'Louisville':{ap:'SDF'}, 'Birmingham':{ap:'BHM'},
@@ -1105,7 +1150,9 @@ const CITY_AIRPORT = {
   'Milwaukee':{ap:'MKE'}, 'Minneapolis':{ap:'MSP'}, 'Indianapolis':{ap:'IND'}, 'Detroit':{ap:'DTW'},
   'Cleveland':{ap:'CLE'}, 'Columbus':{ap:'CMH'}, 'Cincinnati':{ap:'CVG'}, 'Pittsburgh':{ap:'PIT'},
   'Millvale':{ap:'PIT',drive:'~20 min from PIT'}, 'Rochester':{ap:'ROC'},
-  'New York':{ap:'LGA'}, 'New York City':{ap:'LGA'}, 'Boston':{ap:'BOS'}, 'Hartford':{ap:'BDL'},
+  'Pontiac':{ap:'DTW',drive:'~30 min from DTW'},
+  'New York':{ap:'LGA'}, 'New York City':{ap:'LGA'}, 'Brooklyn':{ap:'LGA',drive:'~30 min from LGA'},
+  'Boston':{ap:'BOS'}, 'Hartford':{ap:'BDL'},
   'Philadelphia':{ap:'PHL'}, 'Baltimore':{ap:'BWI'}, 'Silver Spring':{ap:'BWI',drive:'~40 min from BWI'},
   'Washington':{ap:'DCA'}, 'Richmond':{ap:'ORF',drive:'~1.5 hr drive from ORF (or DCA)'},
   'Norfolk':{ap:'ORF'}, 'Raleigh':{ap:'RDU'}, 'Greensboro':{ap:'RDU',drive:'~1.5 hr drive from RDU'},
@@ -1234,7 +1281,7 @@ Object.keys(dateMap).forEach(date => {
 });
 
 // State
-let activeFilters = { fattmack: true, babyface: true, rio: true, travis: true, realest: true, autumn: true, smurf: true, yhapojj: true, slimey: true };
+let activeFilters = { fattmack: true, babyface: true, rio: true, travis: true, realest: true, autumn: true, smurf: true, yhapojj: true, slimey: true, dutch: true };
 let activeHighlight = null;
 let currentView = 'calendar';
 
@@ -1549,6 +1596,7 @@ function showDetail(evt, date, tourId) {
     }
   }
 
+  if (e.note) rows += `<div class="modal-row"><span class="modal-label">Date Note</span><span style="color:var(--collision)">${e.note}</span></div>`;
   if (tour.special) rows += `<div class="modal-row"><span class="modal-label">Notes</span><span style="color:var(--text-dim)">${tour.special}</span></div>`;
   if (e.uncertain) rows += `<div class="modal-row"><span class="modal-label">Accuracy</span><span style="color:var(--realest)">Unverified — low-res source</span></div>`;
 
