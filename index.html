@@ -32,6 +32,8 @@
     --slimey-bg: rgba(118,255,3,0.12);
     --dutch: #FF5CF7;
     --dutch-bg: rgba(255,92,247,0.12);
+    --football: #00E676;
+    --football-bg: rgba(0,230,118,0.12);
     --dallas: #00E5FF;
     --texas: #FF6B35;
     --collision: #FF9500;
@@ -154,6 +156,7 @@
   .filter-btn[data-tour="yhapojj"] { color: var(--yhapojj); }
   .filter-btn[data-tour="slimey"] { color: var(--slimey); }
   .filter-btn[data-tour="dutch"] { color: var(--dutch); }
+  .filter-btn[data-tour="football"] { color: var(--football); }
   .filter-btn[data-highlight="dallas"] { color: var(--dallas); }
   .filter-btn[data-highlight="texas"] { color: var(--texas); }
   .filter-btn[data-highlight="collision"] { color: var(--collision); }
@@ -291,6 +294,7 @@
   .event-chip[data-tour="yhapojj"] { background: var(--yhapojj-bg); color: var(--yhapojj); border-left: 2px solid var(--yhapojj); }
   .event-chip[data-tour="slimey"] { background: var(--slimey-bg); color: var(--slimey); border-left: 2px solid var(--slimey); }
   .event-chip[data-tour="dutch"] { background: var(--dutch-bg); color: var(--dutch); border-left: 2px solid var(--dutch); }
+  .event-chip[data-tour="football"] { background: var(--football-bg); color: var(--football); border-left: 2px dashed var(--football); }
 
   .event-chip .sold-out {
     font-size: 8px;
@@ -409,6 +413,7 @@
   .list-artist[data-tour="yhapojj"] { color: var(--yhapojj); }
   .list-artist[data-tour="slimey"] { color: var(--slimey); }
   .list-artist[data-tour="dutch"] { color: var(--dutch); }
+  .list-artist[data-tour="football"] { color: var(--football); }
 
   .list-city { font-size: 13px; color: var(--text); }
   .list-venue { font-size: 12px; color: var(--text-dim); }
@@ -710,6 +715,11 @@
   </div>
   <div class="divider"></div>
   <div class="filter-group">
+    <label>Football</label>
+    <button class="filter-btn active" data-tour="football" onclick="toggleFilter(this)">&#127944; HBCU &amp; College</button>
+  </div>
+  <div class="divider"></div>
+  <div class="filter-group">
     <label>Highlights</label>
     <button class="filter-btn" data-highlight="dallas" onclick="toggleHighlight(this)">Dallas Only</button>
     <button class="filter-btn" data-highlight="texas" onclick="toggleHighlight(this)">Texas Only</button>
@@ -724,7 +734,8 @@
 <main>
   <div class="note-banner" id="note-banner">
     <strong>Note:</strong> BabyFxce E "Be Da Realest Tour" dates sourced from Ticketmaster &amp; toursetlist.com.
-    <br><strong style="color:#FF5CF7">Aug 8 update:</strong> Added <strong>Dutch Melrose &mdash; The Heartbreak Hotel Tour</strong> (9 dates, incl. 3 Sept dates not on the flyer). Rio Da Yung OG reconciled against riodayungog.com: <strong>+7 dates</strong> (Tucson, LA, Sacramento, Seattle, Boston, Louisville, Pontiac) and 4 city corrections. Chris Travis: <strong>+Las Vegas 8/9</strong>, OKC moved 7/11 &rarr; 8/16, all venues filled in.
+    <br><strong style="color:#00E676">&#127944; New:</strong> <strong>YK1K HBCU &amp; College Football 2026</strong> &mdash; 33 game days added (Aug&ndash;Nov), calendar now runs through November. Filter them on/off with the Football button. Flights only appear where Southwest flies within ~50 mi of the stadium; <strong>11 game days have no Southwest option</strong> (Prairie View, Waco, Jackson MS, Baton Rouge, Huntsville, Greensboro, Montgomery, South Bend) and show no flight block by design &mdash; open the game for the reason.
+    <br><strong style="color:#FF5CF7">Aug 8:</strong> Added <strong>Dutch Melrose &mdash; The Heartbreak Hotel Tour</strong> (9 dates, incl. 3 Sept dates not on the flyer). Rio Da Yung OG reconciled against riodayungog.com: <strong>+7 dates</strong> and 4 city corrections. Chris Travis: <strong>+Las Vegas 8/9</strong>, OKC moved 7/11 &rarr; 8/16, all venues filled in.
     <br><strong style="color:#7EC8E3">✈</strong> Southwest departures out of Love Field (DAL) show under each city &mdash; tap any show for the full schedule, night-before times, and live-verify links (for SWA Cargo merch restocks). Times pulled Jul 19&ndash;Aug 8 &mdash; always verify before shipping. Heads up: <strong>Little Rock has no SWA from DAL</strong>; Tucson / Reno / Boise / Detroit / Cleveland / Norfolk are 1-stop only; Salt Lake City, Seattle, Boston &amp; Louisville are <strong>one flight a day</strong>.
   </div>
 
@@ -1018,6 +1029,53 @@ const TOURS = [
       { date: '2026-09-24', city: 'Los Angeles', state: 'CA', venue: 'The Peppermint Club', status: '', note: 'Not on the tour flyer — second LA night added' },
       { date: '2026-09-25', city: 'Los Angeles', state: 'CA', venue: 'The Peppermint Club', status: '' },
     ]
+  },
+  {
+    // Merch / screen-print activations, not concerts. `noFlights: true` marks a
+    // stop with NO Southwest airport inside ~50 mi — those show no flight block
+    // at all, per the rule for this schedule.
+    id: 'football',
+    artist: 'YK1K Football',
+    tour: 'HBCU & College Football 2026',
+    special: 'Merch + screen-print activation',
+    dates: [
+      { date: '2026-08-29', city: 'Nashville', state: 'TN', label: 'Merritt Classic', venue: 'John Merritt Classic — TSU vs Jackson State', status: '' },
+
+      { date: '2026-09-06', city: 'Prairie View', state: 'TX', label: 'Labor Day Classic', venue: 'Labor Day Classic — PVAMU vs Texas Southern', status: '', noFlights: true, note: 'Nearest Southwest field is Houston Hobby at ~60 mi — outside the 50-mile cap, so no flights listed' },
+      { date: '2026-09-12', city: 'Dallas', state: 'TX', label: 'SMU vs UC Davis', venue: 'SMU Home Opener — Gerald J. Ford Stadium', status: '' },
+      { date: '2026-09-12', city: 'Waco', state: 'TX', label: 'Baylor vs PVAMU', venue: 'McLane Stadium', status: '', noFlights: true, note: 'No Southwest airport within 50 mi (Waco Regional is American-only; DAL is ~95 mi)' },
+      { date: '2026-09-18', city: 'Lubbock', state: 'TX', label: 'Tech vs Houston', venue: 'Texas Tech vs Houston', status: '' },
+      { date: '2026-09-26', city: 'Dallas', state: 'TX', label: 'SMU vs Missouri St', venue: 'Gerald J. Ford Stadium', status: '' },
+      { date: '2026-09-26', city: 'Dallas', state: 'TX', label: 'State Fair Classic', venue: 'State Fair Classic — Grambling vs PVAMU (Cotton Bowl)', status: '' },
+      { date: '2026-09-26', city: 'Jackson', state: 'MS', label: 'JSU vs Southern', venue: 'Mississippi Veterans Memorial Stadium', status: '', noFlights: true, note: 'Southwest does not serve Jackson (JAN); nearest is New Orleans at ~185 mi' },
+
+      { date: '2026-10-03', city: 'Dallas', state: 'TX', label: 'SMU vs Boston College', venue: 'Gerald J. Ford Stadium', status: '' },
+      { date: '2026-10-03', city: 'Baton Rouge', state: 'LA', label: 'Southern HC', venue: 'Southern University Homecoming vs UAPB', status: '', noFlights: true, note: 'Southwest does not serve Baton Rouge (BTR); New Orleans is ~80 mi' },
+      { date: '2026-10-10', city: 'Norfolk', state: 'VA', label: 'Norfolk St HC', venue: 'Norfolk State Homecoming', status: '' },
+      { date: '2026-10-10', city: 'Houston', state: 'TX', label: 'Texas Southern HC', venue: 'Texas Southern Homecoming', status: '' },
+      { date: '2026-10-10', city: 'Houston', state: 'TX', label: 'PVAMU vs Southern', venue: 'PVAMU vs Southern — Houston', status: '' },
+      { date: '2026-10-10', city: 'Atlanta', state: 'GA', label: 'Morehouse HC', venue: 'Morehouse College Homecoming', status: '' },
+      { date: '2026-10-17', city: 'Nashville', state: 'TN', label: 'TSU Homecoming', venue: 'Tennessee State Homecoming', status: '' },
+      { date: '2026-10-17', city: 'Prairie View', state: 'TX', label: 'PVAMU Homecoming', venue: 'PVAMU Homecoming vs Alcorn State', status: '', noFlights: true, note: 'Nearest Southwest field is Houston Hobby at ~60 mi — outside the 50-mile cap' },
+      { date: '2026-10-17', city: 'Jackson', state: 'MS', label: 'JSU Homecoming', venue: 'Jackson State Homecoming vs Florida A&M', status: '', noFlights: true, note: 'Southwest does not serve Jackson (JAN)' },
+      { date: '2026-10-17', city: 'Lubbock', state: 'TX', label: 'Tech Homecoming', venue: 'Texas Tech Homecoming vs Arizona State', status: '' },
+      { date: '2026-10-17', city: 'Huntsville', state: 'AL', label: 'Alabama A&M HC', venue: 'Alabama A&M Homecoming vs Grambling State', status: '', noFlights: true, note: 'Southwest does not serve Huntsville (HSV); Birmingham is ~100 mi' },
+      { date: '2026-10-17', city: 'Dallas', state: 'TX', label: 'SMU vs Virginia', venue: 'Gerald J. Ford Stadium', status: '' },
+      { date: '2026-10-17', city: 'Washington', state: 'DC', label: 'Howard Homecoming', venue: 'Howard University Homecoming', status: '' },
+      { date: '2026-10-24', city: 'Hampton', state: 'VA', label: 'Hampton Homecoming', venue: 'Hampton University Homecoming', status: '' },
+      { date: '2026-10-24', city: 'Dallas', state: 'TX', label: 'SMU vs Cal', venue: 'Gerald J. Ford Stadium', status: '', note: 'Listed as Oct 23/24 — confirm the exact day' },
+      { date: '2026-10-31', city: 'Greensboro', state: 'NC', label: 'NC A&T Homecoming', venue: 'North Carolina A&T Homecoming', status: '', noFlights: true, note: 'Southwest does not serve Greensboro (GSO); Raleigh is ~80 mi' },
+      { date: '2026-10-31', city: 'Birmingham', state: 'AL', label: 'Magic City Classic', venue: 'Magic City Classic — Alabama A&M vs Alabama State (Legion Field)', status: '', note: 'Your list said Southern vs Grambling — the Magic City Classic is Alabama A&M vs Alabama State. Southern vs Grambling is the Bayou Classic on Nov 28' },
+
+      { date: '2026-11-07', city: 'Dallas', state: 'TX', label: 'SMU vs Virginia', venue: 'Gerald J. Ford Stadium', status: '', note: 'Listed as Nov 6/7, and SMU vs Virginia also appears on Oct 17 — one of the two needs checking' },
+      { date: '2026-11-07', city: 'Waco', state: 'TX', label: 'Baylor Homecoming', venue: 'Baylor Homecoming vs Iowa State', status: '', noFlights: true, note: 'No Southwest airport within 50 mi of Waco' },
+      { date: '2026-11-07', city: 'Houston', state: 'TX', label: 'PVAMU vs AAMU', venue: 'PVAMU vs Alabama A&M — Houston', status: '' },
+      { date: '2026-11-14', city: 'Pine Bluff', state: 'AR', label: 'UAPB vs PVAMU', venue: 'UAPB vs Prairie View A&M', status: '' },
+      { date: '2026-11-14', city: 'Dallas', state: 'TX', label: 'SMU vs Wake Forest', venue: 'Gerald J. Ford Stadium', status: '' },
+      { date: '2026-11-21', city: 'Montgomery', state: 'AL', label: 'Alabama St HC', venue: 'Alabama State Homecoming vs PVAMU', status: '', noFlights: true, note: 'Southwest does not serve Montgomery (MGM); Birmingham is ~90 mi' },
+      { date: '2026-11-21', city: 'South Bend', state: 'IN', label: 'SMU at Notre Dame', venue: 'Notre Dame Stadium', status: '', noFlights: true, note: 'Southwest does not serve South Bend (SBN); Chicago Midway is ~95 mi' },
+      { date: '2026-11-28', city: 'New Orleans', state: 'LA', label: 'Bayou Classic', venue: 'Bayou Classic — Southern vs Grambling State (Caesars Superdome)', status: '' },
+    ]
   }
 ];
 
@@ -1123,8 +1181,12 @@ const SWA_ROUTES = {
     {d:'1:20p',a:'4:20p',f:'WN3563'}]},
   TUS: { name: 'Tucson', mode: 'connect', flights: [
     {d:'6:00a',a:'9:45a',via:'DEN'},{d:'6:25a',a:'9:50a',via:'LAS'},{d:'8:10a',a:'1:30p',via:'PHX'},{d:'10:45a',a:'6:25p',via:'DEN'}]},
+  BNA: { name: 'Nashville', mode: 'nonstop', flights: [
+    {d:'8:55a',a:'10:45a',f:'WN644'},{d:'10:05a',a:'11:50a',f:'WN4780'},{d:'12:40p',a:'2:25p',f:'WN1247'},{d:'3:35p',a:'5:30p',f:'WN1249'}]},
+  LBB: { name: 'Lubbock', mode: 'nonstop', flights: [
+    {d:'7:55a',a:'9:05a',f:'WN1232'},{d:'11:10a',a:'12:20p',f:'WN2427'},{d:'3:20p',a:'4:35p',f:'WN2756'},{d:'8:30p',a:'9:45p',f:'WN1715'}]},
   // Airports with no upcoming shows — mapped so the popup still links out
-  BNA:{name:'Nashville',mode:'nonstop',flights:[]}, CMH:{name:'Columbus',mode:'nonstop',flights:[]},
+  CMH:{name:'Columbus',mode:'nonstop',flights:[]},
   BDL:{name:'Hartford',mode:'nonstop',flights:[]}, FLL:{name:'Fort Lauderdale',mode:'nonstop',flights:[]},
   OAK:{name:'Oakland',mode:'nonstop',flights:[]}, SJC:{name:'San Jose',mode:'nonstop',flights:[]},
   MSP:{name:'Minneapolis',mode:'nonstop',flights:[]},
@@ -1158,6 +1220,9 @@ const CITY_AIRPORT = {
   'Norfolk':{ap:'ORF'}, 'Raleigh':{ap:'RDU'}, 'Greensboro':{ap:'RDU',drive:'~1.5 hr drive from RDU'},
   'Charlotte':{ap:'CLT'}, 'Columbia':{ap:'CLT',drive:'~1.5 hr drive from CLT'}, 'Charleston':{ap:'CHS'},
   'Savannah':{ap:'CHS'}, 'Orlando':{ap:'MCO'}, 'Miami':{ap:'MIA'}, 'Fort Lauderdale':{ap:'FLL'},
+  // Football-schedule cities with Southwest inside the 50-mile cap
+  'Lubbock':{ap:'LBB'}, 'Hampton':{ap:'ORF',drive:'~20 min from ORF'},
+  'Pine Bluff':{ap:'LIT',drive:'~45 min from LIT'},
   'Toronto':{none:'Southwest doesn’t fly to Canada'},
   'Calgary':{none:'Southwest doesn’t fly to Canada'},
   'Edmonton':{none:'Southwest doesn’t fly to Canada'},
@@ -1186,6 +1251,7 @@ function fmtFlight(fl) {
 
 // Compact "✈ DAL→MSY 6:05a 12:55p 10:00p" line for calendar chips
 function chipFlightLine(e) {
+  if (e.noFlights) return ''; // no Southwest field inside 50 mi — show nothing at all
   const info = swaInfoFor(e.city);
   if (!info || info.local) return '';
   if (info.none) return `<span class="chip-flights no-swa">✈ no SWA</span>`;
@@ -1204,6 +1270,7 @@ function chipFlightLine(e) {
 
 // Full flight block for the detail modal / day sheet
 function flightSectionHtml(e) {
+  if (e.noFlights) return ''; // no Southwest field inside 50 mi — show nothing at all
   const info = swaInfoFor(e.city);
   if (!info) return '';
   if (info.local) {
@@ -1252,12 +1319,15 @@ function flightSectionHtml(e) {
   </details>`;
 }
 
-// Flatten all events
+// Flatten all events. `uid` keeps the modal on the right row when one tour
+// plays several cities on the same day (football Saturdays do this constantly).
 let allEvents = [];
+let _uid = 0;
 TOURS.forEach(tour => {
   tour.dates.forEach(d => {
     allEvents.push({
       ...d,
+      uid: 'e' + (_uid++),
       tourId: tour.id,
       artist: tour.artist,
       tourName: tour.tour,
@@ -1266,6 +1336,7 @@ TOURS.forEach(tour => {
     });
   });
 });
+const eventByUid = Object.fromEntries(allEvents.map(e => [e.uid, e]));
 
 // Find collisions (multiple artists on the same date)
 const dateMap = {};
@@ -1281,7 +1352,7 @@ Object.keys(dateMap).forEach(date => {
 });
 
 // State
-let activeFilters = { fattmack: true, babyface: true, rio: true, travis: true, realest: true, autumn: true, smurf: true, yhapojj: true, slimey: true, dutch: true };
+let activeFilters = { fattmack: true, babyface: true, rio: true, travis: true, realest: true, autumn: true, smurf: true, yhapojj: true, slimey: true, dutch: true, football: true };
 let activeHighlight = null;
 let currentView = 'calendar';
 
@@ -1292,6 +1363,8 @@ const MONTHS = [
   { year: 2026, month: 6, name: 'July 2026' },
   { year: 2026, month: 7, name: 'August 2026' },
   { year: 2026, month: 8, name: 'September 2026' },
+  { year: 2026, month: 9, name: 'October 2026' },
+  { year: 2026, month: 10, name: 'November 2026' },
 ];
 let mobileMonthIdx = null;
 function isMobile() { return window.matchMedia('(max-width: 768px)').matches; }
@@ -1440,7 +1513,7 @@ function buildMonthBlock({ year, month, name }, todayStr, mobile) {
     if (mobile) {
       // Compact chips (artist only); tapping the day opens a sheet with full details
       dayEvents.forEach(e => {
-        inner += `<div class="event-chip" data-tour="${e.tourId}">${e.artist.split(' ')[0]}</div>`;
+        inner += `<div class="event-chip" data-tour="${e.tourId}">${e.label || e.artist.split(' ')[0]}</div>`;
       });
       if (dayEvents.length) cell.onclick = () => openDaySheet(dateStr);
     } else {
@@ -1448,7 +1521,7 @@ function buildMonthBlock({ year, month, name }, todayStr, mobile) {
         let statusHtml = '';
         if (e.status === 'sold_out') statusHtml = '<span class="sold-out">SOLD OUT</span>';
         else if (e.status === 'low_tickets') statusHtml = '<span class="low-tickets">LOW</span>';
-        inner += `<div class="event-chip" data-tour="${e.tourId}" onclick="showDetail(event, '${e.date}', '${e.tourId}')">${e.artist.split(' ')[0]}${statusHtml}<br><span style="opacity:0.7">${e.city}, ${e.state}</span>${chipFlightLine(e)}</div>`;
+        inner += `<div class="event-chip" data-tour="${e.tourId}" onclick="showDetail(event, '${e.uid}')">${e.label || e.artist.split(' ')[0]}${statusHtml}<br><span style="opacity:0.7">${e.city}, ${e.state}</span>${chipFlightLine(e)}</div>`;
       });
     }
 
@@ -1515,7 +1588,7 @@ function renderList() {
     `;
 
     row.style.cursor = 'pointer';
-    row.onclick = () => showDetail(null, e.date, e.tourId);
+    row.onclick = () => showDetail(null, e.uid);
     container.appendChild(row);
   });
 }
@@ -1565,15 +1638,17 @@ function renderCollisions() {
 }
 
 // Modal
-function showDetail(evt, date, tourId) {
+function showDetail(evt, uid, tourIdLegacy) {
   if (evt) evt.stopPropagation();
-  const events = dateMap[date].filter(e => e.tourId === tourId);
-  if (!events.length) return;
-  const e = events[0];
+  // uid is normally an event id; fall back to date+tourId for older call shapes
+  let e = eventByUid[uid];
+  if (!e && tourIdLegacy) e = (dateMap[uid] || []).filter(x => x.tourId === tourIdLegacy)[0];
+  if (!e) return;
+  const tourId = e.tourId, date = e.date;
   const tour = TOURS.find(t => t.id === tourId);
   const d = new Date(date + 'T12:00:00');
 
-  document.getElementById('modal-title').textContent = `${e.artist}`;
+  document.getElementById('modal-title').textContent = e.label || e.artist;
   document.getElementById('modal-title').style.color = `var(--${tourId})`;
 
   let rows = `
@@ -1626,7 +1701,7 @@ function openDaySheet(dateStr) {
     if (e.status === 'sold_out') badges += ' <span style="color:#ff5555;font-weight:700">SOLD OUT</span>';
     else if (e.status === 'low_tickets') badges += ' <span style="color:#ffaa00;font-weight:700">LOW</span>';
     html += `<div class="day-sheet-row">` +
-      `<div class="day-sheet-artist" style="color:var(--${e.tourId})">${e.artist}</div>` +
+      `<div class="day-sheet-artist" style="color:var(--${e.tourId})">${e.label || e.artist}</div>` +
       `<div class="day-sheet-city">${e.city}, ${e.state}${e.venue ? ' &middot; ' + e.venue : ''}${badges}</div>` +
       flightSectionHtml(e) +
       `</div>`;
@@ -1663,8 +1738,7 @@ function scrollToToday() {
   }
   const now = new Date();
   const blocks = document.querySelectorAll('.month-block');
-  const rendered = [[2026,4],[2026,5],[2026,6],[2026,7],[2026,8]]; // May–Sep 2026
-  let idx = rendered.findIndex(([y,m]) =>
+  let idx = MONTHS.findIndex(({ year: y, month: m }) =>
     now.getFullYear() < y || (now.getFullYear() === y && now.getMonth() <= m));
   if (idx === -1) idx = blocks.length - 1; // past the window → last month
   if (blocks[idx]) blocks[idx].scrollIntoView({ block: 'start' });
